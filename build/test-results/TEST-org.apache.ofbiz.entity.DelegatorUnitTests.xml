@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.apache.ofbiz.entity.DelegatorUnitTests" tests="5" skipped="0" failures="0" errors="0" timestamp="2017-01-03T07:36:50" hostname="zhangwenwendeMacBook-Pro.local" time="6.439">
+  <properties/>
+  <testcase name="delegatorCreationUsingConstructorFailsIfConfigurationIsMissing" classname="org.apache.ofbiz.entity.DelegatorUnitTests" time="1.687"/>
+  <testcase name="delegatorCreationUsingConstructor" classname="org.apache.ofbiz.entity.DelegatorUnitTests" time="2.765"/>
+  <testcase name="delegatorCreationUsingFactoryGetInstance" classname="org.apache.ofbiz.entity.DelegatorUnitTests" time="1.313"/>
+  <testcase name="delegatorCreationUsingFactoryGetDelegator" classname="org.apache.ofbiz.entity.DelegatorUnitTests" time="0.672"/>
+  <testcase name="delegatorCreationUsingFactoryReturnsNullIfConfigurationIsMissing" classname="org.apache.ofbiz.entity.DelegatorUnitTests" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
