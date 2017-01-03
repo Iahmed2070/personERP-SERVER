@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import org.apache.ofbiz.base.util.UtilMisc;
+import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
@@ -15,7 +16,6 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
-
 public class PersonErpService {
 	public static final String module = PersonErpQueryService.class.getName();
 
@@ -25,8 +25,11 @@ public class PersonErpService {
 	 * @param dctx
 	 * @param context
 	 * @return Map
+	 * @throws GenericEntityException
+	 * @throws GenericServiceException
 	 */
-	public static Map<String, Object> addContects(DispatchContext dctx, Map<String, Object> context) {
+	public static Map<String, Object> addContects(DispatchContext dctx, Map<String, Object> context)
+			throws GenericEntityException, GenericServiceException {
 		LocalDispatcher dispatcher = dctx.getDispatcher();
 		Delegator delegator = dispatcher.getDelegator();
 		Locale locale = (Locale) context.get("locale");
@@ -37,6 +40,8 @@ public class PersonErpService {
 		String contactAddress1 = (String) context.get("contactAddress1");
 		String contactCity = (String) context.get("contactCity");
 		String contactPostalCode = (String) context.get("contactPostalCode");
+		String contactGeoName = (String) context.get("contactGeoName");
+		String contactAddress2 = (String) context.get("contactAddress2");
 		String contactEmail = (String) context.get("contactEmail");
 		String contactGroup = (String) context.get("contactGroup");
 		String contactCompany = (String) context.get("contactCompany");
@@ -44,26 +49,14 @@ public class PersonErpService {
 		// 模拟一个用户登录信息
 		String userLoginId = "admin";
 		GenericValue userLogin;
-		try {
-			userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
-		} catch (GenericEntityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return ServiceUtil.returnError(e1.getMessage());
-		}
+		userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
 		// 创建联系人partyId
 		Map<String, Object> inputFieldMap = new HashMap<String, Object>();
 		inputFieldMap.put("firstName", firstName);
 		inputFieldMap.put("lastName", lastName);
 		inputFieldMap.put("gender", gender);
 		Map<String, Object> createPerson = null;
-		try {
-			createPerson = dispatcher.runSync("createUpdatePerson", inputFieldMap);
-		} catch (GenericServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return ServiceUtil.returnError(e.getMessage());
-		}
+		createPerson = dispatcher.runSync("createUpdatePerson", inputFieldMap);
 		// 添加联系人手机号码
 		if (UtilValidate.isNotEmpty(createPerson) && contactNumber != "") {
 			Map<String, Object> inputTelecom = new HashMap<String, Object>();
@@ -73,12 +66,7 @@ public class PersonErpService {
 			inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
 			inputTelecom.put("userLogin", userLogin);
 			Map<String, Object> createTelecom = null;
-			try {
-				createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
-			} catch (GenericServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			createTelecom = dispatcher.runSync("createPartyTelecomNumber", inputTelecom);
 		}
 		// 添加联系人email
 		if (UtilValidate.isNotEmpty(createPerson) && UtilValidate.isNotEmpty(contactEmail)) {
@@ -89,33 +77,22 @@ public class PersonErpService {
 			inputEmail.put("contactMechPurposeTypeId", "PRIMARY_EMAIL");
 			inputEmail.put("userLogin", userLogin);
 			Map<String, Object> createEmail = null;
-			try {
-				createEmail = dispatcher.runSync("createPartyEmailAddress", inputEmail);
-			} catch (GenericServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return ServiceUtil.returnError(e.getMessage());
-			}
+			createEmail = dispatcher.runSync("createPartyEmailAddress", inputEmail);
 		}
 		// 添加联系人地址
-		if (UtilValidate.isNotEmpty(createPerson) || UtilValidate.isNotEmpty(contactAddress1)
-				|| UtilValidate.isNotEmpty(contactCity) || UtilValidate.isNotEmpty(contactPostalCode)) {
+		if (UtilValidate.isNotEmpty(createPerson)) {
 			Map<String, Object> inputElcAddress = new HashMap<String, Object>();
 			inputElcAddress.put("partyId", createPerson.get("partyId"));
 			inputElcAddress.put("address1", contactAddress1);
 			inputElcAddress.put("city", contactCity);
 			inputElcAddress.put("postalCode", contactPostalCode);
+			inputElcAddress.put("stateProvinceGeoId", contactGeoName);
+			inputElcAddress.put("address2", contactAddress2);
 			inputElcAddress.put("contactMechTypeId", "POSTAL_ADDRESS");
 			inputElcAddress.put("contactMechPurposeTypeId", "PRIMARY_LOCATION");
 			inputElcAddress.put("userLogin", userLogin);
 			Map<String, Object> createElsAddress = null;
-			try {
-				createElsAddress = dispatcher.runSync("createPartyPostalAddress", inputElcAddress);
-			} catch (GenericServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return ServiceUtil.returnError(e.getMessage());
-			}
+			createElsAddress = dispatcher.runSync("createPartyPostalAddress", inputElcAddress);
 		}
 		// 添加联系人标签(属于哪个party_Group)
 		if (UtilValidate.isNotEmpty(createPerson) && UtilValidate.isNotEmpty(contactGroup)) {
@@ -124,13 +101,7 @@ public class PersonErpService {
 			inputLable.put("partyIdTo", createPerson.get("partyId").toString());
 			inputLable.put("userLogin", userLogin);
 			Map<String, Object> createLable = null;
-			try {
-				createLable = dispatcher.runSync("createPartyRelationship", inputLable);
-			} catch (GenericServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return ServiceUtil.returnError(e.getMessage());
-			}
+			createLable = dispatcher.runSync("createPartyRelationship", inputLable);
 		}
 		// 添加联系人所在公司(属性)
 		if (UtilValidate.isNotEmpty(createPerson) && UtilValidate.isNotEmpty(contactCompany)) {
@@ -140,32 +111,25 @@ public class PersonErpService {
 			inputCompany.put("partyId", createPerson.get("partyId").toString());
 			inputCompany.put("userLogin", userLogin);
 			Map<String, Object> createCompany = null;
-			try {
-				createCompany = dispatcher.runSync("createPartyAttribute", inputCompany);
-			} catch (GenericServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return ServiceUtil.returnError(e.getMessage());
-			}
+			createCompany = dispatcher.runSync("createPartyAttribute", inputCompany);
 		}
-		// 添加到当前用户联系人
+		// 添加到当前用户联系人列表
 		if (UtilValidate.isNotEmpty(createPerson)) {
 			Map<String, Object> inputLable = new HashMap<String, Object>();
 			inputLable.put("partyIdFrom", createPerson.get("partyId").toString());
 			inputLable.put("partyIdTo", partyId);
 			inputLable.put("userLogin", userLogin);
-			//inputLable.put("roleTypeIdTo", "SUBSCRIBER");
+			// inputLable.put("roleTypeIdTo", "SUBSCRIBER");
 			inputLable.put("partyRelationshipTypeId", "CONTACT_REL");
 			Map<String, Object> createLable = null;
-			try {
-				createLable = dispatcher.runSync("createPartyRelationship", inputLable);
-			} catch (GenericServiceException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			createLable = dispatcher.runSync("createPartyRelationship", inputLable);
 		}
-		Map<String, Object> result = ServiceUtil.returnSuccess("添加联系人成功");
-		result.put("partyId", createPerson.get("partyId"));
+		Map<String, Object> result = ServiceUtil.returnSuccess();
+		Map<String, Object> inputMap = new HashMap<String, Object>();
+		String personId = (String) createPerson.get("partyId");
+		inputMap.put("partyId", personId);
+		inputMap.put("resultMsg", UtilProperties.getMessage("PersonErpUiLabels", "success", locale));
+		result.put("resultMap", inputMap);
 		return result;
 	}
 
@@ -175,8 +139,11 @@ public class PersonErpService {
 	 * @param dctx
 	 * @param context
 	 * @return Map
+	 * @throws GenericEntityException
+	 * @throws GenericServiceException
 	 */
-	public static Map<String, Object> updateContects(DispatchContext dctx, Map<String, Object> context) {
+	public static Map<String, Object> updateContects(DispatchContext dctx, Map<String, Object> context)
+			throws GenericEntityException, GenericServiceException {
 		LocalDispatcher dispatcher = dctx.getDispatcher();
 		Delegator delegator = dispatcher.getDelegator();
 		Locale locale = (Locale) context.get("locale");
@@ -187,6 +154,8 @@ public class PersonErpService {
 		String contactAddress1 = (String) context.get("contactAddress1");
 		String contactCity = (String) context.get("contactCity");
 		String contactPostalCode = (String) context.get("contactPostalCode");
+		String contactGeoName = (String) context.get("contactGeoName");
+		String contactAddress2 = (String) context.get("contactAddress2");
 		String contactEmail = (String) context.get("contactEmail");
 		String contactGroup = (String) context.get("contactGroup");
 		String contactCompany = (String) context.get("contactCompany");
@@ -194,13 +163,7 @@ public class PersonErpService {
 		// 模拟一个用户登录信息
 		String userLoginId = "admin";
 		GenericValue userLogin;
-		try {
-			userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
-		} catch (GenericEntityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			return ServiceUtil.returnError(e1.getMessage());
-		}
+		userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
 		// 更新人员基本信息
 		Map<String, Object> inputFieldMap = new HashMap<String, Object>();
 		inputFieldMap.put("partyId", partyId);
@@ -209,24 +172,14 @@ public class PersonErpService {
 		inputFieldMap.put("lastName", lastName);
 		inputFieldMap.put("userLogin", userLogin);
 		Map<String, Object> updatePerson = null;
-		try {
-			updatePerson = dispatcher.runSync("updatePerson", inputFieldMap);
-		} catch (GenericServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		updatePerson = dispatcher.runSync("updatePerson", inputFieldMap);
 		// 更新手机号码
 		List<GenericValue> contactMechIdList = null;
 		EntityCondition condition = EntityCondition.makeCondition(
 				EntityCondition
 						.makeCondition(UtilMisc.toMap("partyId", partyId, "contactMechTypeId", "TELECOM_NUMBER")),
 				EntityUtil.getFilterByDateExpr());
-		try {
-			contactMechIdList = delegator.findList("PartyAndContactMech", condition, null, null, null, false);
-		} catch (GenericEntityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		contactMechIdList = delegator.findList("PartyAndContactMech", condition, null, null, null, false);
 		for (GenericValue contactMechInfo : contactMechIdList) {
 			// 如果手机号码不同
 			if (contactMechInfo.get("tnContactNumber") != contactNumber) {
@@ -237,12 +190,7 @@ public class PersonErpService {
 				inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
 				inputTelecom.put("userLogin", userLogin);
 				Map<String, Object> updateTelecom = null;
-				try {
-					updateTelecom = dispatcher.runSync("updatePartyTelecomNumber", inputTelecom);
-				} catch (GenericServiceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				updateTelecom = dispatcher.runSync("updatePartyTelecomNumber", inputTelecom);
 			}
 		}
 		// 更新邮箱地址
@@ -251,12 +199,7 @@ public class PersonErpService {
 		EntityCondition conditionEmail = EntityCondition.makeCondition(
 				EntityCondition.makeCondition(UtilMisc.toMap("partyId", partyId, "contactMechTypeId", "EMAIL_ADDRESS")),
 				EntityUtil.getFilterByDateExpr());
-		try {
-			contactEmailList = delegator.findList("PartyAndContactMech", conditionEmail, null, null, null, false);
-		} catch (GenericEntityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		contactEmailList = delegator.findList("PartyAndContactMech", conditionEmail, null, null, null, false);
 		// 原始邮箱不为空
 		if (UtilValidate.isNotEmpty(contactEmailList)) {
 			for (GenericValue contactEmailInfo : contactEmailList) {
@@ -269,12 +212,7 @@ public class PersonErpService {
 						inputDeleteEmial.put("userLogin", userLogin);
 						inputDeleteEmial.put("contactMechId", contactEmailInfo.get("contactMechId"));
 						Map<String, Object> deleteEmail = null;
-						try {
-							deleteEmail = dispatcher.runSync("deletePartyContactMech", inputDeleteEmial);
-						} catch (GenericServiceException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						deleteEmail = dispatcher.runSync("deletePartyContactMech", inputDeleteEmial);
 					} else {
 						// 否则更新邮箱地址
 						Map<String, Object> inputEmial = new HashMap<String, Object>();
@@ -283,12 +221,7 @@ public class PersonErpService {
 						inputEmial.put("contactMechId", contactEmailInfo.get("contactMechId"));
 						inputEmial.put("userLogin", userLogin);
 						Map<String, Object> updateTelecom = null;
-						try {
-							updateTelecom = dispatcher.runSync("updatePartyEmailAddress", inputEmial);
-						} catch (GenericServiceException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						updateTelecom = dispatcher.runSync("updatePartyEmailAddress", inputEmial);
 					}
 				}
 			}
@@ -302,13 +235,7 @@ public class PersonErpService {
 				inputEmail.put("contactMechPurposeTypeId", "PRIMARY_EMAIL");
 				inputEmail.put("userLogin", userLogin);
 				Map<String, Object> createEmail = null;
-				try {
-					createEmail = dispatcher.runSync("createPartyEmailAddress", inputEmail);
-				} catch (GenericServiceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return ServiceUtil.returnError(e.getMessage());
-				}
+				createEmail = dispatcher.runSync("createPartyEmailAddress", inputEmail);
 			}
 		}
 		// 更新地址
@@ -317,46 +244,36 @@ public class PersonErpService {
 				EntityCondition
 						.makeCondition(UtilMisc.toMap("partyId", partyId, "contactMechTypeId", "POSTAL_ADDRESS")),
 				EntityUtil.getFilterByDateExpr());
-		try {
-			contactElcList = delegator.findList("PartyAndContactMech", contactElcCondition, null, null, null, false);
-		} catch (GenericEntityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		contactElcList = delegator.findList("PartyAndContactMech", contactElcCondition, null, null, null, false);
 		// 原地址不为空
 		if (UtilValidate.isNotEmpty(contactElcList)) {
 			for (GenericValue contactElcInfo : contactElcList) {
 				if (contactElcInfo.get("paAddress1") != contactAddress1 || contactElcInfo.get("paCity") != contactCity
-						|| contactElcInfo.get("paPostalCode") != contactPostalCode) {
-					if (UtilValidate.isEmpty(contactAddress1) && UtilValidate.isEmpty(contactCity)
-							&& UtilValidate.isEmpty(contactPostalCode)) {
+						|| contactElcInfo.get("paPostalCode") != contactPostalCode
+						|| contactGeoName != contactElcInfo.get("paStateProvinceGeoId")
+						|| contactAddress2 != contactElcInfo.get("paAddress2")) {
+					if (UtilValidate.isEmpty(contactAddress1) && UtilValidate.isEmpty(contactGeoName)
+							&& UtilValidate.isEmpty(contactPostalCode) && UtilValidate.isEmpty(contactPostalCode)) {
 						Map<String, Object> inputDeleteEmial = new HashMap<String, Object>();
 						inputDeleteEmial.put("partyId", partyId);
 						inputDeleteEmial.put("userLogin", userLogin);
 						inputDeleteEmial.put("contactMechId", contactElcInfo.get("contactMechId"));
 						Map<String, Object> deleteAddress = null;
-						try {
-							deleteAddress = dispatcher.runSync("deletePartyContactMech", inputDeleteEmial);
-						} catch (GenericServiceException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						deleteAddress = dispatcher.runSync("deletePartyContactMech", inputDeleteEmial);
+
 					} else {
 						Map<String, Object> inputElc = new HashMap<String, Object>();
 						inputElc.put("partyId", partyId);
 						inputElc.put("address1", contactAddress1);
 						inputElc.put("city", contactCity);
 						inputElc.put("postalCode", contactPostalCode);
+						inputElc.put("stateProvinceGeoId", contactGeoName);
+						inputElc.put("address2", contactAddress2);
 						inputElc.put("contactMechId", contactElcInfo.get("contactMechId"));
 						inputElc.put("contactMechTypeId", "POSTAL_ADDRESS");
 						inputElc.put("userLogin", userLogin);
 						Map<String, Object> updateEmail = null;
-						try {
-							updateEmail = dispatcher.runSync("updatePartyPostalAddress", inputElc);
-						} catch (GenericServiceException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						updateEmail = dispatcher.runSync("updatePartyPostalAddress", inputElc);
 					}
 				}
 			}
@@ -384,41 +301,24 @@ public class PersonErpService {
 		List<GenericValue> contactCompanyList = null;
 		EntityCondition contactCompanuyCondition = EntityCondition.makeCondition(
 				EntityCondition.makeCondition(UtilMisc.toMap("partyId", partyId, "attrName", "Company")));
-		try {
-			contactCompanyList = delegator.findList("PartyAttribute", contactCompanuyCondition, null, null, null,
-					false);
-		} catch (GenericEntityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		contactCompanyList = delegator.findList("PartyAttribute", contactCompanuyCondition, null, null, null, false);
 		if (UtilValidate.isNotEmpty(contactCompanyList)) {
 			for (GenericValue contactCompanuyInfo : contactCompanyList) {
 				if (contactCompanuyInfo.get("attrValue") != contactCompany
 						|| UtilValidate.isEmpty(contactCompanuyInfo.get("attrValue"))) {
 					if (UtilValidate.isEmpty(contactCompany)) {
-						GenericValue deleteattr;
-						try {
-							deleteattr = delegator.findOne("PartyAttribute",
-									UtilMisc.toMap("partyId", partyId, "attrName", "Company"),false);
-							deleteattr.remove();
-						} catch (GenericEntityException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						/*GenericValue deleteattr;
+						deleteattr = delegator.findByPrimaryKey("PartyAttribute",
+								UtilMisc.toMap("partyId", partyId, "attrName", "Company"));
+						deleteattr.remove();*/
 					} else {
-						Map<String, Object> inputCompany = new HashMap<String, Object>();
+						Map<String, Object> inputCompany =new HashMap<String, Object>();
 						inputCompany.put("attrName", "Company");
 						inputCompany.put("attrValue", contactCompany);
 						inputCompany.put("partyId", partyId);
 						inputCompany.put("userLogin", userLogin);
 						Map<String, Object> createCompany = null;
-						try {
-							createCompany = dispatcher.runSync("updatePartyAttribute", inputCompany);
-						} catch (GenericServiceException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-							return ServiceUtil.returnError(e.getMessage());
-						}
+						createCompany = dispatcher.runSync("updatePartyAttribute", inputCompany);
 					}
 				}
 			}
@@ -430,25 +330,14 @@ public class PersonErpService {
 				inputCompany.put("partyId", partyId);
 				inputCompany.put("userLogin", userLogin);
 				Map<String, Object> createCompany = null;
-				try {
-					createCompany = dispatcher.runSync("createPartyAttribute", inputCompany);
-				} catch (GenericServiceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return ServiceUtil.returnError(e.getMessage());
-				}
+				createCompany = dispatcher.runSync("createPartyAttribute", inputCompany);
 			}
 		}
 		// 更新标签
 		List<GenericValue> contactGroupList = null;
 		EntityCondition contactGroupCondition = EntityCondition.makeCondition(
 				EntityCondition.makeCondition(UtilMisc.toMap("partyIdTo", partyId)), EntityUtil.getFilterByDateExpr());
-		try {
-			contactGroupList = delegator.findList("PartyRelationship", contactGroupCondition, null, null, null, false);
-		} catch (GenericEntityException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		contactGroupList = delegator.findList("PartyRelationship", contactGroupCondition, null, null, null, false);
 		// 原标签不为空
 		if (UtilValidate.isNotEmpty(contactGroupList) && UtilValidate.isNotEmpty(contactGroup)) {
 			for (GenericValue contactGroupInfo : contactGroupList) {
@@ -461,25 +350,14 @@ public class PersonErpService {
 					inputGroup.put("partyIdFrom", contactGroupInfo.get("partyIdFrom"));
 					inputGroup.put("userLogin", userLogin);
 					Map<String, Object> deleteGroup = null;
-					try {
-						deleteGroup = dispatcher.runSync("deletePartyRelationship", inputGroup);
-					} catch (GenericServiceException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					deleteGroup = dispatcher.runSync("deletePartyRelationship", inputGroup);
 				} else {
 					Map<String, Object> inputLable = new HashMap<String, Object>();
 					inputLable.put("partyIdFrom", contactGroup);
 					inputLable.put("partyIdTo", partyId);
 					inputLable.put("userLogin", userLogin);
 					Map<String, Object> createLable = null;
-					try {
-						createLable = dispatcher.runSync("createPartyRelationship", inputLable);
-					} catch (GenericServiceException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-						return ServiceUtil.returnError(e.getMessage());
-					}
+					createLable = dispatcher.runSync("createPartyRelationship", inputLable);
 				}
 			}
 		}
@@ -491,16 +369,46 @@ public class PersonErpService {
 				inputLable.put("partyIdTo", partyId);
 				inputLable.put("userLogin", userLogin);
 				Map<String, Object> createLable = null;
-				try {
-					createLable = dispatcher.runSync("createPartyRelationship", inputLable);
-				} catch (GenericServiceException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return ServiceUtil.returnError(e.getMessage());
-				}
+				createLable = dispatcher.runSync("createPartyRelationship", inputLable);
 			}
 		}
-		Map<String, Object> result = ServiceUtil.returnSuccess("更新成功");
+		Map<String, Object> result = ServiceUtil.returnSuccess();
+		Map<String, Object> inputMap = new HashMap<String, Object>();
+		inputMap.put("resultMsg", UtilProperties.getMessage("PersonErpUiLabels", "success", locale));
+		result.put("resultMap", inputMap);
 		return result;
+	}
+
+	/**
+	 * 删除标签
+	 * 
+	 * @param dctx
+	 * @param context
+	 * @return Map
+	 * @throws GenericEntityException
+	 * @throws GenericServiceException
+	 */
+	public static Map<String, Object> deleteLable(DispatchContext dctx, Map<String, Object> context)
+			throws GenericEntityException, GenericServiceException {
+		LocalDispatcher dispatcher = dctx.getDispatcher();
+		Delegator delegator = dispatcher.getDelegator();
+		Locale locale = (Locale) context.get("locale");
+		String partyId = (String) context.get("partyId");
+		Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+		Map<String, Object> inputMap = new HashMap<String, Object>();
+		// 模拟一个用户登录信息
+		String userLoginId = "admin";
+		GenericValue userLogin;
+		userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
+		// 同步updatePartyGroup服务，使statusId更新为禁用
+		Map<String, Object> input = new HashMap<String, Object>();
+		input.put("partyId", partyId);
+		input.put("statusId", "PARTY_DISABLED");
+		input.put("userLogin", userLogin);
+		Map<String, Object> deleteLable = null;
+		deleteLable = dispatcher.runSync("updatePartyGroup", input);
+		inputMap.put("resultMsg", UtilProperties.getMessage("PersonErpUiLabels", "success", locale));
+		resultMap.put("resultMap", inputMap);
+		return resultMap;
 	}
 }

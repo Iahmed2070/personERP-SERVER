@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
-    <description>PersonContacts Services</description>
+    <description>PersonErp Services</description>
     <vendor></vendor>
     <version>1.0</version>
 
@@ -9,7 +9,7 @@
         <description>
             Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
         </description>
-    </service> 
+    </service>
     <service name="findPersonInfo" engine="java"
             location="com.banfftech.personerp.PersonErpQueryService" invoke="findPersonInfo" auth="false">
         <description>查询用户信息</description>
@@ -25,7 +25,7 @@
             location="com.banfftech.personerp.PersonErpQueryService" invoke="findContectsInfo" auth="false">
         <description>查询用户信息</description>
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
-        <attribute name="contactList" type="List" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service> 
     <service name="addContects" engine="java"
             location="com.banfftech.personerp.PersonErpService" invoke="addContects" auth="false">
@@ -37,10 +37,13 @@
         <attribute name="contactAddress1" type="String" mode="IN" optional="false"/>
         <attribute name="contactCity" type="String" mode="IN" optional="false"/>
         <attribute name="contactPostalCode" type="String" mode="IN" optional="false"/>
+        <attribute name="contactGeoName" type="String" mode="IN" optional="false"/>
+        <attribute name="contactAddress2" type="String" mode="IN" optional="true"/>
         <attribute name="contactEmail" type="String" mode="IN" optional="true"/>
         <attribute name="contactGroup" type="String" mode="IN" optional="true"/>
         <attribute name="contactCompany" type="String" mode="IN" optional="true"/>
-        <attribute name="partyId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
     <service name="updateContects" engine="java"
             location="com.banfftech.personerp.PersonErpService" invoke="updateContects" auth="false">
@@ -52,21 +55,31 @@
         <attribute name="contactAddress1" type="String" mode="IN" optional="false"/>
         <attribute name="contactCity" type="String" mode="IN" optional="false"/>
         <attribute name="contactPostalCode" type="String" mode="IN" optional="false"/>
+        <attribute name="contactGeoName" type="String" mode="IN" optional="false"/>
+        <attribute name="contactAddress2" type="String" mode="IN" optional="true"/>
         <attribute name="contactEmail" type="String" mode="IN" optional="true"/>
         <attribute name="contactGroup" type="String" mode="IN" optional="true"/>
         <attribute name="contactCompany" type="String" mode="IN" optional="true"/>
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
     <service name="findLable" engine="java"
             location="com.banfftech.personerp.PersonErpQueryService" invoke="findLable" auth="false">
         <description>查询拥有的标签</description>
         <attribute name="userLoginId" type="String" mode="IN" optional="false"/>
-        <attribute name="lableNames" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service> 
     <service name="findLablePerson" engine="java"
             location="com.banfftech.personerp.PersonErpQueryService" invoke="findLablePerson" auth="false">
         <description>获取标签内的人员</description>
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
-        <attribute name="lablePersons" type="String" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service> 
+    <service name="deleteLable" engine="java"
+            location="com.banfftech.personerp.PersonErpService" invoke="deleteLable" auth="false">
+        <description>删除标签</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service> 
+    
 </services>
