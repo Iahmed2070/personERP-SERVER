@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.apache.ofbiz.base.start.OfbizStartupUnitTests" tests="7" skipped="0" failures="0" errors="0" timestamp="2017-01-04T02:13:09" hostname="jinlongxideMacBook-Pro.local" time="0.035">
+<testsuite name="org.apache.ofbiz.base.start.OfbizStartupUnitTests" tests="7" skipped="0" failures="0" errors="0" timestamp="2017-01-04T03:57:42" hostname="jinlongxideMacBook-Pro.local" time="0.051">
   <properties/>
-  <testcase name="commandParserDoesNotAcceptPortoffsetWithoutPositiveInteger" classname="org.apache.ofbiz.base.start.OfbizStartupUnitTests" time="0.015"/>
+  <testcase name="commandParserDoesNotAcceptPortoffsetWithoutPositiveInteger" classname="org.apache.ofbiz.base.start.OfbizStartupUnitTests" time="0.02"/>
   <testcase name="commandParserDoesNotAcceptMoreThanOneCommand" classname="org.apache.ofbiz.base.start.OfbizStartupUnitTests" time="0.001"/>
   <testcase name="commandParserDoesNotAcceptPortoffsetWithoutArgument" classname="org.apache.ofbiz.base.start.OfbizStartupUnitTests" time="0.001"/>
   <testcase name="commandParserDoesNotAcceptArgumentForStatus" classname="org.apache.ofbiz.base.start.OfbizStartupUnitTests" time="0.0"/>
   <testcase name="commandParserDoesNotAcceptArgumentForStart" classname="org.apache.ofbiz.base.start.OfbizStartupUnitTests" time="0.0"/>
-  <testcase name="commandParserDoesNotAcceptArgumentForShutdown" classname="org.apache.ofbiz.base.start.OfbizStartupUnitTests" time="0.0"/>
-  <testcase name="commandParserCombinesMultipleArgsIntoOneCommand" classname="org.apache.ofbiz.base.start.OfbizStartupUnitTests" time="0.013"/>
+  <testcase name="commandParserDoesNotAcceptArgumentForShutdown" classname="org.apache.ofbiz.base.start.OfbizStartupUnitTests" time="0.001"/>
+  <testcase name="commandParserCombinesMultipleArgsIntoOneCommand" classname="org.apache.ofbiz.base.start.OfbizStartupUnitTests" time="0.021"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

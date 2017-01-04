@@ -63,7 +63,7 @@
     <!-- 新建标签 -->
 	<request-map uri="createLable">
 		<security https="true" auth="false" />
-    	<event type="service" invoke="createPartyGroup"/>
+    	<event type="service" invoke="createLable"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>

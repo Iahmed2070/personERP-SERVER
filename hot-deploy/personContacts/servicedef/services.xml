@@ -81,5 +81,10 @@
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service> 
-    
+    <service name="createLable" engine="java"
+            location="com.banfftech.personerp.PersonErpService" invoke="createLable" auth="false">
+        <description>新建标签</description>
+        <attribute name="lableName" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service> 
 </services>

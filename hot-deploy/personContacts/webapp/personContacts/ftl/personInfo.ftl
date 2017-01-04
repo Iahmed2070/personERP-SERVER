@@ -11,6 +11,7 @@
 				<option value="addContects">添加联系人</option>
 				<option value="updateContects">更新联系人信息</option>
 				<option value="deleteLable">删除标签</option>
+				<option value="createLable">新建标签</option>
 			</select>
 		</td>
 	</tr>
@@ -192,6 +193,18 @@
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
 			<td><input type="button" value="提交" onclick="getJsonForThis('deleteLable','deleteLable');"/></td>
+		</tr>
+	</table>
+</form>	
+<form id="createLable" style="display:none;" class="showOrHid">
+	<table width="100%">
+		<tr>
+			<td style="width:20%;text-align:right;">标签名称:</td>
+			<td><input type="text" name="lableName"/></td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">&nbsp;</td>
+			<td><input type="button" value="提交" onclick="getJsonForThis('createLable','createLable');"/></td>
 		</tr>
 	</table>
 </form>	

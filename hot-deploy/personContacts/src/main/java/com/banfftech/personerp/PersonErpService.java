@@ -189,6 +189,7 @@ public class PersonErpService {
 				inputTelecom.put("contactNumber", contactNumber);
 				inputTelecom.put("contactMechId", contactMechInfo.get("contactMechId"));
 				inputTelecom.put("contactMechTypeId", "TELECOM_NUMBER");
+				inputTelecom.put("contactMechPurposeTypeId", "PHONE_MOBILE");
 				inputTelecom.put("userLogin", userLogin);
 				Map<String, Object> updateTelecom = null;
 				updateTelecom = dispatcher.runSync("updatePartyTelecomNumber", inputTelecom);
@@ -216,13 +217,15 @@ public class PersonErpService {
 						deleteEmail = dispatcher.runSync("deletePartyContactMech", inputDeleteEmial);
 					} else {
 						// 否则更新邮箱地址
-						Map<String, Object> inputEmial = new HashMap<String, Object>();
-						inputEmial.put("partyId", partyId);
-						inputEmial.put("emailAddress", contactEmail);
-						inputEmial.put("contactMechId", contactEmailInfo.get("contactMechId"));
-						inputEmial.put("userLogin", userLogin);
+						Map<String, Object> inputEmail = new HashMap<String, Object>();
+						inputEmail.put("partyId", partyId);
+						inputEmail.put("emailAddress", contactEmail);
+						inputEmail.put("contactMechId", contactEmailInfo.get("contactMechId"));
+						inputEmail.put("contactMechTypeId", "EMAIL_ADDRESS");
+						inputEmail.put("contactMechPurposeTypeId", "PRIMARY_EMAIL");
+						inputEmail.put("userLogin", userLogin);
 						Map<String, Object> updateTelecom = null;
-						updateTelecom = dispatcher.runSync("updatePartyEmailAddress", inputEmial);
+						updateTelecom = dispatcher.runSync("updatePartyEmailAddress", inputEmail);
 					}
 				}
 			}
@@ -255,12 +258,12 @@ public class PersonErpService {
 						|| contactAddress2 != contactElcInfo.get("paAddress2")) {
 					if (UtilValidate.isEmpty(contactAddress1) && UtilValidate.isEmpty(contactGeoName)
 							&& UtilValidate.isEmpty(contactPostalCode) && UtilValidate.isEmpty(contactPostalCode)) {
-						Map<String, Object> inputDeleteEmial = new HashMap<String, Object>();
-						inputDeleteEmial.put("partyId", partyId);
-						inputDeleteEmial.put("userLogin", userLogin);
-						inputDeleteEmial.put("contactMechId", contactElcInfo.get("contactMechId"));
+						Map<String, Object> inputDelete = new HashMap<String, Object>();
+						inputDelete.put("partyId", partyId);
+						inputDelete.put("userLogin", userLogin);
+						inputDelete.put("contactMechId", contactElcInfo.get("contactMechId"));
 						Map<String, Object> deleteAddress = null;
-						deleteAddress = dispatcher.runSync("deletePartyContactMech", inputDeleteEmial);
+						deleteAddress = dispatcher.runSync("deletePartyContactMech", inputDelete);
 
 					} else {
 						Map<String, Object> inputElc = new HashMap<String, Object>();
@@ -272,6 +275,7 @@ public class PersonErpService {
 						inputElc.put("address2", contactAddress2);
 						inputElc.put("contactMechId", contactElcInfo.get("contactMechId"));
 						inputElc.put("contactMechTypeId", "POSTAL_ADDRESS");
+						inputElc.put("contactMechPurposeTypeId", "PRIMARY_LOCATION");
 						inputElc.put("userLogin", userLogin);
 						Map<String, Object> updateEmail = null;
 						updateEmail = dispatcher.runSync("updatePartyPostalAddress", inputElc);
@@ -308,12 +312,11 @@ public class PersonErpService {
 				if (contactCompanuyInfo.get("attrValue") != contactCompany
 						|| UtilValidate.isEmpty(contactCompanuyInfo.get("attrValue"))) {
 					if (UtilValidate.isEmpty(contactCompany)) {
-						/*
-						 * GenericValue deleteattr; deleteattr =
-						 * delegator.findByPrimaryKey("PartyAttribute",
-						 * UtilMisc.toMap("partyId", partyId, "attrName",
-						 * "Company")); deleteattr.remove();
-						 */
+						GenericValue deleteattr;
+						deleteattr = delegator.findOne("PartyAttribute", false,
+								UtilMisc.toMap("partyId", partyId, "attrName", "Company"));
+						deleteattr.remove();
+
 					} else {
 						Map<String, Object> inputCompany = new HashMap<String, Object>();
 						inputCompany.put("attrName", "Company");
@@ -410,6 +413,38 @@ public class PersonErpService {
 		input.put("userLogin", userLogin);
 		Map<String, Object> deleteLable = null;
 		deleteLable = dispatcher.runSync("updatePartyGroup", input);
+		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+		resultMap.put("resultMap", inputMap);
+		return resultMap;
+	}
+
+	/**
+	 * 新建标签
+	 * 
+	 * @param dctx
+	 * @param context
+	 * @return Map
+	 * @throws GenericEntityException
+	 * @throws GenericServiceException
+	 */
+	public static Map<String, Object> createLable(DispatchContext dctx, Map<String, Object> context)
+			throws GenericEntityException, GenericServiceException {
+		LocalDispatcher dispatcher = dctx.getDispatcher();
+		Delegator delegator = dispatcher.getDelegator();
+		Locale locale = (Locale) context.get("locale");
+		String lableName = (String) context.get("lableName");
+		Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+		Map<String, Object> inputMap = new HashMap<String, Object>();
+		// 模拟一个用户登录信息
+		String userLoginId = "admin";
+		GenericValue userLogin;
+		userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
+		// 同步createPartyGroup服务
+		Map<String, Object> input = new HashMap<String, Object>();
+		input.put("groupName", lableName);
+		input.put("userLogin", userLogin);
+		Map<String, Object> createLable = null;
+		createLable = dispatcher.runSync("createPartyGroup", input);
 		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
 		resultMap.put("resultMap", inputMap);
 		return resultMap;
