@@ -44,7 +44,6 @@ public class PersonErpQueryService {
 			inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "userDoesNotExist", locale));
 			resultMap.put("resultMap", inputMap);
 			return resultMap;
-
 		}
 		// 判断用户是否被禁用
 		GenericValue party = delegator.findOne("Party", UtilMisc.toMap("partyId", partyId), false);
@@ -114,7 +113,7 @@ public class PersonErpQueryService {
 		List<GenericValue> contactPartyIdList = null;
 		contactPartyIdList = delegator.findList("PartyRelationship", findConditions, UtilMisc.toSet("partyIdFrom"),
 				null, null, false);
-		List<GenericValue> contactList = new ArrayList<GenericValue>();
+		List<Object> contactList = new ArrayList<Object>();
 		// 遍历获得的联系人partyId，同步findPersonInfo获得联系人信息
 		if (UtilValidate.isNotEmpty(contactPartyIdList)) {
 			for (GenericValue contactParty : contactPartyIdList) {
@@ -122,7 +121,7 @@ public class PersonErpQueryService {
 				inputFieldMap.put("partyId", contactParty.get("partyIdFrom"));
 				Map<String, Object> catactMap = new HashMap<String, Object>();
 				catactMap = dispatcher.runSync("findPersonInfo", inputFieldMap);
-				contactList.add((GenericValue) catactMap.get("resultMap"));
+				contactList.add( catactMap.get("resultMap"));
 			}
 		}
 		inputMap.put("contact", contactList);
@@ -192,7 +191,7 @@ public class PersonErpQueryService {
 				EntityUtil.getFilterByDateExpr());
 		lableList = delegator.findList("PartyRelationship", findConditions, UtilMisc.toSet("partyIdTo"), null, null,
 				false);
-		List<GenericValue> lables = new ArrayList<GenericValue>();
+		List<Object> lables = new ArrayList<Object>();
 		// 遍历查到的partyId，同步findPersonInfo获得成员信息
 		if (UtilValidate.isNotEmpty(lableList)) {
 			for (GenericValue lable : lableList) {
@@ -200,7 +199,7 @@ public class PersonErpQueryService {
 				inputFieldMap.put("partyId", lable.get("partyIdTo"));
 				Map<String, Object> findResult = null;
 				findResult = dispatcher.runSync("findPersonInfo", inputFieldMap);
-				lables.add((GenericValue) findResult.get("resultMap"));
+				lables.add(findResult.get("resultMap"));
 			}
 		}
 		inputMap.put("person", lables);

@@ -16,6 +16,7 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
+
 public class PersonErpService {
 	public static final String module = PersonErpQueryService.class.getName();
 
@@ -128,7 +129,7 @@ public class PersonErpService {
 		Map<String, Object> inputMap = new HashMap<String, Object>();
 		String personId = (String) createPerson.get("partyId");
 		inputMap.put("partyId", personId);
-		inputMap.put("resultMsg", UtilProperties.getMessage("PersonErpUiLabels", "success", locale));
+		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
 		result.put("resultMap", inputMap);
 		return result;
 	}
@@ -307,12 +308,14 @@ public class PersonErpService {
 				if (contactCompanuyInfo.get("attrValue") != contactCompany
 						|| UtilValidate.isEmpty(contactCompanuyInfo.get("attrValue"))) {
 					if (UtilValidate.isEmpty(contactCompany)) {
-						/*GenericValue deleteattr;
-						deleteattr = delegator.findByPrimaryKey("PartyAttribute",
-								UtilMisc.toMap("partyId", partyId, "attrName", "Company"));
-						deleteattr.remove();*/
+						/*
+						 * GenericValue deleteattr; deleteattr =
+						 * delegator.findByPrimaryKey("PartyAttribute",
+						 * UtilMisc.toMap("partyId", partyId, "attrName",
+						 * "Company")); deleteattr.remove();
+						 */
 					} else {
-						Map<String, Object> inputCompany =new HashMap<String, Object>();
+						Map<String, Object> inputCompany = new HashMap<String, Object>();
 						inputCompany.put("attrName", "Company");
 						inputCompany.put("attrValue", contactCompany);
 						inputCompany.put("partyId", partyId);
@@ -374,7 +377,7 @@ public class PersonErpService {
 		}
 		Map<String, Object> result = ServiceUtil.returnSuccess();
 		Map<String, Object> inputMap = new HashMap<String, Object>();
-		inputMap.put("resultMsg", UtilProperties.getMessage("PersonErpUiLabels", "success", locale));
+		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
 		result.put("resultMap", inputMap);
 		return result;
 	}
@@ -407,7 +410,7 @@ public class PersonErpService {
 		input.put("userLogin", userLogin);
 		Map<String, Object> deleteLable = null;
 		deleteLable = dispatcher.runSync("updatePartyGroup", input);
-		inputMap.put("resultMsg", UtilProperties.getMessage("PersonErpUiLabels", "success", locale));
+		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
 		resultMap.put("resultMap", inputMap);
 		return resultMap;
 	}
