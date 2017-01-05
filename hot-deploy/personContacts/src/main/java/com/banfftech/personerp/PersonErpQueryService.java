@@ -70,9 +70,10 @@ public class PersonErpQueryService {
 
 		GenericValue partyContent = EntityUtil.getFirst(
 				delegator.findList("PartyContent", findConditions, null, UtilMisc.toList("-fromDate"), null, false));
-		String contentId = partyContent.getString("contentId");
-		if (UtilValidate.isNotEmpty(contentId))
+		if (UtilValidate.isNotEmpty(partyContent)){
+			String contentId = partyContent.getString("contentId");
 			inputMap.put("headPortrait", "http://127.0.0.1:3400/content/control/stream?contentId=" + contentId);
+		}
 
 		// 获取电话号码
 		GenericValue telecomNumber = EntityUtil.getFirst(delegator.findByAnd("findTelecomNumberByPaytyId",
