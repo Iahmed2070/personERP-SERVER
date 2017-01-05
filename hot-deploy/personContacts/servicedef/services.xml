@@ -15,12 +15,13 @@
         <description>查询用户信息</description>
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
-<!--         <attribute name="personName" type="String" mode="OUT" optional="true"/> -->
-<!--         <attribute name="gender" type="String" mode="OUT" optional="true"/> -->
-<!--         <attribute name="contactNumber" type="String" mode="OUT" optional="true"/> -->
-<!--         <attribute name="email" type="String" mode="OUT" optional="true"/> -->
-<!--         <attribute name="contactAddress" type="String" mode="OUT" optional="true"/> -->
     </service>
+    
+    <service name="showPersonAddress" engine="java" location="com.banfftech.personerp.PersonErpQueryService" invoke="showPersonAddress" auth="false">
+    	<attribute name="partyId" mode="IN" type="String" optional="false"/>
+    	<attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+    
     <service name="findContectsInfo" engine="java"
             location="com.banfftech.personerp.PersonErpQueryService" invoke="findContectsInfo" auth="false">
         <description>查询用户信息</description>

@@ -29,6 +29,7 @@ public class PersonErpQueryService {
 	 * @param context
 	 * @return Map
 	 * @throws GenericEntityException
+	 * @author zhangwenwen
 	 */
 	public static Map<String, Object> findPersonInfo(DispatchContext dctx, Map<String, Object> context)
 			throws GenericEntityException {
@@ -54,12 +55,25 @@ public class PersonErpQueryService {
 			return resultMap;
 		}
 		// 获取姓名
-		inputMap.put("personName", "" + person.get("firstName") + person.get("lastName"));
+		inputMap.put("personName", "" + person.get("lastName") + person.get("firstName"));
 		// 获取性别
 		String gender = "";
 		if (UtilValidate.isNotEmpty(person.get("gender")))
 			gender = "M".equals(person.get("gender")) ? "男" : "女";
 		inputMap.put("gender", gender);
+
+		// 获取头像
+		EntityCondition findConditions = EntityCondition.makeCondition(
+				EntityCondition.makeCondition(UtilMisc.toMap("partyId", partyId)),
+				EntityCondition.makeCondition(UtilMisc.toMap("partyContentTypeId", "LGOIMGURL")),
+				EntityUtil.getFilterByDateExpr());
+
+		GenericValue partyContent = EntityUtil.getFirst(
+				delegator.findList("PartyContent", findConditions, null, UtilMisc.toList("-fromDate"), null, false));
+		String contentId = partyContent.getString("contentId");
+		if (UtilValidate.isNotEmpty(contentId))
+			inputMap.put("headPortrait", "http://127.0.0.1:3400/content/control/stream?contentId=" + contentId);
+
 		// 获取电话号码
 		GenericValue telecomNumber = EntityUtil.getFirst(delegator.findByAnd("findTelecomNumberByPaytyId",
 				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId",
@@ -88,7 +102,48 @@ public class PersonErpQueryService {
 		resultMap.put("resultMap", inputMap);
 		return resultMap;
 	}
-
+	/**
+	 * 用户地址编辑页面的查询
+	 * @param dctx
+	 * @param context
+	 * @return
+	 * @throws GenericEntityException
+	 * @author zhangwenwen
+	 */
+	public static Map<String, Object> showPersonAddress(DispatchContext dctx, Map<String, Object> context)
+			throws GenericEntityException {
+		LocalDispatcher dispatcher = dctx.getDispatcher();
+		Delegator delegator = dispatcher.getDelegator();
+		Locale locale = (Locale) context.get("locale");
+		String partyId = (String) context.get("partyId");
+		Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+		Map<String, Object> inputMap = new HashMap<String, Object>();
+		GenericValue person = delegator.findOne("Person", false, UtilMisc.toMap("partyId", partyId));
+		if (UtilValidate.isEmpty(person)) {
+			resultMap = new HashMap<String, Object>();
+			inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "userDoesNotExist", locale));
+			resultMap.put("resultMap", inputMap);
+			return resultMap;
+		}
+		// 判断用户是否被禁用
+		GenericValue party = delegator.findOne("Party", UtilMisc.toMap("partyId", partyId), false);
+		if ("PARTY_DISABLED".equals(party.get("statusId"))) {
+			resultMap = new HashMap<String, Object>();
+			inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "userDisabled", locale));
+			resultMap.put("resultMap", inputMap);
+			return resultMap;
+		}
+		
+		// 获取地址
+		GenericValue postalAddress = EntityUtil.getFirst(delegator.findByAnd("findPostalAddressByPaytyId",
+				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId",
+						"POSTAL_ADDRESS"),
+				null, false));
+		
+		
+		return null;
+	}
+	
 	/**
 	 * 查询联系人信息
 	 * 
@@ -121,7 +176,7 @@ public class PersonErpQueryService {
 				inputFieldMap.put("partyId", contactParty.get("partyIdFrom"));
 				Map<String, Object> catactMap = new HashMap<String, Object>();
 				catactMap = dispatcher.runSync("findPersonInfo", inputFieldMap);
-				contactList.add( catactMap.get("resultMap"));
+				contactList.add(catactMap.get("resultMap"));
 			}
 		}
 		inputMap.put("contact", contactList);

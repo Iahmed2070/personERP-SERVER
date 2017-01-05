@@ -27,7 +27,7 @@
    	</request-map>
    	<!-- 查询用户信息 -->
 	<request-map uri="findPerson">
-		<!--<security https="true" auth="false" />-->
+		<security https="false" auth="false" />
     	<event type="service" invoke="findPersonInfo"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>

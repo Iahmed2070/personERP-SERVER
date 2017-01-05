@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="org.apache.ofbiz.base.util.template.FreeMarkerWorkerTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2017-01-04T03:57:42" hostname="jinlongxideMacBook-Pro.local" time="0.692">
-  <properties/>
-  <testcase name="renderTemplateFromString" classname="org.apache.ofbiz.base.util.template.FreeMarkerWorkerTests" time="0.692"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[ERROR StatusLogger No log4j2 configuration file found. Using default configuration: logging only errors to the console.
-]]></system-err>
-</testsuite>

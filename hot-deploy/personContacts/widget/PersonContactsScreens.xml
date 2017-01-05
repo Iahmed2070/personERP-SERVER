@@ -23,7 +23,7 @@
                 <set field="tabButtonItem" value="mainInterface"/>
             </actions>
             <widgets>
-                <decorator-screen name="PersonContactsCommonDecorator" location="${parameters.mainDecoratorLocation}">
+                <decorator-screen name="PersonContactsCommonDecorators" location="${parameters.mainDecoratorLocation}">
                     <decorator-section name="body">
                     	<include-menu location="component://personContacts/widget/PersonContactsMenus.xml" name="Json"/>
                     	<screenlet title="人员接口">
