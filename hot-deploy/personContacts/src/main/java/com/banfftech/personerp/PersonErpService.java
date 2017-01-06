@@ -224,8 +224,8 @@ public class PersonErpService {
 						inputEmail.put("contactMechTypeId", "EMAIL_ADDRESS");
 						inputEmail.put("contactMechPurposeTypeId", "PRIMARY_EMAIL");
 						inputEmail.put("userLogin", userLogin);
-						Map<String, Object> updateTelecom = null;
-						updateTelecom = dispatcher.runSync("updatePartyEmailAddress", inputEmail);
+						Map<String, Object> updateEmail = null;
+						updateEmail = dispatcher.runSync("updatePartyEmailAddress", inputEmail);
 					}
 				}
 			}
@@ -277,8 +277,8 @@ public class PersonErpService {
 						inputElc.put("contactMechTypeId", "POSTAL_ADDRESS");
 						inputElc.put("contactMechPurposeTypeId", "PRIMARY_LOCATION");
 						inputElc.put("userLogin", userLogin);
-						Map<String, Object> updateEmail = null;
-						updateEmail = dispatcher.runSync("updatePartyPostalAddress", inputElc);
+						Map<String, Object> updateAddress = null;
+						updateAddress = dispatcher.runSync("updatePartyPostalAddress", inputElc);
 					}
 				}
 			}

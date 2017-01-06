@@ -55,7 +55,7 @@ public class PersonErpQueryService {
 			return resultMap;
 		}
 		// 获取姓名
-		inputMap.put("personName", "" + person.get("lastName") + person.get("firstName"));
+		inputMap.put("personName", "" + person.get("firstName") + person.get("lastName"));
 		// 获取性别
 		String gender = "";
 		if (UtilValidate.isNotEmpty(person.get("gender")))
@@ -88,6 +88,12 @@ public class PersonErpQueryService {
 						"PRIMARY_EMAIL", "contactMechTypeId", "EMAIL_ADDRESS"), null, false));
 		if (UtilValidate.isNotEmpty(emailAddress))
 			inputMap.put("email", emailAddress.getString("infoString"));
+		// 获取公司
+		GenericValue company = EntityUtil.getFirst(
+				delegator.findByAnd("PartyAttribute", UtilMisc.toMap("partyId", partyId,"attrName", "Company" 
+						), null, false));
+		if (UtilValidate.isNotEmpty(company))
+			inputMap.put("company", company.get("attrValue"));
 		// 获取地址
 		GenericValue postalAddress = EntityUtil.getFirst(delegator.findByAnd("findPostalAddressByPaytyId",
 				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId",
@@ -100,6 +106,7 @@ public class PersonErpQueryService {
 			inputMap.put("email", emailAddress.getString("infoString"));
 
 		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+		inputMap.put("partyId", partyId);
 		resultMap.put("resultMap", inputMap);
 		return resultMap;
 	}
@@ -146,7 +153,7 @@ public class PersonErpQueryService {
 	}
 	
 	/**
-	 * 查询联系人信息
+	 * 查询联系人列表
 	 * 
 	 * @param dctx
 	 * @param context

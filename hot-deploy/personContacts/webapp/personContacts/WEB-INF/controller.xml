@@ -34,56 +34,56 @@
     </request-map>
     <!-- 获取联系人列表 -->
 	<request-map uri="findContects">
-		<!--<security https="true" auth="false" />-->
+		<security https="false" auth="false" />
     	<event type="service" invoke="findContectsInfo"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- 添加联系人 -->
 	<request-map uri="addContects">
-		<!--<security https="true" auth="false" />-->
+		<security https="false" auth="false" />
     	<event type="service" invoke="addContects"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- 删除联系人 -->
 	<request-map uri="deleteContects">
-		<!--<security https="true" auth="false" />-->
+		<security https="false" auth="false" />
     	<event type="service" invoke="deletePartyRelationship"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- 更新联系人 -->
 	<request-map uri="updateContects">
-		<!--<security https="true" auth="false" />-->
+		<security https="false" auth="false" />
     	<event type="service" invoke="updateContects"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- 新建标签 -->
 	<request-map uri="createLable">
-		<security https="true" auth="false" />
+		<security https="false" auth="false" />
     	<event type="service" invoke="createLable"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- 获取全部标签 -->
 	<request-map uri="findLable">
-		<security https="true" auth="false" />
+		<security https="false" auth="false" />
     	<event type="service" invoke="findLable"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- 获取标签内的人员 -->
 	<request-map uri="findLablePerson">
-		<security https="true" auth="false" />
+		<security https="false" auth="false" />
     	<event type="service" invoke="findLablePerson"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
      <!-- 删除标签 -->
 	<request-map uri="deleteLable">
-		<security https="true" auth="false" />
+		<security https="false" auth="false" />
     	<event type="service" invoke="deleteLable"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
