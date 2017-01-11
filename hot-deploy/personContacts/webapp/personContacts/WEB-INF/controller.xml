@@ -81,10 +81,17 @@
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
-     <!-- 删除标签 -->
+    <!-- 删除标签 -->
 	<request-map uri="deleteLable">
 		<security https="false" auth="false" />
     	<event type="service" invoke="deleteLable"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+    <!-- 获得省列表 -->
+	<request-map uri="getProvince">
+		<security https="false" auth="false" />
+    	<event type="service" invoke="getProvince"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
