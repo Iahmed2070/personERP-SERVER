@@ -55,7 +55,8 @@ public class PersonErpQueryService {
 			return resultMap;
 		}
 		// 获取姓名
-		inputMap.put("personName", "" + person.get("firstName") + person.get("lastName"));
+		inputMap.put("firstName", person.get("firstName"));
+		inputMap.put("lastName",  person.get("firstName"));
 		// 获取性别
 		String gender = "";
 		if (UtilValidate.isNotEmpty(person.get("gender")))
@@ -100,11 +101,12 @@ public class PersonErpQueryService {
 						"POSTAL_ADDRESS"),
 				null, false));
 		if (UtilValidate.isNotEmpty(postalAddress))
-			inputMap.put("contactAddress", "" + postalAddress.get("geoName") + " " + postalAddress.get("city") + " "
-					+ postalAddress.get("address2") + " " + postalAddress.get("address1"));
-		if (UtilValidate.isNotEmpty(emailAddress))
-			inputMap.put("email", emailAddress.getString("infoString"));
-
+			/*inputMap.put("contactAddress", "" + postalAddress.get("geoName") + " " + postalAddress.get("city") + " "
+					+ postalAddress.get("address2") + " " + postalAddress.get("address1"));*/
+			inputMap.put("geoName",postalAddress.get("geoName"));
+			inputMap.put("city",postalAddress.get("city"));
+			inputMap.put("address1",postalAddress.get("address1"));
+			inputMap.put("address2",postalAddress.get("address2"));
 		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
 		inputMap.put("partyId", partyId);
 		resultMap.put("resultMap", inputMap);
