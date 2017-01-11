@@ -56,7 +56,7 @@ public class PersonErpQueryService {
 		}
 		// 获取姓名
 		inputMap.put("firstName", person.get("firstName"));
-		inputMap.put("lastName",  person.get("firstName"));
+		inputMap.put("lastName",  person.get("lastName"));
 		// 获取性别
 		String gender = "";
 		if (UtilValidate.isNotEmpty(person.get("gender")))
