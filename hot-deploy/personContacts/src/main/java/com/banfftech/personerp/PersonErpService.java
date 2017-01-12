@@ -100,6 +100,7 @@ public class PersonErpService {
 			Map<String, Object> inputLable = new HashMap<String, Object>();
 			inputLable.put("partyIdFrom", contactGroup);
 			inputLable.put("partyIdTo", createPerson.get("partyId").toString());
+			//inputLable.put("partyRelationshipTypeId", "GROUP_ROLLUP");
 			inputLable.put("userLogin", userLogin);
 			Map<String, Object> createLable = null;
 			createLable = dispatcher.runSync("createPartyRelationship", inputLable);
@@ -445,6 +446,39 @@ public class PersonErpService {
 		input.put("userLogin", userLogin);
 		Map<String, Object> createLable = null;
 		createLable = dispatcher.runSync("createPartyGroup", input);
+		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+		resultMap.put("resultMap", inputMap);
+		return resultMap;
+	}
+	/**
+	 * 添加标签内成员
+	 * 
+	 * @param dctx
+	 * @param context
+	 * @return Map
+	 * @throws GenericEntityException
+	 * @throws GenericServiceException
+	 */
+	public static Map<String, Object> addLablePerson(DispatchContext dctx, Map<String, Object> context)
+			throws GenericEntityException, GenericServiceException {
+		LocalDispatcher dispatcher = dctx.getDispatcher();
+		Delegator delegator = dispatcher.getDelegator();
+		Locale locale = (Locale) context.get("locale");
+		String partyIdFrom = (String) context.get("partyIdFrom");
+		String partyIdTo = (String) context.get("partyIdTo");
+		Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+		Map<String, Object> inputMap = new HashMap<String, Object>();
+		// 模拟一个用户登录信息
+		String userLoginId = "admin";
+		GenericValue userLogin;
+		userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
+		// 同步createPartyRelationship服务
+		Map<String, Object> input = new HashMap<String, Object>();
+		input.put("partyIdFrom", partyIdFrom);
+		input.put("partyIdTo", partyIdTo);
+		input.put("userLogin", userLogin);
+		Map<String, Object> addLablePerson = null;
+		addLablePerson = dispatcher.runSync("createPartyRelationship", input);
 		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
 		resultMap.put("resultMap", inputMap);
 		return resultMap;

@@ -88,6 +88,13 @@
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
+    <!-- 添加标签内人员 -->
+	<request-map uri="addLablePerson">
+		<security https="false" auth="false" />
+    	<event type="service" invoke="addLablePerson"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
     <!-- 获得省列表 -->
 	<request-map uri="getProvince">
 		<security https="false" auth="false" />
@@ -95,8 +102,8 @@
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
-    
-     <request-map uri="stream">
+   	<!-- 上传头像 -->
+    <request-map uri="stream">
     	<security  https="false"/>
         <event type="java" path="org.apache.ofbiz.content.data.DataEvents" invoke="serveObjectData"/>
         <response name="success" type="none"/>
