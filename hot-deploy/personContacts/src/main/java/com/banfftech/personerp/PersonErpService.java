@@ -100,7 +100,7 @@ public class PersonErpService {
 			Map<String, Object> inputLable = new HashMap<String, Object>();
 			inputLable.put("partyIdFrom", contactGroup);
 			inputLable.put("partyIdTo", createPerson.get("partyId").toString());
-			//inputLable.put("partyRelationshipTypeId", "GROUP_ROLLUP");
+			inputLable.put("partyRelationshipTypeId", "GROUP_ROLLUP");
 			inputLable.put("userLogin", userLogin);
 			Map<String, Object> createLable = null;
 			createLable = dispatcher.runSync("createPartyRelationship", inputLable);
@@ -343,7 +343,7 @@ public class PersonErpService {
 		// 更新标签
 		List<GenericValue> contactGroupList = null;
 		EntityCondition contactGroupCondition = EntityCondition.makeCondition(
-				EntityCondition.makeCondition(UtilMisc.toMap("partyIdTo", partyId)), EntityUtil.getFilterByDateExpr());
+				EntityCondition.makeCondition(UtilMisc.toMap("partyIdTo", partyId,"partyRelationshipTypeId","GROUP_ROLLUP")), EntityUtil.getFilterByDateExpr());
 		contactGroupList = delegator.findList("PartyRelationship", contactGroupCondition, null, null, null, false);
 		// 原标签不为空
 		if (UtilValidate.isNotEmpty(contactGroupList) && UtilValidate.isNotEmpty(contactGroup)) {
@@ -353,6 +353,7 @@ public class PersonErpService {
 					Map<String, Object> inputGroup = new HashMap<String, Object>();
 					inputGroup.put("partyId", partyId);
 					inputGroup.put("partyIdTo", partyId);
+					inputGroup.put("partyRelationshipTypeId", "GROUP_ROLLUP");
 					inputGroup.put("fromDate", contactGroupInfo.get("fromDate"));
 					inputGroup.put("partyIdFrom", contactGroupInfo.get("partyIdFrom"));
 					inputGroup.put("userLogin", userLogin);
@@ -374,6 +375,7 @@ public class PersonErpService {
 				Map<String, Object> inputLable = new HashMap<String, Object>();
 				inputLable.put("partyIdFrom", contactGroup);
 				inputLable.put("partyIdTo", partyId);
+				inputLable.put("partyRelationshipTypeId", "GROUP_ROLLUP");
 				inputLable.put("userLogin", userLogin);
 				Map<String, Object> createLable = null;
 				createLable = dispatcher.runSync("createPartyRelationship", inputLable);
