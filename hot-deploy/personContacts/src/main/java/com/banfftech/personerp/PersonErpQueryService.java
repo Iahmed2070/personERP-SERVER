@@ -72,9 +72,10 @@ public class PersonErpQueryService {
 
 		GenericValue partyContent = EntityUtil.getFirst(
 				delegator.findList("PartyContent", findConditions, null, UtilMisc.toList("-fromDate"), null, false));
-		if (UtilValidate.isNotEmpty(partyContent)){
+		if (UtilValidate.isNotEmpty(partyContent)) {
 			String contentId = partyContent.getString("contentId");
-			inputMap.put("headPortrait", "http://127.0.0.1:3400/content/control/stream?contentId=" + contentId);
+			inputMap.put("headPortrait",
+					"http://114.215.200.46:3400/personContacts/control/stream?contentId=" + contentId);
 		}
 
 		// 获取电话号码
@@ -91,9 +92,8 @@ public class PersonErpQueryService {
 		if (UtilValidate.isNotEmpty(emailAddress))
 			inputMap.put("email", emailAddress.getString("infoString"));
 		// 获取公司
-		GenericValue company = EntityUtil.getFirst(
-				delegator.findByAnd("PartyAttribute", UtilMisc.toMap("partyId", partyId,"attrName", "Company" 
-						), null, false));
+		GenericValue company = EntityUtil.getFirst(delegator.findByAnd("PartyAttribute",
+				UtilMisc.toMap("partyId", partyId, "attrName", "Company"), null, false));
 		if (UtilValidate.isNotEmpty(company))
 			inputMap.put("company", company.get("attrValue"));
 		// 获取地址
@@ -102,18 +102,25 @@ public class PersonErpQueryService {
 						"POSTAL_ADDRESS"),
 				null, false));
 		if (UtilValidate.isNotEmpty(postalAddress))
-			inputMap.put("contactAddress", "" + postalAddress.get("geoName") + " " + postalAddress.get("city") + " "
-					+ postalAddress.get("address2") + " " + postalAddress.get("address1"));
-		if (UtilValidate.isNotEmpty(emailAddress))
-			inputMap.put("email", emailAddress.getString("infoString"));
-
+			/*
+			 * inputMap.put("contactAddress", "" + postalAddress.get("geoName")
+			 * + " " + postalAddress.get("city") + " " +
+			 * postalAddress.get("address2") + " " +
+			 * postalAddress.get("address1"));
+			 */
+			inputMap.put("geoName", postalAddress.get("geoName"));
+		inputMap.put("city", postalAddress.get("city"));
+		inputMap.put("address1", postalAddress.get("address1"));
+		inputMap.put("address2", postalAddress.get("address2"));
 		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
 		inputMap.put("partyId", partyId);
 		resultMap.put("resultMap", inputMap);
 		return resultMap;
 	}
+
 	/**
 	 * 用户地址编辑页面的查询
+	 * 
 	 * @param dctx
 	 * @param context
 	 * @return
@@ -143,19 +150,17 @@ public class PersonErpQueryService {
 			resultMap.put("resultMap", inputMap);
 			return resultMap;
 		}
-		
+
 		// 获取地址
 		GenericValue postalAddress = EntityUtil.getFirst(delegator.findByAnd("findPostalAddressByPartyId",
 				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId",
 						"POSTAL_ADDRESS"),
 				null, false));
-		
 		EntityQuery.use(delegator).from("").where(EntityCondition.makeCondition("geoId", EntityOperator.LIKE, "CN%"),EntityCondition.makeCondition("", EntityOperator.IN, UtilMisc.toList("", "")));
-		
 		
 		return null;
 	}
-	
+
 	/**
 	 * 查询联系人列表
 	 * 
