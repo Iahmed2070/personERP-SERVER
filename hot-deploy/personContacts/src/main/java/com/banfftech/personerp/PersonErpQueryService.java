@@ -101,7 +101,7 @@ public class PersonErpQueryService {
 				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId",
 						"POSTAL_ADDRESS"),
 				null, false));
-		if (UtilValidate.isNotEmpty(postalAddress))
+		if (UtilValidate.isNotEmpty(postalAddress)) {
 			/*
 			 * inputMap.put("contactAddress", "" + postalAddress.get("geoName")
 			 * + " " + postalAddress.get("city") + " " +
@@ -109,9 +109,10 @@ public class PersonErpQueryService {
 			 * postalAddress.get("address1"));
 			 */
 			inputMap.put("geoName", postalAddress.get("geoName"));
-		inputMap.put("city", postalAddress.get("city"));
-		inputMap.put("address1", postalAddress.get("address1"));
-		inputMap.put("address2", postalAddress.get("address2"));
+			inputMap.put("city", postalAddress.get("city"));
+			inputMap.put("address1", postalAddress.get("address1"));
+			inputMap.put("address2", postalAddress.get("address2"));
+		}
 		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
 		inputMap.put("partyId", partyId);
 		resultMap.put("resultMap", inputMap);
@@ -156,8 +157,9 @@ public class PersonErpQueryService {
 				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId",
 						"POSTAL_ADDRESS"),
 				null, false));
-		EntityQuery.use(delegator).from("").where(EntityCondition.makeCondition("geoId", EntityOperator.LIKE, "CN%"),EntityCondition.makeCondition("", EntityOperator.IN, UtilMisc.toList("", "")));
-		
+		EntityQuery.use(delegator).from("").where(EntityCondition.makeCondition("geoId", EntityOperator.LIKE, "CN%"),
+				EntityCondition.makeCondition("", EntityOperator.IN, UtilMisc.toList("", "")));
+
 		return null;
 	}
 
