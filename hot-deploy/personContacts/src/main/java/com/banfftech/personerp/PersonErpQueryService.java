@@ -13,6 +13,8 @@ import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.condition.EntityCondition;
+import org.apache.ofbiz.entity.condition.EntityOperator;
+import org.apache.ofbiz.entity.util.EntityQuery;
 import org.apache.ofbiz.entity.util.EntityUtil;
 import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
@@ -76,7 +78,7 @@ public class PersonErpQueryService {
 		}
 
 		// 获取电话号码
-		GenericValue telecomNumber = EntityUtil.getFirst(delegator.findByAnd("findTelecomNumberByPaytyId",
+		GenericValue telecomNumber = EntityUtil.getFirst(delegator.findByAnd("findTelecomNumberByPartyId",
 				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId",
 						"TELECOM_NUMBER"),
 				null, false));
@@ -95,7 +97,7 @@ public class PersonErpQueryService {
 		if (UtilValidate.isNotEmpty(company))
 			inputMap.put("company", company.get("attrValue"));
 		// 获取地址
-		GenericValue postalAddress = EntityUtil.getFirst(delegator.findByAnd("findPostalAddressByPaytyId",
+		GenericValue postalAddress = EntityUtil.getFirst(delegator.findByAnd("findPostalAddressByPartyId",
 				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId",
 						"POSTAL_ADDRESS"),
 				null, false));
@@ -143,10 +145,12 @@ public class PersonErpQueryService {
 		}
 		
 		// 获取地址
-		GenericValue postalAddress = EntityUtil.getFirst(delegator.findByAnd("findPostalAddressByPaytyId",
+		GenericValue postalAddress = EntityUtil.getFirst(delegator.findByAnd("findPostalAddressByPartyId",
 				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId",
 						"POSTAL_ADDRESS"),
 				null, false));
+		
+		EntityQuery.use(delegator).from("").where(EntityCondition.makeCondition("geoId", EntityOperator.LIKE, "CN%"),EntityCondition.makeCondition("", EntityOperator.IN, UtilMisc.toList("", "")));
 		
 		
 		return null;

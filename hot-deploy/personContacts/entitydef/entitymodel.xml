@@ -9,7 +9,7 @@
     <copyright></copyright>
     <version></version>
 
-	<view-entity entity-name="findTelecomNumberByPaytyId" package-name="">
+	<view-entity entity-name="findTelecomNumberByPartyId" package-name="">
 		<member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
 		<member-entity entity-alias="PCMP" entity-name="PartyContactMechPurpose"/>
 		<member-entity entity-alias="CM" entity-name="ContactMech"/>
@@ -73,15 +73,18 @@
 		</entity-condition>
 	</view-entity>
 	
-	<view-entity entity-name="findPostalAddressByPaytyId" package-name="">
+	<view-entity entity-name="findPostalAddressByPartyId" package-name="">
 		<member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
 		<member-entity entity-alias="PCMP" entity-name="PartyContactMechPurpose"/>
 		<member-entity entity-alias="CM" entity-name="ContactMech"/>
 		<member-entity entity-alias="PA" entity-name="PostalAddress"/>
 		<member-entity entity-alias="G" entity-name="Geo"/>
+		
+		<member-entity entity-alias="G1" entity-name="Geo"/><!-- 找出市对应的GeoId -->
+		<member-entity entity-alias="G2" entity-name="Geo"/><!-- 找出区对应的GeoId -->
+		
 		<alias entity-alias="PCM" name="partyId" field="partyId"/>
 		<alias entity-alias="PCM" name="fromDate" field="fromDate"/>
-		<alias entity-alias="PCM" name="partyId" field="partyId"/>
 		<alias entity-alias="PCM" name="contactMechId" field="contactMechId"/>
 		<alias entity-alias="PCMP" name="thruDatePartyPu" field="thruDate"/>
 		<alias entity-alias="PCMP" name="contactMechPurposeTypeId" field="contactMechPurposeTypeId"/>
@@ -91,6 +94,8 @@
 		<alias entity-alias="PA" name="city" field="city"/>
 		<alias entity-alias="PA" name="stateProvinceGeoId" field="stateProvinceGeoId"/>
 		<alias entity-alias="G" name="geoName" field="geoName"/>
+		<alias entity-alias="G1" name="geoIdCity" field="geoId"/>
+		<alias entity-alias="G2" name="geoIdArea" field="geoId"/>
 		<view-link entity-alias="PCM" rel-entity-alias="PCMP">
 			<key-map field-name="partyId" rel-field-name="partyId"/>
 			<key-map field-name="contactMechId" rel-field-name="contactMechId"/>
@@ -110,6 +115,14 @@
 		<view-link entity-alias="PA" rel-entity-alias="G">
 			<key-map field-name="stateProvinceGeoId" rel-field-name="geoId"/>
 		</view-link>
+		
+		<view-link entity-alias="PA" rel-entity-alias="G1">
+			<key-map field-name="city" rel-field-name="geoName"/>
+		</view-link>
+		<view-link entity-alias="PA" rel-entity-alias="G2">
+			<key-map field-name="address2" rel-field-name="geoName"/>
+		</view-link>
+		
 		<entity-condition>
 			<order-by field-name="-fromDate"/>
 		</entity-condition>

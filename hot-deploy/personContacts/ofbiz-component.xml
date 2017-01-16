@@ -12,8 +12,10 @@
     <!-- entity resources: model(s), eca(s), group, and data definitions -->
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
     <!-- <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/> -->
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/GeoAssocTypeData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/PersonContactsTypeData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/PersonContactsSecurityPermissionSeedData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/GeoAssocTypeData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/PersonContactsSecurityGroupDemoData.xml"/>
     <entity-resource type="data" reader-name="demo" loader="main" location="data/PersonContactsDemoData.xml"/>
 
