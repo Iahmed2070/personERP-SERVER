@@ -478,6 +478,7 @@ public class PersonErpService {
 		Map<String, Object> input = new HashMap<String, Object>();
 		input.put("partyIdFrom", partyIdFrom);
 		input.put("partyIdTo", partyIdTo);
+		input.put("partyRelationshipTypeId", "GROUP_ROLLUP");
 		input.put("userLogin", userLogin);
 		Map<String, Object> addLablePerson = null;
 		addLablePerson = dispatcher.runSync("createPartyRelationship", input);
