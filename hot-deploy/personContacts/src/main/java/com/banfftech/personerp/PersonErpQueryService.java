@@ -57,7 +57,7 @@ public class PersonErpQueryService {
 			return resultMap;
 		}
 		// 获取姓名
-		inputMap.put("personName", "" + person.get("firstName") + person.get("lastName"));
+		inputMap.put("personName", "" + person.get("lastName") + person.get("firstName"));
 		// 获取性别
 		String gender = "";
 		if (UtilValidate.isNotEmpty(person.get("gender")))
@@ -162,10 +162,72 @@ public class PersonErpQueryService {
 				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId",
 						"POSTAL_ADDRESS"),
 				null, false));
-		EntityQuery.use(delegator).from("").where(EntityCondition.makeCondition("geoId", EntityOperator.LIKE, "CN%"),
-				EntityCondition.makeCondition("", EntityOperator.IN, UtilMisc.toList("", "")));
 
-		return null;
+		if (UtilValidate.isNotEmpty(postalAddress)) {
+			inputMap.put("address1", postalAddress.getString("address1"));
+			inputMap.put("stateProvinceGeoId", postalAddress.getString("stateProvinceGeoId"));
+			inputMap.put("geoIdCity", postalAddress.getString("geoIdCity"));
+			inputMap.put("geoIdArea", postalAddress.getString("geoIdArea"));
+		}
+
+		// 获取电话号码
+		GenericValue telecomNumber = EntityUtil.getFirst(delegator.findByAnd("findTelecomNumberByPartyId",
+				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId",
+						"TELECOM_NUMBER"),
+				null, false));
+		if (UtilValidate.isNotEmpty(telecomNumber))
+			inputMap.put("contactNumber", telecomNumber.getString("contactNumber"));
+		// 获取email
+		GenericValue emailAddress = EntityUtil.getFirst(
+				delegator.findByAnd("findEmailByPartyId", UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId",
+						"PRIMARY_EMAIL", "contactMechTypeId", "EMAIL_ADDRESS"), null, false));
+		if (UtilValidate.isNotEmpty(emailAddress))
+			inputMap.put("email", emailAddress.getString("infoString"));
+
+		List<GenericValue> geoList = EntityQuery.use(delegator).from("Geo")
+				.where(EntityCondition.makeCondition("geoId", EntityOperator.LIKE, "CN%"), EntityCondition
+						.makeCondition("geoTypeId", EntityOperator.IN, UtilMisc.toList("PROVINCE", "MUNICIPALITY")))
+				.cache().queryList();
+		// 处理省市区数据
+		List<Map<String, Object>> dataList = new ArrayList<Map<String, Object>>();
+		for (GenericValue gv : geoList) {
+			Map<String, Object> province = new HashMap<String, Object>();
+			String geoId = gv.getString("geoId");
+
+			province.put("geoId", geoId);
+			province.put("geoName", gv.getString("geoName"));
+
+			List<GenericValue> listGeoAssocAndGeoTo = delegator.findByAnd("GeoAssocAndGeoTo",
+					UtilMisc.toMap("geoIdFrom", geoId, "geoAssocTypeId", "PROVINCE_CITY"), null, true);
+			List<Map<String, Object>> provinceList = new ArrayList<Map<String, Object>>();
+			if (UtilValidate.isNotEmpty(listGeoAssocAndGeoTo)) {
+				for (GenericValue gvga : listGeoAssocAndGeoTo) {
+					Map<String, Object> city = new HashMap<String, Object>();
+					String geoIds = gvga.getString("geoId");
+
+					city.put("geoId", geoIds);
+					city.put("geoName", gvga.getString("geoName"));
+
+					List<GenericValue> listGeoAssocAndGeoToTwo = delegator.findByAnd("GeoAssocAndGeoTo",
+							UtilMisc.toMap("geoIdFrom", geoIds, "geoAssocTypeId", "CITY_COUNTY"), null, true);
+					List<Map<String, Object>> cityList = new ArrayList<Map<String, Object>>();
+					for (GenericValue gvw : listGeoAssocAndGeoToTwo) {
+						Map<String, Object> county = new HashMap<String, Object>();
+						county.put("geoId", gvw.getString("geoId"));
+						county.put("geoName", gvw.getString("geoName"));
+						cityList.add(county);
+					}
+					city.put("child", cityList);
+					provinceList.add(city);
+				}
+			}
+			province.put("child", provinceList);
+			dataList.add(province);
+		}
+		inputMap.put("addressSelectData", dataList);
+
+		resultMap.put("resultMap", inputMap);
+		return resultMap;
 	}
 
 	/**

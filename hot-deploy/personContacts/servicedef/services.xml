@@ -18,6 +18,7 @@
     </service>
     
     <service name="showPersonAddress" engine="java" location="com.banfftech.personerp.PersonErpQueryService" invoke="showPersonAddress" auth="false">
+    	<description>查询用户地址(地址修改页面)</description>
     	<attribute name="partyId" mode="IN" type="String" optional="false"/>
     	<attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
