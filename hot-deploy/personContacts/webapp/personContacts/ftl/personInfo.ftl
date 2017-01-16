@@ -12,6 +12,7 @@
 				<option value="updateContects">更新联系人信息</option>
 				<option value="deleteLable">删除标签</option>
 				<option value="createLable">新建标签</option>
+				<option value="showPersonAddress">修改地址页数据</option>
 			</select>
 		</td>
 	</tr>
@@ -205,6 +206,18 @@
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
 			<td><input type="button" value="提交" onclick="getJsonForThis('createLable','createLable');"/></td>
+		</tr>
+	</table>
+</form>	
+<form id="showPersonAddress" style="display:none;" class="showOrHid">
+	<table width="100%">
+		<tr>
+			<td style="width:20%;text-align:right;">partyId:</td>
+			<td><input type="text" name="partyId"/></td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">&nbsp;</td>
+			<td><input type="button" value="提交" onclick="getJsonForThis('showPersonAddress','showPersonAddress');"/></td>
 		</tr>
 	</table>
 </form>	

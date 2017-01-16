@@ -32,6 +32,13 @@
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
+    <!-- 修改地址是的查询界面 -->
+	<request-map uri="showPersonAddress">
+		<security https="false" auth="false" />
+    	<event type="service" invoke="showPersonAddress"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
     <!-- 获取联系人列表 -->
 	<request-map uri="findContects">
 		<security https="false" auth="false" />
