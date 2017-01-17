@@ -96,6 +96,11 @@ public class PersonErpQueryService {
 				UtilMisc.toMap("partyId", partyId, "attrName", "Company"), null, false));
 		if (UtilValidate.isNotEmpty(company))
 			inputMap.put("company", company.get("attrValue"));
+		// 获取标签
+		GenericValue lable = EntityUtil.getFirst(delegator.findByAnd("PartyRelationship",
+				UtilMisc.toMap("partyIdTo", partyId, "partyRelationshipTypeId", "GROUP_ROLLUP"), null, false));
+		if (UtilValidate.isNotEmpty(lable))
+			inputMap.put("lable", lable.get("partyIdFrom"));
 		// 获取地址
 		GenericValue postalAddress = EntityUtil.getFirst(delegator.findByAnd("findPostalAddressByPartyId",
 				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId",
@@ -323,7 +328,7 @@ public class PersonErpQueryService {
 		// 查询标签内成员的partyId
 		EntityCondition findConditions = null;
 		findConditions = EntityCondition.makeCondition(
-				EntityCondition.makeCondition(UtilMisc.toMap("partyIdFrom", partyId)),
+				EntityCondition.makeCondition(UtilMisc.toMap("partyIdFrom", partyId,"partyRelationshipTypeId", "GROUP_ROLLUP")),
 				EntityUtil.getFilterByDateExpr());
 		lableList = delegator.findList("PartyRelationship", findConditions, UtilMisc.toSet("partyIdTo"), null, null,
 				false);
