@@ -16,7 +16,7 @@
 		<member-entity entity-alias="TN" entity-name="TelecomNumber"/>
 		<alias entity-alias="PCM" name="partyId" field="partyId"/>
 		<alias entity-alias="PCM" name="fromDate" field="fromDate"/>
-		<alias entity-alias="PCM" name="thruDateParty" field="thruDate"/>
+		<alias entity-alias="PCM" name="thruDate" field="thruDate"/>
 		<alias entity-alias="PCMP" name="thruDatePartyPu" field="thruDate"/>
 		<alias entity-alias="PCM" name="contactMechId" field="contactMechId"/>
 		<alias entity-alias="PCMP" name="contactMechPurposeTypeId" field="contactMechPurposeTypeId"/>
@@ -49,7 +49,7 @@
 		<member-entity entity-alias="CM" entity-name="ContactMech"/>
 		<alias entity-alias="PCM" name="partyId" field="partyId"/>
 		<alias entity-alias="PCM" name="fromDate" field="fromDate"/>
-		<alias entity-alias="PCM" name="thruDateParty" field="thruDate"/>
+		<alias entity-alias="PCM" name="thruDate" field="thruDate"/>
 		<alias entity-alias="PCM" name="contactMechId" field="contactMechId"/>
 		<alias entity-alias="PCMP" name="thruDatePartyPu" field="thruDate"/>
 		<alias entity-alias="PCMP" name="contactMechPurposeTypeId" field="contactMechPurposeTypeId"/>
@@ -86,12 +86,16 @@
 		<alias entity-alias="PCM" name="partyId" field="partyId"/>
 		<alias entity-alias="PCM" name="fromDate" field="fromDate"/>
 		<alias entity-alias="PCM" name="contactMechId" field="contactMechId"/>
-		<alias entity-alias="PCMP" name="thruDatePartyPu" field="thruDate"/>
+		<alias entity-alias="PCMP" name="thruDate" field="thruDate"/>
 		<alias entity-alias="PCMP" name="contactMechPurposeTypeId" field="contactMechPurposeTypeId"/>
 		<alias entity-alias="CM" name="contactMechTypeId" field="contactMechTypeId"/>
 		<alias entity-alias="PA" name="address1" field="address1"/>
 		<alias entity-alias="PA" name="address2" field="address2"/>
 		<alias entity-alias="PA" name="city" field="city"/>
+		<alias entity-alias="PA" name="toName" field="toName"/>
+		<alias entity-alias="PA" name="attnName" field="attnName"/>
+		<alias entity-alias="PA" name="postalCode" field="postalCode"/>
+		<alias entity-alias="PA" name="countryGeoId" field="countryGeoId"/>
 		<alias entity-alias="PA" name="stateProvinceGeoId" field="stateProvinceGeoId"/>
 		<alias entity-alias="G" name="geoName" field="geoName"/>
 		<alias entity-alias="G1" name="geoIdCity" field="geoId"/>

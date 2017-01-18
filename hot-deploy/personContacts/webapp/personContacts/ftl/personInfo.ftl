@@ -13,6 +13,7 @@
 				<option value="deleteLable">删除标签</option>
 				<option value="createLable">新建标签</option>
 				<option value="showPersonAddress">修改地址页数据</option>
+				<option value="editPersonAddress">修改或添加联系信息</option>
 			</select>
 		</td>
 	</tr>
@@ -218,6 +219,54 @@
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
 			<td><input type="button" value="提交" onclick="getJsonForThis('showPersonAddress','showPersonAddress');"/></td>
+		</tr>
+	</table>
+</form>	
+<form id="editPersonAddress" style="display:none;" class="showOrHid">
+	<table width="100%">
+		<tr>
+			<td style="width:20%;text-align:right;">省份ID:</td>
+			<td><input type="text" name="stateProvinceGeoId"/>*</td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">市ID:</td>
+			<td><input type="text" name="geoIdCity"/>*</td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">区ID:</td>
+			<td><input type="text" name="geoIdArea"/>*</td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">详细地址:</td>
+			<td><input type="text" name="address1"/>*</td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">电话号码:</td>
+			<td><input type="text" name="contactNumber"/>*</td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">邮箱地址:</td>
+			<td><input type="text" name="email"/>*</td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">partyId:</td>
+			<td><input type="text" name="partyId"/>*</td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">toName:</td>
+			<td><input type="text" name="toName"/></td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">attnName:</td>
+			<td><input type="text" name="attnName"/></td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">邮政编码:</td>
+			<td><input type="text" name="postalCode"/></td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">&nbsp;</td>
+			<td><input type="button" value="提交" onclick="getJsonForThis('editPersonAddress','editPersonAddress');"/></td>
 		</tr>
 	</table>
 </form>	

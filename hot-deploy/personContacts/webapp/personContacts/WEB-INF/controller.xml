@@ -39,6 +39,13 @@
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
+    <!-- 修改联系方式 -->
+	<request-map uri="editPersonAddress">
+		<security https="false" auth="false" />
+    	<event type="service" invoke="editPersonAddress"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
     <!-- 获取联系人列表 -->
 	<request-map uri="findContects">
 		<security https="false" auth="false" />

@@ -23,6 +23,22 @@
     	<attribute name="resultMap" type="java.util.HashMap" mode="OUT" optional="true"/>
     </service>
     
+    <service name="editPersonAddress" engine="java" location="com.banfftech.personerp.PersonErpQueryService" invoke="editPersonAddress" auth="false">
+    	<description>编辑用户地址</description>
+    	<attribute name="stateProvinceGeoId" mode="IN" type="String" optional="false"/>
+    	<attribute name="geoIdCity" mode="IN" type="String" optional="false"/>
+    	<attribute name="geoIdArea" mode="IN" type="String" optional="false"/>
+    	<attribute name="address1" mode="IN" type="String" optional="false"/>
+    	<attribute name="contactNumber" mode="IN" type="String" optional="false"/>
+    	<attribute name="email" mode="IN" type="String" optional="false"/>
+    	<attribute name="partyId" mode="IN" type="String" optional="false"/>
+    	<attribute name="toName" mode="IN" type="String" optional="true"/>
+    	<attribute name="attnName" mode="IN" type="String" optional="true"/>
+    	<attribute name="postalCode" mode="IN" type="String" optional="true"/>
+    	
+    	<attribute name="resultMap" mode="OUT" type="java.util.HashMap" optional="false"/>
+    </service>
+    
     <service name="findContectsInfo" engine="java"
             location="com.banfftech.personerp.PersonErpQueryService" invoke="findContectsInfo" auth="false">
         <description>查询用户信息</description>
