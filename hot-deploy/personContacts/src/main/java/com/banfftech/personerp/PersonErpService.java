@@ -429,6 +429,42 @@ public class PersonErpService {
 		resultMap.put("resultMap", inputMap);
 		return resultMap;
 	}
+	/**
+	 * 删除联系人
+	 * 
+	 * @param dctx
+	 * @param context
+	 * @return Map
+	 * @throws GenericEntityException
+	 * @throws GenericServiceException
+	 */
+	public static Map<String, Object> deleteContects(DispatchContext dctx, Map<String, Object> context)
+			throws GenericEntityException, GenericServiceException {
+		LocalDispatcher dispatcher = dctx.getDispatcher();
+		Delegator delegator = dispatcher.getDelegator();
+		Locale locale = (Locale) context.get("locale");
+		String partyIdTo = (String) context.get("partyIdTo");
+		String partyIdFrom = (String) context.get("partyIdFrom");
+		Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+		Map<String, Object> inputMap = new HashMap<String, Object>();
+		// 模拟一个用户登录信息
+		String userLoginId = "admin";
+		GenericValue userLogin;
+		userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
+		GenericValue contact = EntityUtil.getFirst(delegator.findByAnd("PartyRelationship",
+				UtilMisc.toMap("partyIdTo", partyIdTo,"partyIdFrom",partyIdFrom, "partyRelationshipTypeId", "CONTACT_REL"), null, false));
+		// 同步deletePartyRelationship服务删除联系人
+		Map<String, Object> input = new HashMap<String, Object>();
+		input.put("fromDate", contact.get("fromDate"));
+		input.put("partyIdTo", partyIdTo);
+		input.put("partyIdFrom", partyIdFrom);
+		input.put("userLogin", userLogin);
+		Map<String, Object> deleteContact = null;
+		deleteContact = dispatcher.runSync("deletePartyRelationship", input);
+		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+		resultMap.put("resultMap", inputMap);
+		return resultMap;
+	}
 
 	/**
 	 * 新建标签

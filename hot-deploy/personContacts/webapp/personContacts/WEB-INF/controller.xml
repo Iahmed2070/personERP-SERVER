@@ -63,7 +63,7 @@
     <!-- 删除联系人 -->
 	<request-map uri="deleteContects">
 		<security https="false" auth="false" />
-    	<event type="service" invoke="deletePartyRelationship"/>
+    	<event type="service" invoke="deleteContects"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>

@@ -10,6 +10,7 @@
 				<option value="findLable">查询用户拥有的标签</option>
 				<option value="findLablePerson">查询标签内成员</option>
 				<option value="addContects">添加联系人</option>
+				<option value="deleteContects">删除联系人</option>
 				<option value="updateContects">更新联系人信息</option>
 				<option value="deleteLable">删除标签</option>
 				<option value="createLable">新建标签</option>
@@ -39,6 +40,22 @@
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
 			<td><input type="button" value="提交" onclick="getJsonForThis('findContactInfo','findContactInfo');"/></td>
+		</tr>
+	</table>
+</form>	
+<form id="deleteContects" style="display:none;" class="showOrHid">
+	<table width="100%">
+		<tr>
+			<td style="width:20%;text-align:right;">联系人partyId:</td>
+			<td><input type="text" name="partyIdFrom"/></td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">用户partyId:</td>
+			<td><input type="text" name="partyIdTo"/></td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">&nbsp;</td>
+			<td><input type="button" value="提交" onclick="getJsonForThis('deleteContects','deleteContects');"/></td>
 		</tr>
 	</table>
 </form>	

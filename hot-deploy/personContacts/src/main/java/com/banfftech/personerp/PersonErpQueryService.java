@@ -345,7 +345,7 @@ public class PersonErpQueryService {
 				.makeCondition(UtilMisc.toMap("partyIdTo", partyId, "partyRelationshipTypeId", "CONTACT_REL"));
 		List<GenericValue> contactPartyIdList = null;
 		contactPartyIdList = delegator.findList("PartyRelationship", findConditions, UtilMisc.toSet("partyIdFrom"),
-				null, null, false);
+				UtilMisc.toList("-fromDate"), null, false);
 		List<Object> contactList = new ArrayList<Object>();
 		// 遍历获得的联系人partyId，同步findPersonInfo获得联系人信息
 		if (UtilValidate.isNotEmpty(contactPartyIdList)) {

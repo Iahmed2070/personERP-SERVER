@@ -70,6 +70,13 @@
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+    <service name="deleteContects" engine="java"
+            location="com.banfftech.personerp.PersonErpService" invoke="deleteContects" auth="false">
+        <description>删除联系人</description>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service> 
     <service name="findLable" engine="java"
             location="com.banfftech.personerp.PersonErpQueryService" invoke="findLable" auth="false">
         <description>查询拥有的标签</description>
