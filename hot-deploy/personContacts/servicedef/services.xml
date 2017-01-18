@@ -17,6 +17,13 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
     
+    <service name="findContactPerson" engine="java"
+            location="com.banfftech.personerp.PersonErpQueryService" invoke="findContactPerson" auth="false">
+        <description>查询联系人个人信息</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+    
     <service name="showPersonAddress" engine="java" location="com.banfftech.personerp.PersonErpQueryService" invoke="showPersonAddress" auth="false">
     	<description>查询用户地址(地址修改页面)</description>
     	<attribute name="partyId" mode="IN" type="String" optional="false"/>
@@ -32,8 +39,7 @@
     <service name="addContects" engine="java"
             location="com.banfftech.personerp.PersonErpService" invoke="addContects" auth="false">
         <description>添加联系人</description>
-        <attribute name="firstName" type="String" mode="IN" optional="false"/>
-        <attribute name="lastName" type="String" mode="IN" optional="false"/>
+        <attribute name="personName" type="String" mode="IN" optional="false"/>
         <attribute name="gender" type="String" mode="IN" optional="false"/>
         <attribute name="contactNumber" type="String" mode="IN" optional="false"/>
         <attribute name="contactAddress1" type="String" mode="IN" optional="false"/>
@@ -50,8 +56,7 @@
     <service name="updateContects" engine="java"
             location="com.banfftech.personerp.PersonErpService" invoke="updateContects" auth="false">
         <description>更新联系人</description>
-        <attribute name="firstName" type="String" mode="IN" optional="false"/>
-        <attribute name="lastName" type="String" mode="IN" optional="false"/>
+        <attribute name="personName" type="String" mode="IN" optional="false"/>
         <attribute name="gender" type="String" mode="IN" optional="false"/>
         <attribute name="contactNumber" type="String" mode="IN" optional="false"/>
         <attribute name="contactAddress1" type="String" mode="IN" optional="false"/>

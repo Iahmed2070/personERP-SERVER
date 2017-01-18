@@ -123,6 +123,98 @@ public class PersonErpQueryService {
 		resultMap.put("resultMap", inputMap);
 		return resultMap;
 	}
+	/**
+	 * 查询联系人信息
+	 * 
+	 * @param dctx
+	 * @param context
+	 * @return Map
+	 * @throws GenericEntityException
+	 * @author zhangwenwen
+	 */
+	
+	public static Map<String, Object> findContactPerson(DispatchContext dctx, Map<String, Object> context)
+			throws GenericEntityException {
+		LocalDispatcher dispatcher = dctx.getDispatcher();
+		Delegator delegator = dispatcher.getDelegator();
+		Locale locale = (Locale) context.get("locale");
+		String partyId = (String) context.get("partyId");
+		Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+		Map<String, Object> inputMap = new HashMap<String, Object>();
+		GenericValue person = delegator.findOne("Person", false, UtilMisc.toMap("partyId", partyId));
+		if (UtilValidate.isEmpty(person)) {
+			resultMap = new HashMap<String, Object>();
+			inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "userDoesNotExist", locale));
+			resultMap.put("resultMap", inputMap);
+			return resultMap;
+		}
+		// 判断用户是否被禁用
+		GenericValue party = delegator.findOne("Party", UtilMisc.toMap("partyId", partyId), false);
+		if ("PARTY_DISABLED".equals(party.get("statusId"))) {
+			resultMap = new HashMap<String, Object>();
+			inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "userDisabled", locale));
+			resultMap.put("resultMap", inputMap);
+			return resultMap;
+		}
+		// 获取姓名
+		inputMap.put("personName", "" + person.get("lastName") + person.get("firstName"));
+		
+		// 获取性别
+		if (UtilValidate.isNotEmpty(person.get("gender")))
+		inputMap.put("gender", person.get("gender"));
+		// 获取头像
+		EntityCondition findConditions = EntityCondition.makeCondition(
+				EntityCondition.makeCondition(UtilMisc.toMap("partyId", partyId)),
+				EntityCondition.makeCondition(UtilMisc.toMap("partyContentTypeId", "LGOIMGURL")),
+				EntityUtil.getFilterByDateExpr());
+
+		GenericValue partyContent = EntityUtil.getFirst(
+				delegator.findList("PartyContent", findConditions, null, UtilMisc.toList("-fromDate"), null, false));
+		if (UtilValidate.isNotEmpty(partyContent)) {
+			String contentId = partyContent.getString("contentId");
+			inputMap.put("headPortrait",
+					"http://114.215.200.46:3400/personContacts/control/stream?contentId=" + contentId);
+		}
+
+		// 获取电话号码
+		GenericValue telecomNumber = EntityUtil.getFirst(delegator.findByAnd("findTelecomNumberByPartyId",
+				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE", "contactMechTypeId",
+						"TELECOM_NUMBER"),
+				null, false));
+		if (UtilValidate.isNotEmpty(telecomNumber))
+			inputMap.put("contactNumber", telecomNumber.getString("contactNumber"));
+		// 获取email
+		GenericValue emailAddress = EntityUtil.getFirst(
+				delegator.findByAnd("findEmailByPartyId", UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId",
+						"PRIMARY_EMAIL", "contactMechTypeId", "EMAIL_ADDRESS"), null, false));
+		if (UtilValidate.isNotEmpty(emailAddress))
+			inputMap.put("email", emailAddress.getString("infoString"));
+		// 获取公司
+		GenericValue company = EntityUtil.getFirst(delegator.findByAnd("PartyAttribute",
+				UtilMisc.toMap("partyId", partyId, "attrName", "Company"), null, false));
+		if (UtilValidate.isNotEmpty(company))
+			inputMap.put("company", company.get("attrValue"));
+		// 获取标签
+		GenericValue lable = EntityUtil.getFirst(delegator.findByAnd("PartyRelationship",
+				UtilMisc.toMap("partyIdTo", partyId, "partyRelationshipTypeId", "GROUP_ROLLUP"), null, false));
+		if (UtilValidate.isNotEmpty(lable))
+			inputMap.put("lable", lable.get("partyIdFrom"));
+		// 获取地址
+		GenericValue postalAddress = EntityUtil.getFirst(delegator.findByAnd("findPostalAddressByPartyId",
+				UtilMisc.toMap("partyId", partyId, "contactMechPurposeTypeId", "PRIMARY_LOCATION", "contactMechTypeId",
+						"POSTAL_ADDRESS"),
+				null, false));
+		if (UtilValidate.isNotEmpty(postalAddress)) {
+			inputMap.put("geoName", postalAddress.get("stateProvinceGeoId"));
+			inputMap.put("city", postalAddress.get("geoIdCity"));
+			inputMap.put("address1", postalAddress.get("address1"));
+			inputMap.put("address2", postalAddress.get("geoIdArea"));
+		}
+		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+		inputMap.put("partyId", partyId);
+		resultMap.put("resultMap", inputMap);
+		return resultMap;
+	}
 
 	/**
 	 * 用户地址编辑页面的查询
