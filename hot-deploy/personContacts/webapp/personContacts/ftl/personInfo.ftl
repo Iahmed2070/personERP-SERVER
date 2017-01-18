@@ -5,10 +5,12 @@
 			<select onchange="showForm(this);">
 				<option>空</option>
 				<option value="findPerson">获取自己的详细信息</option>
+				<option value="findContactInfo">获取联系人详细信息</option>
 				<option value="findContects">获取自己的联系人列表</option>
 				<option value="findLable">查询用户拥有的标签</option>
 				<option value="findLablePerson">查询标签内成员</option>
 				<option value="addContects">添加联系人</option>
+				<option value="deleteContects">删除联系人</option>
 				<option value="updateContects">更新联系人信息</option>
 				<option value="deleteLable">删除标签</option>
 				<option value="createLable">新建标签</option>
@@ -27,6 +29,34 @@
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
 			<td><input type="button" value="提交" onclick="getJsonForThis('findPerson','findPerson');"/></td>
+		</tr>
+	</table>
+</form>	
+<form id="findContactInfo" style="display:none;" class="showOrHid">
+	<table width="100%">
+		<tr>
+			<td style="width:20%;text-align:right;">联系人partyId:</td>
+			<td><input type="text" name="partyId"/></td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">&nbsp;</td>
+			<td><input type="button" value="提交" onclick="getJsonForThis('findContactInfo','findContactInfo');"/></td>
+		</tr>
+	</table>
+</form>	
+<form id="deleteContects" style="display:none;" class="showOrHid">
+	<table width="100%">
+		<tr>
+			<td style="width:20%;text-align:right;">联系人partyId:</td>
+			<td><input type="text" name="partyIdFrom"/></td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">用户partyId:</td>
+			<td><input type="text" name="partyIdTo"/></td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">&nbsp;</td>
+			<td><input type="button" value="提交" onclick="getJsonForThis('deleteContects','deleteContects');"/></td>
 		</tr>
 	</table>
 </form>	
@@ -73,12 +103,8 @@
 			<td><input type="text" name="partyId"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">姓:</td>
-			<td><input type="text" name="firstName"/></td>
-		</tr>
-		<tr>
-			<td style="width:20%;text-align:right;">名:</td>
-			<td><input type="text" name="lastName"/></td>
+			<td style="width:20%;text-align:right;">姓名:</td>
+			<td><input type="text" name="personName"/></td>
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">性别:</td>
