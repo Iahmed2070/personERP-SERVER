@@ -9,6 +9,22 @@
     <copyright></copyright>
     <version></version>
 
+	<!--活动的内容/附件-->
+	<entity entity-name="MarketingCampaignContent" package-name="com.banfftech.personerp" title="活动内容附件">
+		<field name="marketingCampaignContentId" type="id-ne"/><!-- PK -->
+		<field name="marketingCampaignId" type="id-ne"/>       <!-- FK -->
+		<field name="partyId" type="value"/>
+		<field name="path" type="long-varchar"/>
+		<field name="contentType" type="name"/>
+		<field name="encodedFileName" type="long-varchar"/>
+		<field name="originalFileName" type="long-varchar"/>
+		<field name="fileSize" type="numeric"/>
+		<prim-key field="marketingCampaignContentId"/>
+		<relation type="one" fk-name="CONTENT_MARKETINGCAMPAIGN" rel-entity-name="MarketingCampaign">
+			<key-map field-name="marketingCampaignId"/>
+		</relation>
+	</entity>
+
 	<view-entity entity-name="findTelecomNumberByPartyId" package-name="">
 		<member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
 		<member-entity entity-alias="PCMP" entity-name="PartyContactMechPurpose"/>
@@ -131,5 +147,36 @@
 			<order-by field-name="-fromDate"/>
 		</entity-condition>
 	</view-entity>
+
+	<!-- 我参与的活动 -->
+	<view-entity entity-name="MarketingCampaignAndRole">
+		<member-entity entity-name="MarketingCampaign" entity-alias="MC"/>
+		<member-entity entity-name="MarketingCampaignRole" entity-alias="MCR"/>
+
+		<alias-all entity-alias="MC"/>
+		<alias-all entity-alias="MCR"/>
+		<!--<alias entity-alias="MC" field="marketingCampaignId" name="marketingCampaignId"/>&lt;!&ndash; 活动PrimaryKey &ndash;&gt;-->
+		<!--<alias entity-alias="MC" field="campaignName" name="campaignName"/>&lt;!&ndash; 活动名称 &ndash;&gt;-->
+		<!--<alias entity-alias="MC" field="budgetedCost" name="budgetedCost"/>&lt;!&ndash; 预算费用 &ndash;&gt;-->
+		<!--<alias entity-alias="MC" field="campaignSummary" name="campaignSummary"/>&lt;!&ndash; 活动的摘要 &ndash;&gt;-->
+		<!--<alias entity-alias="MC" field="fromDate" name="fromDate"/>&lt;!&ndash; 这是开始时间 &ndash;&gt;-->
+		<!--<alias entity-alias="MC" field="marketingCampaignId" name="marketingCampaignId"/>-->
+		<!--<alias entity-alias="MC" field="statusId" name="statusId"/>&lt;!&ndash; 活动的状态 &ndash;&gt;-->
+		<!--<alias entity-alias="MCR" field="partyId" name="partyId"/>&lt;!&ndash; 参与的人 &ndash;&gt;-->
+		<!--<alias entity-alias="MCR" field="roleTypeId" name="roleTypeId"/>&lt;!&ndash; 参与的类型 &ndash;&gt;-->
+		<!--<alias entity-alias="MCR" field="marketingCampaignId" name="marketingCampaignId"/>-->
+		<view-link entity-alias="MC" rel-entity-alias="MCR" >
+			<key-map  field-name="marketingCampaignId"/>
+			<entity-condition>
+				<condition-list>
+					<condition-expr field-name="roleTypeId" entity-alias="MCR" operator="equals" value="CAMPAIGN_MEMBER"/>
+				</condition-list>
+				<order-by field-name="-fromDate"/>
+			</entity-condition>
+		</view-link>
+
+
+	</view-entity>
+
 
 </entitymodel>
