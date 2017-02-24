@@ -16,6 +16,6 @@
   <load-component component-location="example"/>
   <load-component component-location="exampleext"/>
   <load-component component-location="passport"/>
-  <load-component component-location="personErp"/>
   <load-component component-location="personContacts"/>
+  <load-component component-location="personactivity"/>
 </component-loader>

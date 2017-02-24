@@ -9,19 +9,26 @@
     <copyright></copyright>
     <version></version>
 
-	<!--活动的内容/附件-->
-	<entity entity-name="MarketingCampaignContent" package-name="com.banfftech.personerp" title="活动内容附件">
-		<field name="marketingCampaignContentId" type="id-ne"/><!-- PK -->
-		<field name="marketingCampaignId" type="id-ne"/>       <!-- FK -->
-		<field name="partyId" type="value"/>
-		<field name="path" type="long-varchar"/>
-		<field name="contentType" type="name"/>
-		<field name="encodedFileName" type="long-varchar"/>
-		<field name="originalFileName" type="long-varchar"/>
-		<field name="fileSize" type="numeric"/>
-		<prim-key field="marketingCampaignContentId"/>
-		<relation type="one" fk-name="CONTENT_MARKETINGCAMPAIGN" rel-entity-name="MarketingCampaign">
-			<key-map field-name="marketingCampaignId"/>
+	<!--活动的内容附件中间表-->
+	<entity entity-name="MarketingCampaignContent" package-name="com.banfftech.personerp" title="中间表">
+
+		<field name="marketingCampaignId" type="id-ne"/>       <!-- PK -->
+		<field name="contentId" type="id-ne"/>	               <!-- PK -->
+		<prim-key field="marketingCampaignId"/>
+		<prim-key field="contentId"/>
+	</entity>
+<!--活动附件类型-->
+	<entity entity-name="MarketingCampaignContentType"
+			package-name="com.banfftech.personerp"
+			title="活动附件类型">
+		<field name="marketingCampaignContentTypeId" type="id-ne"></field>
+		<field name="parentTypeId" type="id"></field>
+		<field name="hasTable" type="indicator"></field>
+		<field name="description" type="description"></field>
+
+		<prim-key field="marketingCampaignContentTypeId"/>
+		<relation type="one" fk-name="MARKET_TYP_PAR" title="Parent" rel-entity-name="MarketingCampaignContentType">
+			<key-map field-name="parentTypeId" rel-field-name="marketingCampaignContentTypeId"/>
 		</relation>
 	</entity>
 

@@ -1,24 +1,339 @@
 package com.banfftech.personerp;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.nio.ByteBuffer;
+import java.util.*;
+
+
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.base.util.UtilValidate;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
+import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.entity.GenericValue;
 import org.apache.ofbiz.entity.condition.EntityCondition;
 import org.apache.ofbiz.entity.util.EntityUtil;
 import org.apache.ofbiz.service.DispatchContext;
-import org.apache.ofbiz.service.GenericServiceException;
+
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
+import sun.net.www.content.text.Generic;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.sql.Timestamp;
+
+import java.io.DataInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import javax.servlet.ServletException;
+
+import java.io.IOException;
+
+
 
 public class PersonErpService {
-	public static final String module = PersonErpQueryService.class.getName();
+	public static final String module = com.banfftech.personerp.PersonErpQueryService.class.getName();
+
+
+
+
+
+
+
+	public static String processRequest(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException,GenericServiceException,GenericEntityException {
+//		request.setContentType("text/html;charset=gb2312");
+//		request.setCharacterEncoding("GBK");
+//		response.setCharacterEncoding("GBK");
+		String path = request.getSession().getServletContext().getRealPath("/") + "upload\\";
+		String encodedFileName = UUID.randomUUID().toString();
+
+		Delegator delegator = (Delegator) request.getAttribute("delegator");
+		//模拟登陆
+		GenericValue userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
+		LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+
+		org.apache.ofbiz.base.util.HttpRequestFileUpload uploadObject = new org.apache.ofbiz.base.util.HttpRequestFileUpload();
+
+//		uploadObject.setOverrideFilename(encodedFileName);
+		uploadObject.setSavePath(path);
+		uploadObject.doUpload(request);
+
+
+
+		String fileName  =uploadObject.getFilename();
+
+		String fileName5 = new String(fileName.getBytes(), "UTF-8");
+
+		//String result = getEncoding(fileName);
+		//创建人
+		String partyId = new String(uploadObject.getFieldValue("partyId").getBytes("ISO-8859-1"),"UTF-8");
+		//活动名称
+		String workEffortName  = new String(uploadObject.getFieldValue("workEffortName").getBytes(), "UTF-8");
+		//简介
+		String description = new String(uploadObject.getFieldValue("description").getBytes("ISO-8859-1"),"UTF-8");
+		//地址
+		String convertedLeads = new String(uploadObject.getFieldValue("convertedLeads").getBytes("ISO-8859-1"),"UTF-8");
+		//活动时间
+		String actualStartDateStr      = new String(uploadObject.getFieldValue("actualStartDate").getBytes("ISO-8859-1"),"UTF-8");
+
+		Timestamp actualStartDate = null;
+		if (actualStartDateStr != null) {
+			actualStartDate = Timestamp.valueOf(actualStartDateStr);
+		}
+
+
+//		//读取请求Body
+//		byte[] body = readBody(request);
+//		//取得所有Body内容的字符串表示
+//		String textBody = new String(body, "ISO-8859-1");
+//		//取得上传的文件名称
+//		String fileName = getFileName(textBody);
+//		//String result = getEncoding(fileName);
+//		fileName = new String(fileName.getBytes("ISO-8859-1"),"UTF-8");
+//		//取得文件开始与结束位置
+//		Position p = getFilePosition(request, textBody);
+//		//输出至文件
+//		writeTo(fileName, body, p,path);
+
+		//1.CREATE DATA RESOURCE
+		Map<String, Object> createDataResourceMap = UtilMisc.toMap("userLogin", userLogin,
+				"dataResourceTypeId","LOCAL_FILE",
+				"dataCategoryId","PERSONAL",
+				"dataResourceName",fileName
+				,"mimeTypeId","image/jpeg",
+				"isPublic","Y",
+				"dataTemplateTypeId","NONE",
+				"statusId","CTNT_PUBLISHED",
+				"objectInfo",path
+				);
+		Map<String, Object> serviceResultByDataResource = dispatcher.runSync("createDataResource",createDataResourceMap);
+		String dataResourceId = (String) serviceResultByDataResource.get("dataResourceId");
+		//2.CREATE CONTENT
+		Map<String, Object> createContentMap = UtilMisc.toMap("userLogin", userLogin,"contentTypeId","ACTIVITY_BACKGROUND","mimeTypeId","image/jpeg","dataResourceId",dataResourceId);
+		Map<String, Object> serviceResultByCreateContentMap = dispatcher.runSync("createContent", createContentMap);
+		String contentId = (String) serviceResultByCreateContentMap.get("contentId");
+		//IF HAS PICTURE WALL
+		//TODO FOREACH CREATE
+		//3.CREATE WORK_EFFORT 目前状态计划中 目前类型事件
+		Map<String,Object> createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin,"currentStatusId","CAL_IN_PLANNING","workEffortName",workEffortName,"workEffortTypeId","workEffortTypeId","description",description,"actualStartDate",actualStartDate);
+		Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort", createWorkEffortMap);
+		//NEW WORKEFFORT_ID
+		String workEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+		//4.assignPartyToWorkEffort
+		Map<String,Object> createAdminAssignPartyMap = UtilMisc.toMap("userLogin", userLogin,"partyId",partyId,"roleTypeId","ACTIVITY_ADMIN","statusId","PRTYASGN_ASSIGNED","workEffortId",workEffortId);
+		Map<String,Object> createMemberAssignPartyMap = UtilMisc.toMap("userLogin", userLogin,"partyId",partyId,"roleTypeId","ACTIVITY_ADMIN","statusId","PRTYASGN_ASSIGNED","workEffortId",workEffortId);
+	    dispatcher.runSync("assignPartyToWorkEffort", createAdminAssignPartyMap);
+		dispatcher.runSync("assignPartyToWorkEffort", createMemberAssignPartyMap);
+
+        //ASSOC WORKEFFORT & CONTENT
+		Map<String,Object> createAssocWFContMap = UtilMisc.toMap("userLogin", userLogin,"contentId",contentId,"workEffortContentTypeId","PROPOSAL_MEDIA","workEffortId",workEffortId);
+		dispatcher.runSync("createWorkEffortContent", createAssocWFContMap);
+		return "success";
+	}
+
+
+
+	public static String getEncoding(String str) {
+		String encode = "GB2312";
+		try {
+			if (str.equals(new String(str.getBytes(encode), encode))) {      //判断是不是GB2312
+				String s = encode;
+				return s;      //是的话，返回“GB2312“，以下代码同理
+			}
+		} catch (Exception exception) {
+		}
+		encode = "ISO-8859-1";
+		try {
+			if (str.equals(new String(str.getBytes(encode), encode))) {      //判断是不是ISO-8859-1
+				String s1 = encode;
+				return s1;
+			}
+		} catch (Exception exception1) {
+		}
+		encode = "UTF-8";
+		try {
+			if (str.equals(new String(str.getBytes(encode), encode))) {   //判断是不是UTF-8
+				String s2 = encode;
+				return s2;
+			}
+		} catch (Exception exception2) {
+		}
+		encode = "GBK";
+		try {
+			if (str.equals(new String(str.getBytes(encode), encode))) {      //判断是不是GBK
+				String s3 = encode;
+				return s3;
+			}
+		} catch (Exception exception3) {
+		}
+		return "";        //如果都不是，说明输入的内容不属于常见的编码格式。
+	}
+
+
+
+	//构造类
+	static class Position {
+
+		int begin;
+		int end;
+
+		public Position(int begin, int end) {
+			this.begin = begin;
+			this.end = end;
+		}
+	}
+
+	private static byte[] readBody(HttpServletRequest request) throws IOException {
+		//获取请求文本字节长度
+		int formDataLength = request.getContentLength();
+		//取得ServletInputStream输入流对象
+		DataInputStream dataStream = new DataInputStream(request.getInputStream());
+		byte body[] = new byte[formDataLength];
+		int totalBytes = 0;
+		while (totalBytes < formDataLength) {
+			int bytes = dataStream.read(body, totalBytes, formDataLength);
+			totalBytes += bytes;
+		}
+		return body;
+	}
+
+	private static Position getFilePosition(HttpServletRequest request, String textBody) throws IOException {
+		//取得文件区段边界信息
+		String contentType = request.getContentType();
+		String boundaryText = contentType.substring(contentType.lastIndexOf("=") + 1, contentType.length());
+		//取得实际上传文件的气势与结束位置
+		int pos = textBody.indexOf("filename=\"");
+		pos = textBody.indexOf("\n", pos) + 1;
+		pos = textBody.indexOf("\n", pos) + 1;
+		pos = textBody.indexOf("\n", pos) + 1;
+		int boundaryLoc = textBody.indexOf(boundaryText, pos) - 4;
+		int begin = ((textBody.substring(0, pos)).getBytes("ISO-8859-1")).length;
+		int end = ((textBody.substring(0, boundaryLoc)).getBytes("ISO-8859-1")).length;
+
+		return new Position(begin, end);
+	}
+
+	private static String getParameter(String requestBody,String parameterName) {
+		String fileName ="";
+		if(requestBody.indexOf(parameterName+"\"")>0){
+			 fileName = requestBody.substring(requestBody.indexOf(parameterName+"\"") + 10);
+		}
+
+		fileName = fileName.substring(0, fileName.indexOf("\n"));
+		fileName = fileName.substring(fileName.indexOf("\n") + 1, fileName.indexOf("\""));
+
+		return fileName;
+	}
+
+	private static String getFileName(String requestBody) {
+		String fileName = requestBody.substring(requestBody.indexOf("filename=\"") + 10);
+		fileName = fileName.substring(0, fileName.indexOf("\n"));
+		fileName = fileName.substring(fileName.indexOf("\n") + 1, fileName.indexOf("\""));
+
+		return fileName;
+	}
+
+	private static void writeTo(String fileName, byte[] body, Position p,String path) throws IOException {
+		FileOutputStream fileOutputStream = new FileOutputStream(path + fileName);
+		fileOutputStream.write(body, p.begin, (p.end - p.begin));
+		fileOutputStream.flush();
+		fileOutputStream.close();
+	}
+
+
+
+
+
+
+	/**
+	 * 创建新的活动
+	 * @param dctx
+	 * @param context
+	 * @return
+	 * @throws GenericEntityException
+	 * @throws GenericServiceException
+	 */
+	public static Map<String, Object> createNewEvent(DispatchContext dctx, Map<String, ? extends Object> context)
+			throws IOException, GenericEntityException, GenericServiceException, InterruptedException {
+
+		LocalDispatcher dispatcher = dctx.getDispatcher();
+		Delegator delegator = dctx.getDelegator();
+		//模拟登陆
+		GenericValue userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
+		Locale locale = (Locale) context.get("locale");
+
+
+		//创建人
+		String partyId = (String) context.get("partyId");
+		//活动名称
+		String workEffortName  = (String)  context.get("workEffortName");
+		//简介
+		String description = (String)  context.get("description");
+		//地址
+		String locationDesc = (String)  context.get("locationDesc");
+		//活动时间
+		String actualStartDate      = (String)  context.get("actualStartDate");
+		//预计完成时间
+		String   estimatedCompletionDate = (String)  context.get("estimatedCompletionDate");
+
+		Timestamp tm = null;
+		Timestamp tmend = null;
+		if (actualStartDate != null) {
+			tm = Timestamp.valueOf(actualStartDate);
+		}
+		if (estimatedCompletionDate != null) {
+			tmend = Timestamp.valueOf(estimatedCompletionDate);
+		}
+
+
+
+		Map<String,Object> createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin,"currentStatusId","CAL_IN_PLANNING","workEffortName",workEffortName,"workEffortTypeId","EVENT","description",description,"actualStartDate",actualStartDate,"locationDesc",locationDesc,"estimatedCompletionDate",tmend);
+		Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort", createWorkEffortMap);
+		//NEW WORKEFFORT_ID
+		String workEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+
+		//Create Party Role
+        GenericValue isExsitsAdmin = delegator.findOne("PartyRole",UtilMisc.toMap("partyId",partyId,"roleTypeId","ACTIVITY_ADMIN"),false);
+		GenericValue isExsitsMember = delegator.findOne("PartyRole",UtilMisc.toMap("partyId",partyId,"roleTypeId","ACTIVITY_MEMBER"),false);
+
+
+		Map<String,Object> createPartyRoleAdminMap = UtilMisc.toMap("userLogin", userLogin,"partyId",partyId,"roleTypeId","ACTIVITY_ADMIN");
+		Map<String,Object> createPartyRoleMemberMap = UtilMisc.toMap("userLogin", userLogin,"partyId",partyId,"roleTypeId","ACTIVITY_MEMBER");
+		if(null==isExsitsAdmin){
+			dispatcher.runSync("createPartyRole", createPartyRoleAdminMap);
+		}
+		if(null==createPartyRoleMemberMap){
+			dispatcher.runSync("createPartyRole", createPartyRoleMemberMap);
+		}
+
+
+
+		//4.assignPartyToWorkEffort
+		Map<String,Object> createAdminAssignPartyMap = UtilMisc.toMap("userLogin", userLogin,"partyId",partyId,"roleTypeId","ACTIVITY_ADMIN","statusId","PRTYASGN_ASSIGNED","workEffortId",workEffortId);
+		Map<String,Object> createMemberAssignPartyMap = UtilMisc.toMap("userLogin", userLogin,"partyId",partyId,"roleTypeId","ACTIVITY_MEMBER","statusId","PRTYASGN_ASSIGNED","workEffortId",workEffortId);
+		dispatcher.runSync("assignPartyToWorkEffort", createAdminAssignPartyMap);
+		dispatcher.runSync("assignPartyToWorkEffort", createMemberAssignPartyMap);
+
+
+
+
+
+		Map<String, Object> inputMap = new HashMap<String, Object>();
+
+		inputMap.put("workEffortId", workEffortId);
+		Map<String, Object> result = ServiceUtil.returnSuccess();
+		result.put("resultMap",inputMap);
+		inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+		return result;
+	}
 
 	/**
 	 * 添加联系人

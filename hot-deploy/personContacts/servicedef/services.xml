@@ -123,5 +123,33 @@
         <description>新建标签</description>
         <attribute name="lableName" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
-    </service> 
+    </service>
+    <!-- 查询我的活动-->
+    <service name="findMyEvent" engine="java"
+             location="com.banfftech.personerp.PersonErpQueryService" invoke="findMyEvent" auth="false">
+        <description>获取我的活动列表</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+    <!-- 开始进行一个新的活动-->
+    <service name="createNewEvent" engine="java"
+             location="com.banfftech.personerp.PersonErpService" invoke="createNewEvent" auth="false">
+        <description>开始一个新的活动</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="workEffortName" type="String" mode="IN" optional="false"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="locationDesc" type="String" mode="IN" optional="true"/>
+
+        <attribute name="actualStartDate" type="String" mode="IN" optional="true"/>
+        <attribute name="estimatedCompletionDate" type="String" mode="IN" optional="true"/>
+
+        <!--<attribute name="uploadFile" type="java.nio.ByteBuffer" mode="IN" optional="true"/>-->
+        <!--<attribute name="uploadFile_fileName" type="String" mode="IN" optional="true"/>-->
+        <!--<attribute name="uploadFile_contentType" type="String" mode="IN" optional="true"/>-->
+
+        <attribute name="inputMap" type="java.util.HashMap" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
 </services>
