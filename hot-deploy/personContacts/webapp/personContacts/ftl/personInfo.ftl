@@ -8,6 +8,7 @@
 				<option value="findContactInfo">获取联系人详细信息</option>
 				<option value="findContects">获取自己的联系人列表</option>
 				<option value="findLable">查询用户拥有的标签</option>
+				<option value="findContactLable">查询联系人标签</option>
 				<option value="findLablePerson">查询标签内成员</option>
 				<option value="addContects">添加联系人</option>
 				<option value="deleteContects">删除联系人</option>
@@ -29,6 +30,18 @@
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
 			<td><input type="button" value="提交" onclick="getJsonForThis('findPerson','findPerson');"/></td>
+		</tr>
+	</table>
+</form>	
+<form id="findContactLable" style="display:none;" class="showOrHid">
+	<table width="100%">
+		<tr>
+			<td style="width:20%;text-align:right;">联系人partyId:</td>
+			<td><input type="text" name="partyId"/></td>
+		</tr>
+		<tr>
+			<td style="width:20%;text-align:right;">&nbsp;</td>
+			<td><input type="button" value="提交" onclick="getJsonForThis('findContactLable','findContactLable');"/></td>
 		</tr>
 	</table>
 </form>	

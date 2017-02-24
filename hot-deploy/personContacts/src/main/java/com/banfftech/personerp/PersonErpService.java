@@ -369,9 +369,20 @@ public class PersonErpService {
 					Map<String, Object> deleteGroup = null;
 					deleteGroup = dispatcher.runSync("deletePartyRelationship", inputGroup);
 				} else {
+					Map<String, Object> inputGroup = new HashMap<String, Object>();
+					inputGroup.put("partyId", partyId);
+					inputGroup.put("partyIdTo", partyId);
+					inputGroup.put("partyRelationshipTypeId", "GROUP_ROLLUP");
+					inputGroup.put("fromDate", contactGroupInfo.get("fromDate"));
+					inputGroup.put("partyIdFrom", contactGroupInfo.get("partyIdFrom"));
+					inputGroup.put("userLogin", userLogin);
+					Map<String, Object> deleteGroup = null;
+					deleteGroup = dispatcher.runSync("deletePartyRelationship", inputGroup);
+					
 					Map<String, Object> inputLable = new HashMap<String, Object>();
 					inputLable.put("partyIdFrom", contactGroup);
 					inputLable.put("partyIdTo", partyId);
+					inputLable.put("partyRelationshipTypeId", "GROUP_ROLLUP");
 					inputLable.put("userLogin", userLogin);
 					Map<String, Object> createLable = null;
 					createLable = dispatcher.runSync("createPartyRelationship", inputLable);

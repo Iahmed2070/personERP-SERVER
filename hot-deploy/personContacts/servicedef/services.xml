@@ -104,7 +104,13 @@
         <description>获取标签内的人员</description>
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
-    </service> 
+    </service>
+    <service name="findContactLable" engine="java"
+            location="com.banfftech.personerp.PersonErpQueryService" invoke="findContactLable" auth="false">
+        <description>查询联系人标签</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>  
     <service name="deleteLable" engine="java"
             location="com.banfftech.personerp.PersonErpService" invoke="deleteLable" auth="false">
         <description>删除标签</description>
@@ -113,7 +119,7 @@
     </service> 
     <service name="addLablePerson" engine="java"
             location="com.banfftech.personerp.PersonErpService" invoke="addLablePerson" auth="false">
-        <description>删除标签</description>
+        <description>添加标签内人员</description>
         <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
         <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>

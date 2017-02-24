@@ -603,6 +603,45 @@ public class PersonErpQueryService {
 		resultMap.put("resultMap", inputMap);
 		return resultMap;
 	}
+	/**
+	 * 查询联系人标签
+	 * 
+	 * @param dctx
+	 * @param context
+	 * @return Map
+	 * @throws GenericEntityException
+	 * @throws GenericServiceException
+	 */
+	public static Map<String, Object> findContactLable(DispatchContext dctx, Map<String, Object> context)
+			throws GenericEntityException, GenericServiceException {
+		LocalDispatcher dispatcher = dctx.getDispatcher();
+		Delegator delegator = dispatcher.getDelegator();
+		Locale locale = (Locale) context.get("locale");
+		String partyId = (String) context.get("partyId");
+		Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+		Map<String, Object> inputMap = new HashMap<String, Object>();
+		// 查询联系人拥有标签
+		EntityCondition findConditions = null;
+		findConditions = EntityCondition
+				.makeCondition(UtilMisc.toMap("partyIdTo", partyId, "partyRelationshipTypeId", "GROUP_ROLLUP"));
+		List<GenericValue> contactLableList = null;
+		contactLableList = delegator.findList("PartyRelationship", findConditions, UtilMisc.toSet("partyIdFrom"),
+				UtilMisc.toList("-fromDate"), null, false);
+		List<Object> contactList = new ArrayList<Object>();
+		// 遍历获得的联系人标签LI
+		if (UtilValidate.isNotEmpty(contactLableList)) {
+			for (GenericValue contactParty : contactLableList) {
+				Map<String, Object> inputFieldMap = UtilMisc.toMap();
+				inputFieldMap.put("partyId", contactParty.get("partyIdFrom"));
+				Map<String, Object> catactMap = new HashMap<String, Object>();
+				catactMap = dispatcher.runSync("findPersonInfo", inputFieldMap);
+				contactList.add(catactMap.get("resultMap"));
+			}
+		}
+		inputMap.put("contact", contactList);
+		resultMap.put("resultMap", inputMap);
+		return resultMap;
+	}
 
 	/**
 	 * 查询用户拥有的标签
