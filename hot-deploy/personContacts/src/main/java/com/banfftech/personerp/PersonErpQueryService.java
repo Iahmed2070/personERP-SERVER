@@ -20,6 +20,7 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
+import sun.net.www.content.text.Generic;
 
 public class PersonErpQueryService {
     public static final String module = PersonErpQueryService.class.getName();
@@ -75,7 +76,7 @@ public class PersonErpQueryService {
         if (UtilValidate.isNotEmpty(partyContent)) {
             String contentId = partyContent.getString("contentId");
             inputMap.put("headPortrait",
-                    "http://114.215.200.46:3400/personContacts/control/stream?contentId=" + contentId);
+                    "http://localhost:3400/personContacts/control/stream?contentId=" + contentId);
         }
 
         // 获取电话号码
@@ -117,6 +118,8 @@ public class PersonErpQueryService {
             inputMap.put("city", postalAddress.get("city"));
             inputMap.put("address1", postalAddress.get("address1"));
             inputMap.put("address2", postalAddress.get("address2"));
+            inputMap.put("partyId", partyId);
+
         }
         inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
 //        inputMap.put("partyId", partyId);
@@ -174,7 +177,7 @@ public class PersonErpQueryService {
         if (UtilValidate.isNotEmpty(partyContent)) {
             String contentId = partyContent.getString("contentId");
             inputMap.put("headPortrait",
-                    "http://114.215.200.46:3400/personContacts/control/stream?contentId=" + contentId);
+                    "http://localhost:3400/personContacts/control/stream?contentId=" + contentId);
         }
 
         // 获取电话号码
@@ -574,7 +577,7 @@ public class PersonErpQueryService {
      * @throws GenericEntityException
      * @throws GenericServiceException
      */
-    public static Map<String, Object> findContectsInfo(DispatchContext dctx, Map<String, Object> context)
+    public static Map<String, Object> findContactsInfo(DispatchContext dctx, Map<String, Object> context)
             throws GenericEntityException, GenericServiceException {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
@@ -604,6 +607,34 @@ public class PersonErpQueryService {
         resultMap.put("resultMap", inputMap);
         return resultMap;
     }
+
+
+
+
+    /**
+     * 联系人公开的列表
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     */
+    public static Map<String, Object> findContactsInfoActivity(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String userLoginId = (String) userLogin.get("userLoginId");
+
+
+
+//        Map<String, Object> findContactResult = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+//
+//        dispatcher.runSync("findContactsInfo", findContactResult);
+
+        return null;
+    }
+
 
     /**
      * 查询用户拥有的标签
@@ -686,6 +717,61 @@ public class PersonErpQueryService {
 
 
     /**
+     * 我的活动详情
+     * @Author
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     */
+    public static Map<String, Object> findMyEventDetail(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        String workEffortId = (String) context.get("workEffortId");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        //活动详情
+        EntityCondition findConditions = null;
+        findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("workEffortId", workEffortId));
+        List<GenericValue> EventsDetail = null;
+
+        EventsDetail = delegator.findList("WorkEffort", findConditions, UtilMisc.toSet("workEffortId","workEffortName","estimatedStartDate","description","locationDesc","estimatedCompletionDate"),
+                null, null, false);
+
+        //参与的人员其实是头像列表
+        EntityCondition findConditionsToPartyContent = null;
+        findConditionsToPartyContent = EntityCondition
+                .makeCondition(UtilMisc.toMap("workEffortId",workEffortId));
+        List<GenericValue> partyJoinEventsList = null;
+        partyJoinEventsList = delegator.findList("WorkEffortPartyAssignmentAndJoinParty",findConditionsToPartyContent,UtilMisc.toSet("workEffortId","partyId","contentId"),
+                null, null, false);
+        List<Map<String,Object>> partyContent = new ArrayList<Map<String, Object>>();
+        if(null!=partyJoinEventsList)
+        for(GenericValue gv : partyJoinEventsList){
+            Map<String,Object> partyContentMap = new HashMap<String, Object>();
+            partyContentMap.put("partyId",
+                    gv.get("partyId"));
+            partyContentMap.put("headPortrait",
+                    "http://localhost:3400/personContacts/control/stream?contentId=" + gv.get("contentId"));
+            partyContent.add(partyContentMap);
+        }
+        inputMap.put("eventDetail",EventsDetail);
+        inputMap.put("partyJoinEventsList",partyContent);
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        resultMap.put("resultMap", inputMap);
+        return resultMap;
+    }
+
+
+
+
+
+
+
+    /**
      * 查询我的活动
      *
      * @param dctx
@@ -701,16 +787,25 @@ public class PersonErpQueryService {
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> inputMap = new HashMap<String, Object>();
-        String partyId = (String) context.get("partyId");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = (String) userLogin.get("partyId");
+        String roleTypeId = (String) context.get("roleTypeId");
+        if(roleTypeId==null){
+            roleTypeId="ACTIVITY_MEMBER";
+        }
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         //GenericValue person = delegator.findOne("Person", false, UtilMisc.toMap("partyId", partyId));
         // 查询联系人partyId
         EntityCondition findConditions = null;
         findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", partyId));
+                .makeCondition(UtilMisc.toMap("partyId", partyId,"roleTypeId",roleTypeId,"workEffortTypeId","Event"));
         List<GenericValue> partyEventsList = null;
-        partyEventsList = delegator.findList("MarketingCampaignAndRole", findConditions, UtilMisc.toSet("partyId","campaignName","startDate"),
-                UtilMisc.toList("-startDate"), null, false);
+//        partyEventsList = delegator.findList("MarketingCampaignAndRole", findConditions, UtilMisc.toSet("partyId","campaignName","startDate"),
+//                UtilMisc.toList("-startDate"), null, false);
+
+        partyEventsList = delegator.findList("WorkEffortAndPartyAssign", findConditions, UtilMisc.toSet("partyId","workEffortName","estimatedStartDate","description","locationDesc","estimatedCompletionDate"),
+                UtilMisc.toList("-estimatedStartDate"), null, false);
+
         inputMap.put("partyEventsList",partyEventsList);
         inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
         resultMap.put("resultMap", inputMap);

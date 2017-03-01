@@ -9,10 +9,11 @@
     <description>PersonContacts Component Site Configuration File</description>
     
     <!-- Events to run on every request before security (chains exempt) -->
-    <!--
+
     <preprocessor>
+        <event name="checkTarjetaLogin" type="java" path="main.java.com.banfftech.personerp.PersonEventLoginWorker" invoke="checkTarjetaLogin"/>
     </preprocessor>
-    -->
+
     <!-- Events to run on every request after all other processing (chains exempt) -->
     <!--
     <postprocessor>
@@ -25,6 +26,15 @@
     	<security https="true" auth="true"/>
     	<response name="success" type="view" value="main"/>
    	</request-map>
+
+    <!-- 用户app登录接口 -->
+    <request-map uri="userAppLogin">
+        <security https="false" auth="false" />
+        <event type="service" invoke="userAppLogin" />
+        <response name="success" type="request" value="json" />
+        <response name="error" type="request" value="json" />
+    </request-map>
+
    	<!-- 查询用户信息 -->
 	<request-map uri="findPerson">
 		<security https="false" auth="false" />
@@ -54,30 +64,30 @@
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- 获取联系人列表 -->
-	<request-map uri="findContects">
+	<request-map uri="findContacts">
 		<security https="false" auth="false" />
-    	<event type="service" invoke="findContectsInfo"/>
+    	<event type="service" invoke="findContactsInfo"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- 添加联系人 -->
-	<request-map uri="addContects">
+	<request-map uri="addContacts">
 		<security https="false" auth="false" />
-    	<event type="service" invoke="addContects"/>
+    	<event type="service" invoke="addContacts"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- 删除联系人 -->
-	<request-map uri="deleteContects">
+	<request-map uri="deleteContacts">
 		<security https="false" auth="false" />
-    	<event type="service" invoke="deleteContects"/>
+    	<event type="service" invoke="deleteContacts"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- 更新联系人 -->
-	<request-map uri="updateContects">
+	<request-map uri="updateContacts">
 		<security https="false" auth="false" />
-    	<event type="service" invoke="updateContects"/>
+    	<event type="service" invoke="updateContacts"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
@@ -146,6 +156,14 @@
         <response name="error" type="request" value="json"/>
     </request-map>
 
+    <!-- 我的活动详情 -->
+    <request-map uri="findMyEventDetail">
+        <security https="false" auth="false" />
+        <event type="service" invoke="findMyEventDetail"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
     <!-- 创建活动-->
     <request-map uri="createNewEvent">
         <security https="false" auth="false" />
@@ -155,7 +173,23 @@
         <response name="error" type="request" value="json"/>
     </request-map>
 
-    
+    <!-- 创建新的标签并且关联到联系人 -->
+    <request-map uri="lableAndRelationContact">
+        <security https="false" auth="false" />
+        <event type="service" invoke="lableAndRelationContact"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+
+    <!-- 报名-->
+    <request-map uri="translationActivity">
+        <security https="false" auth="false" />
+        <event type="service" invoke="translationActivity"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://personContacts/widget/PersonContactsScreens.xml#main"/>
     <view-map name="mainInterface" type="screen" page="component://personContacts/widget/PersonContactsScreens.xml#mainInterface"/>

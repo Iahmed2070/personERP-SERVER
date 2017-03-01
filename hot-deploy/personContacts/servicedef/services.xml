@@ -46,14 +46,14 @@
     	<attribute name="resultMap" mode="OUT" type="java.util.HashMap" optional="false"/>
     </service>
     
-    <service name="findContectsInfo" engine="java"
-            location="com.banfftech.personerp.PersonErpQueryService" invoke="findContectsInfo" auth="false">
+    <service name="findContactsInfo" engine="java"
+            location="com.banfftech.personerp.PersonErpQueryService" invoke="findContactsInfo" auth="false">
         <description>查询用户信息</description>
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service> 
-    <service name="addContects" engine="java"
-            location="com.banfftech.personerp.PersonErpService" invoke="addContects" auth="false">
+    <service name="addContacts" engine="java"
+            location="com.banfftech.personerp.PersonErpService" invoke="addContacts" auth="false">
         <description>添加联系人</description>
         <attribute name="personName" type="String" mode="IN" optional="false"/>
         <attribute name="gender" type="String" mode="IN" optional="false"/>
@@ -69,8 +69,8 @@
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
-    <service name="updateContects" engine="java"
-            location="com.banfftech.personerp.PersonErpService" invoke="updateContects" auth="false">
+    <service name="updateContacts" engine="java"
+            location="com.banfftech.personerp.PersonErpService" invoke="updateContacts" auth="false">
         <description>更新联系人</description>
         <attribute name="personName" type="String" mode="IN" optional="false"/>
         <attribute name="gender" type="String" mode="IN" optional="false"/>
@@ -86,8 +86,8 @@
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
-    <service name="deleteContects" engine="java"
-            location="com.banfftech.personerp.PersonErpService" invoke="deleteContects" auth="false">
+    <service name="deleteContacts" engine="java"
+            location="com.banfftech.personerp.PersonErpService" invoke="deleteContacts" auth="false">
         <description>删除联系人</description>
         <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
         <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
@@ -122,27 +122,55 @@
             location="com.banfftech.personerp.PersonErpService" invoke="createLable" auth="false">
         <description>新建标签</description>
         <attribute name="lableName" type="String" mode="IN" optional="false"/>
+        <attribute name="userLoginId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
     <!-- 查询我的活动-->
     <service name="findMyEvent" engine="java"
              location="com.banfftech.personerp.PersonErpQueryService" invoke="findMyEvent" auth="false">
         <description>获取我的活动列表</description>
-        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+
+    <!-- 报名 -->
+    <service name="translationActivity" engine="java"
+             location="com.banfftech.personerp.PersonErpService" invoke="translationActivity" auth="false">
+        <description>获取我的活动列表</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- findMyEventDetail -->
+    <service name="findMyEventDetail" engine="java"
+             location="com.banfftech.personerp.PersonErpQueryService" invoke="findMyEventDetail" auth="false">
+        <description>获取我的活动列表</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- 创建新的标签并且关联联系人 -->
+    <service name="lableAndRelationContact" engine="java"
+             location="com.banfftech.personerp.PersonErpService" invoke="lableAndRelationContact" auth="false">
+        <description>创建新的标签并且关联联系人</description>
+        <attribute name="groupId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyArray" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
     <!-- 开始进行一个新的活动-->
     <service name="createNewEvent" engine="java"
              location="com.banfftech.personerp.PersonErpService" invoke="createNewEvent" auth="false">
         <description>开始一个新的活动</description>
-        <attribute name="partyId" type="String" mode="IN" optional="false"/>
-        <attribute name="workEffortName" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="workEffortName" type="String" mode="IN" optional="true"/>
         <attribute name="description" type="String" mode="IN" optional="true"/>
         <attribute name="locationDesc" type="String" mode="IN" optional="true"/>
-
         <attribute name="actualStartDate" type="String" mode="IN" optional="true"/>
         <attribute name="estimatedCompletionDate" type="String" mode="IN" optional="true"/>
-
+        <attribute name="scopeEnumId" type="String" mode="IN" optional="true"/>
         <!--<attribute name="uploadFile" type="java.nio.ByteBuffer" mode="IN" optional="true"/>-->
         <!--<attribute name="uploadFile_fileName" type="String" mode="IN" optional="true"/>-->
         <!--<attribute name="uploadFile_contentType" type="String" mode="IN" optional="true"/>-->
@@ -151,5 +179,14 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
-
+    <service name="userAppLogin" engine="java"
+             location="main.java.com.banfftech.personerp.PersonEventLoginWorker" invoke="userAppLogin" auth="false">
+        <description>用户手机登录</description>
+        <attribute name="userLoginId" type="String" mode="IN" optional="false"/>
+        <!--暂无验证码<attribute name="captcha" type="String" mode="IN" optional="false"/>-->
+        <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
+        <!--<attribute name="organizationPartyId" type="String" mode="OUT" optional="true"/>-->
+        <attribute name="inputMap" type="java.util.HashMap" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 </services>

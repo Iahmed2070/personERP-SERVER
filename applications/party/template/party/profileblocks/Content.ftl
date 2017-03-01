@@ -16,6 +16,7 @@ KIND, either express or implied.  See the License for the
 specific language governing permissions and limitations
 under the License.
 -->
+<constant name="struts.i18n.encoding" value="UTF-8" />
   <div id="partyContent" class="screenlet">
     <div class="screenlet-title-bar">
       <ul>

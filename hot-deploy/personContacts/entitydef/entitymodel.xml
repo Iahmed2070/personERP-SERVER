@@ -162,16 +162,6 @@
 
 		<alias-all entity-alias="MC"/>
 		<alias-all entity-alias="MCR"/>
-		<!--<alias entity-alias="MC" field="marketingCampaignId" name="marketingCampaignId"/>&lt;!&ndash; 活动PrimaryKey &ndash;&gt;-->
-		<!--<alias entity-alias="MC" field="campaignName" name="campaignName"/>&lt;!&ndash; 活动名称 &ndash;&gt;-->
-		<!--<alias entity-alias="MC" field="budgetedCost" name="budgetedCost"/>&lt;!&ndash; 预算费用 &ndash;&gt;-->
-		<!--<alias entity-alias="MC" field="campaignSummary" name="campaignSummary"/>&lt;!&ndash; 活动的摘要 &ndash;&gt;-->
-		<!--<alias entity-alias="MC" field="fromDate" name="fromDate"/>&lt;!&ndash; 这是开始时间 &ndash;&gt;-->
-		<!--<alias entity-alias="MC" field="marketingCampaignId" name="marketingCampaignId"/>-->
-		<!--<alias entity-alias="MC" field="statusId" name="statusId"/>&lt;!&ndash; 活动的状态 &ndash;&gt;-->
-		<!--<alias entity-alias="MCR" field="partyId" name="partyId"/>&lt;!&ndash; 参与的人 &ndash;&gt;-->
-		<!--<alias entity-alias="MCR" field="roleTypeId" name="roleTypeId"/>&lt;!&ndash; 参与的类型 &ndash;&gt;-->
-		<!--<alias entity-alias="MCR" field="marketingCampaignId" name="marketingCampaignId"/>-->
 		<view-link entity-alias="MC" rel-entity-alias="MCR" >
 			<key-map  field-name="marketingCampaignId"/>
 			<entity-condition>
@@ -185,5 +175,42 @@
 
 	</view-entity>
 
+	<!-- 活动中的人员-->
+	<view-entity entity-name="WorkEffortPartyAssignmentAndJoinParty">
+		<member-entity entity-name="WorkEffortPartyAssignment" entity-alias="WP"/>
+		<member-entity entity-name="PartyContent" entity-alias="PC"/>
 
+
+		<alias entity-alias="WP" field="partyId" name="partyId"/>
+		<alias entity-alias="WP" field="partyId" name="workEffortId"/>
+		<alias entity-alias="PC" field="partyId" name="partyId"/>
+		<alias entity-alias="PC" field="contentId" name="contentId"/>
+		<alias entity-alias="PC" field="partyContentTypeId" name="partyContentTypeId"/>
+
+		<view-link entity-alias="WP" rel-entity-alias="PC" >
+			<key-map  field-name="partyId"/>
+			<entity-condition>
+				<condition-list>
+					<condition-expr field-name="partyContentTypeId" entity-alias="PC" operator="equals" value="LGOIMGURL"/>
+				</condition-list>
+
+			</entity-condition>
+		</view-link>
+
+
+	</view-entity>
+
+
+	<entity entity-name="SmsValidateCode" package-name="org.ofbiz.personerp.sms" title="短信验证码">
+		<description>短信验证码，过期的 且 isValid=Y 的数据都可以清理</description>
+		<field name="teleNumber" type="id"></field>
+		<field name="smsType" type="id"></field>
+		<field name="captcha" type="id"></field>
+		<field name="isValid" type="id"></field>
+		<field name="fromDate" type="date-time"></field>
+		<field name="thruDate" type="date-time"></field>
+		<prim-key field="teleNumber"/>
+		<prim-key field="captcha"/>
+		<prim-key field="fromDate"/>
+	</entity>
 </entitymodel>
