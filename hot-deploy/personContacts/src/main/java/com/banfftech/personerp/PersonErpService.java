@@ -17,6 +17,7 @@ import org.apache.ofbiz.service.DispatchContext;
 
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
+import sun.net.www.content.text.Generic;
 
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,7 +37,9 @@ import javax.servlet.ServletException;
 
 import java.io.IOException;
 
-
+/**
+ * 聚合服务草稿类,暂未分离不同业务
+ */
 public class PersonErpService {
     public static final String module = com.banfftech.personerp.PersonErpQueryService.class.getName();
 
@@ -241,6 +244,99 @@ public class PersonErpService {
 
 
     /**
+     * 创建投票标题和投票项
+     * @param dctx
+     * @param context
+     * @return
+     * @throws IOException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws InterruptedException
+     */
+    public static Map<String, Object> createSurveyAndQuestions(DispatchContext dctx, Map<String, ? extends Object> context)
+            throws  GenericEntityException, GenericServiceException, InterruptedException {
+
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        // 登陆
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        // 报名人id
+        String partyId = (String) userLogin.get("partyId");
+        Locale locale = (Locale) context.get("locale");
+        //活动的id
+        String workEffortId = (String) context.get("workEffortId");
+        //投票标题
+        String surveyName = (String) context.get("surveyName");
+        //投票描述
+        //String description = (String) context.get("description");
+        //允许匿名投票,默认'否'N
+        String isAnonymous =  context.get("isAnonymous")==null?"N":(String)context.get("isAnonymous");
+        //允许重复投票,默认'是'Y
+        String allowMultiple = context.get("allowMultiple")==null?"Y":(String)context.get("allowMultiple");
+        //允许投票被更新,默认'是'Y
+        String allowUpdate = context.get("allowUpdate")==null?"Y":(String)context.get("allowUpdate");
+        //投票项描述 多个 暂不提供
+        //String qsDescriptions = (String) context.get("qsDescriptions");
+        //投票项名称 多个
+        String questions = (String) context.get("questions");
+        //投票项分类 默认Poll Questions 投票类型 1002
+        String surveyQuestionCategoryId = "1002";
+        //投票项目类型 默认布尔值
+        String surveyQuestionTypeId   = "BOOLEAN";
+
+        //将单个项分成数组进行循环创建
+        String [] questionsArray = questions.split(",");
+
+
+
+        //第一步、创建调查
+        Map<String, Object> createSurveyInMap =
+                UtilMisc.toMap("userLogin", userLogin,
+                        "partyId", partyId,
+                        "surveyName",surveyName,
+                        "isAnonymous",isAnonymous,
+                        "allowMultiple",allowMultiple,
+                        "allowUpdate",allowUpdate);
+        Map<String, Object> createSurveyResultMap = dispatcher.runSync("createSurvey", createSurveyInMap);
+        //得到投票标题主键
+        String surveyId = createSurveyResultMap.get("surveyId");
+
+        //第二步、创建调查对应的问题
+        forEachCreateQuestionsToSurvey(surveyQuestionTypeId,surveyQuestionCategoryId,userLogin,surveyId,delegator,dispatcher,questionsArray);
+
+        //TODO 第三步、将投票与活动关联起来
+
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        result.put("resultMap", inputMap);
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        return result;
+    }
+
+    /**
+     * 循环创建投票项目
+     * @param surveyId
+     * @param delegator
+     * @param dispatcher
+     * @param questionsArray
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     */
+    private static void forEachCreateQuestionsToSurvey(String surveyQuestionTypeId,String surveyQuestionCategoryId,GenericValue userLogin,String surveyId, Delegator delegator, LocalDispatcher dispatcher, String[] questionsArray)throws  GenericEntityException, GenericServiceException {
+        if(questionsArray!=null && questionsArray.length>0){
+            for(int index =0;index<questionsArray.length;index++){
+                      Map<String, Object> createSurveyQuestionsInMap =
+                              UtilMisc.toMap("userLogin", userLogin,
+                                      "surveyId",surveyId,
+                                      "question",questionsArray[index],
+                                      "surveyQuestionCategoryId",surveyQuestionCategoryId,
+                                      "surveyQuestionTypeId",surveyQuestionTypeId);
+                    dispatcher.runSync("createSurveyQuestion", createSurveyQuestionsInMap);
+            }
+        }
+    }
+
+    /**
      * 报名活动
      * @param dctx
      * @param context
@@ -334,6 +430,72 @@ public class PersonErpService {
 
 
     /**
+     * 给活动创建活动项
+     * @param dctx
+     * @param context
+     * @return
+     * @throws IOException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws InterruptedException
+     */
+    public static Map<String, Object> createActivityProject(DispatchContext dctx, Map<String, ? extends Object> context)
+            throws IOException, GenericEntityException, GenericServiceException, InterruptedException {
+
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Locale locale = (Locale) context.get("locale");
+
+        //主活动的Id
+        String workEffortId = (String) context.get("workEffortId");
+        //活动名称
+        String workEffortName = (String) context.get("workEffortName");
+        //简介
+        String description = (String) context.get("description");
+        //地址
+        String locationDesc = (String) context.get("locationDesc");
+        //活动时间
+        String actualStartDate = (String) context.get("actualStartDate");
+        //预计完成时间
+        String estimatedCompletionDate = (String) context.get("estimatedCompletionDate");
+
+
+
+        Timestamp tm = null;
+        Timestamp tmend = null;
+        if (actualStartDate != null) {
+            tm = Timestamp.valueOf(actualStartDate);
+        }
+        if (estimatedCompletionDate != null) {
+            tmend = Timestamp.valueOf(estimatedCompletionDate);
+        }
+
+        Map<String, Object> createWorkEffortMap = null;
+        createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", actualStartDate, "locationDesc", locationDesc);
+        Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort", createWorkEffortMap);
+        //NEW WORKEFFORT_ID
+        String activityProjectId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
+
+        //与主活动进行关联	WORK_EFF_DEPENDENCY
+        Map<String, Object> createWorkEffortAssocMap = UtilMisc.toMap("userLogin", userLogin,"workEffortAssocTypeId","WORK_EFF_DEPENDENCY","workEffortIdFrom",activityProjectId,"workEffortIdTo",workEffortId);
+        dispatcher.runSync("createWorkEffortAssoc", createWorkEffortAssocMap);
+
+
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        inputMap.put("projectId", activityProjectId);
+        inputMap.put("workEffortName", workEffortName);
+        inputMap.put("actualStartDate", actualStartDate);
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        result.put("resultMap", inputMap);
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        return result;
+    }
+
+
+    /**
      * 创建新的活动
      *
      * @param dctx
@@ -382,9 +544,9 @@ public class PersonErpService {
 
         Map<String, Object> createWorkEffortMap = null;
         if(parentId!=null){//代表这是一个子活动
-            UtilMisc.toMap("userLogin", userLogin,"workEffortParentId",parentId, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", actualStartDate, "locationDesc", locationDesc, "estimatedCompletionDate", tmend);
+            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin,"workEffortParentId",parentId, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", actualStartDate, "locationDesc", locationDesc, "estimatedCompletionDate", tmend);
         }else {
-            UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", actualStartDate, "locationDesc", locationDesc, "estimatedCompletionDate", tmend, "scopeEnumId", scopeEnumId);
+            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", actualStartDate, "locationDesc", locationDesc, "estimatedCompletionDate", tmend, "scopeEnumId", scopeEnumId);
         }
 
         Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort", createWorkEffortMap);

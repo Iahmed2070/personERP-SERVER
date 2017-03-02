@@ -198,6 +198,46 @@
         <response name="error" type="request" value="json"/>
     </request-map>
 
+
+    <!-- 创建活动项,并且创建活动项的invoice -->
+    <request-map uri="createActivityProject">
+        <security https="false" auth="false" />
+        <event type="service" invoke="createActivityProject"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+    <!-- 创建投票标题及问题 -->
+    <request-map uri="createSurveyAndQuestions">
+        <security https="false" auth="false" />
+        <event type="service" invoke="createSurveyAndQuestions"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+    <!-- 用户参与投票 -->
+    <request-map uri="partyPollQuestions">
+        <security https="false" auth="false" />
+        <!--<event type="service" invoke="createSurveyAndQuestions"/>-->
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+    <!-- 当前活动的投票标题列表 -->
+    <request-map uri="findActivityPollQuestions">
+        <security https="false" auth="false" />
+        <!--<event type="service" invoke="findActivityProjects"/>-->
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+
+    <!-- 查询活动的活动项目-->
+    <request-map uri="findActivityProjects">
+        <security https="false" auth="false" />
+        <event type="service" invoke="findActivityProjects"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://personContacts/widget/PersonContactsScreens.xml#main"/>
     <view-map name="mainInterface" type="screen" page="component://personContacts/widget/PersonContactsScreens.xml#mainInterface"/>

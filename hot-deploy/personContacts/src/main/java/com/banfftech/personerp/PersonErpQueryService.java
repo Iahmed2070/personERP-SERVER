@@ -713,6 +713,36 @@ public class PersonErpQueryService {
 
 
     /**
+     * 查询我的活动项列表
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     */
+    public static Map<String, Object> findActivityProjects(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        String workEffortId = (String) context.get("workEffortId");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        //查询活动项关系
+        EntityCondition findConditions = null;
+        findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("workEffortIdTo", workEffortId));
+        List<GenericValue> projectList = null;
+
+        projectList = delegator.findList("ActivityAndProject", findConditions, UtilMisc.toSet("workEffortIdTo", "workEffortName", "actualStartDate", "locationDesc"),
+                null, null, false);
+        inputMap.put("projectList",projectList);
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        resultMap.put("resultMap", inputMap);
+        return resultMap;
+    }
+
+
+    /**
      * 我的活动详情
      * @Author
      * @param dctx
@@ -726,8 +756,9 @@ public class PersonErpQueryService {
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> inputMap = new HashMap<String, Object>();
-        String workEffortId = (String) context.get("workEffortId");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        String workEffortId = (String) context.get("workEffortId");
+
         //活动详情
         EntityCondition findConditions = null;
         findConditions = EntityCondition

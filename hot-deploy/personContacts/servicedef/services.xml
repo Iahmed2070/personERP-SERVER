@@ -142,13 +142,42 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
-    <!-- findMyEventDetail -->
+    <!-- 查询活动明细 -->
     <service name="findMyEventDetail" engine="java"
              location="com.banfftech.personerp.PersonErpQueryService" invoke="findMyEventDetail" auth="false">
-        <description>获取我的活动列表</description>
+        <description>获取我的活动明细</description>
         <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+    <!-- 查询活动项目-->
+    <service name="findActivityProjects" engine="java"
+             location="com.banfftech.personerp.PersonErpQueryService" invoke="findActivityProjects" auth="false">
+        <description>获取我的活动项目</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- 创建投票标题和问题 -->
+    <service name="createSurveyAndQuestions" engine="java"
+             location="com.banfftech.personerp.PersonErpService" invoke="createSurveyAndQuestions" auth="false">
+        <description>创建新的投票、并且关联活动和投票项</description>
+
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/><!-- 活动标示 -->
+
+        <attribute name="surveyName" type="String" mode="IN" optional="false"/><!-- 投票标题 -->
+        <!--<attribute name="description" type="String" mode="IN" optional="true"/>投票描述 -->
+        <attribute name="isAnonymous" type="String" mode="IN" optional="true"/><!-- 允许匿名投票,默认'否'N -->
+        <attribute name="allowMultiple" type="String" mode="IN" optional="true"/><!-- 允许重复投票,默认'是'Y -->
+        <attribute name="allowUpdate" type="String" mode="IN" optional="true"/><!-- 允许投票被更新,默认'是'Y -->
+
+        <!-- 投票项分类 默认Poll Questions 1002 -->
+        <!-- surveyQuestionTypeId BOOLEAN-->
+        <!--<attribute name="qsDescriptions" type="String" mode="IN" optional="true"/> 暂时不提供 投票项描述  -->
+        <attribute name="questions" type="String" mode="IN" optional="true"/><!-- 投票项名称 -->
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
 
     <!-- 创建新的标签并且关联联系人 -->
     <service name="lableAndRelationContact" engine="java"
@@ -156,6 +185,20 @@
         <description>创建新的标签并且关联联系人</description>
         <attribute name="groupId" type="String" mode="IN" optional="false"/>
         <attribute name="partyArray" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- 给活动创建活动项 -->
+    <service name="createActivityProject" engine="java"
+             location="com.banfftech.personerp.PersonErpService" invoke="createActivityProject" auth="false">
+        <description>创建活动项</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="workEffortName" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="locationDesc" type="String" mode="IN" optional="true"/>
+        <attribute name="actualStartDate" type="String" mode="IN" optional="true"/>
+        <attribute name="estimatedCompletionDate" type="String" mode="IN" optional="true"/>
+        <attribute name="inputMap" type="java.util.HashMap" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 

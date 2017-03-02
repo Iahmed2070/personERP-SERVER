@@ -354,14 +354,14 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="ext-demo"/>
         <inline-jdbc
                 jdbc-driver="com.mysql.jdbc.Driver"
-                jdbc-uri="jdbc:mysql://127.0.0.1/personERP?autoReconnect=true&amp;characterEncoding=UTF-8"
+                jdbc-uri="jdbc:mysql://127.0.0.1/personerp?autoReconnect=true&amp;characterEncoding=UTF-8"
                 jdbc-username="root"
                 jdbc-password="root"
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
                 pool-maxsize="250"
                 time-between-eviction-runs-millis="600000"/><!-- Please note that at least one person has experienced a problem with this value with MySQL
-                and had to set it to -1 in order to avoid this issue.
+                and had to set it to -1 in order to avoid this issue. personERP
                 For more look at http://markmail.org/thread/5sivpykv7xkl66px and http://commons.apache.org/dbcp/configuration.html-->
         <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/MySqlDataSource" isolation-level="Serializable"/> -->
     </datasource>

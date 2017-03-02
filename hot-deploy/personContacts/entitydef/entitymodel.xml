@@ -200,6 +200,42 @@
 
 	</view-entity>
 
+    <!-- 活动中的活动项 -->
+	<view-entity entity-name="ActivityAndProject">
+		<member-entity entity-name="WorkEffort" entity-alias="ACTIVITY"/>
+		<member-entity entity-name="WorkEffort" entity-alias="PROJECT"/>
+		<member-entity entity-name="WorkEffortAssoc" entity-alias="RELATION"/>
+
+
+
+		<alias entity-alias="ACTIVITY" field="workEffortId" name="activityId"/>
+		<alias entity-alias="PROJECT" field="workEffortId" name="projectId"/>
+		<alias entity-alias="PROJECT" field="workEffortName" name="workEffortName"/>
+		<alias entity-alias="PROJECT" field="actualStartDate" name="actualStartDate"/>
+		<alias entity-alias="PROJECT" field="locationDesc" name="locationDesc"/>
+
+
+		<alias entity-alias="RELATION" field="workEffortIdTo" name="workEffortIdTo"/>
+		<alias entity-alias="RELATION" field="workEffortIdFrom" name="workEffortIdFrom"/>
+		<alias entity-alias="RELATION" field="workEffortAssocTypeId" name="workEffortAssocTypeId"/>
+
+		<view-link entity-alias="RELATION" rel-entity-alias="ACTIVITY" >
+			<key-map  field-name="workEffortIdTo" rel-field-name="workEffortId"/>
+		</view-link>
+		<view-link entity-alias="RELATION" rel-entity-alias="PROJECT" >
+			<key-map  field-name="workEffortIdFrom" rel-field-name="workEffortId"/>
+		</view-link>
+
+		<entity-condition>
+			<condition-list>
+				<condition-expr field-name="workEffortAssocTypeId" entity-alias="RELATION" operator="equals" value="WORK_EFF_DEPENDENCY"/>
+			</condition-list>
+		</entity-condition>
+
+
+	</view-entity>
+
+
 
 	<entity entity-name="SmsValidateCode" package-name="org.ofbiz.personerp.sms" title="短信验证码">
 		<description>短信验证码，过期的 且 isValid=Y 的数据都可以清理</description>
