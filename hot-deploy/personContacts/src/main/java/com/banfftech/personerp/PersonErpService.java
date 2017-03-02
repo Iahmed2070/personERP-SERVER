@@ -255,13 +255,14 @@ public class PersonErpService {
 
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dctx.getDelegator();
-        //模拟登陆
+        // 登陆
         GenericValue userLogin = (GenericValue)context.get("userLogin");
+        // 报名人id
         String partyId = (String)userLogin.get("partyId");
         Locale locale = (Locale) context.get("locale");
 
 
-        //活动的名字
+        //活动的id
         String workEffortId = (String) context.get("workEffortId");
 
         Map<String, Object> createPartyRoleMemberMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER");
@@ -271,10 +272,20 @@ public class PersonErpService {
         }
 
 
-        //4.assignPartyToWorkEffort
-         Map<String, Object> createMemberAssignPartyMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+        //是否作为'受邀人'存在与活动邀请列表
+        EntityCondition findConditions = null;
 
-        dispatcher.runSync("assignPartyToWorkEffort", createMemberAssignPartyMap);
+        findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyId", partyId,"roleTypeId","ACTIVITY_INVITATION","workEffortTypeId","Event"));
+       List<GenericValue> partyExsitEvents =   delegator.findList("WorkEffortAndPartyAssign", findConditions, null, null, null, false);
+        if(null!=partyExsitEvents){
+            //DO unassignPartyFromWorkEffort
+            Map<String, Object> updateMemberAssignPartyMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_INVITATION", "fromDate", partyExsitEvents.get(0).get("fromDate"), "workEffortId", workEffortId);
+            dispatcher.runSync("unassignPartyFromWorkEffort", updateMemberAssignPartyMap);
+        }
+            Map<String, Object> createMemberAssignPartyMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+            dispatcher.runSync("assignPartyToWorkEffort", createMemberAssignPartyMap);
+
         Map<String, Object> inputMap = new HashMap<String, Object>();
         inputMap.put("workEffortId",workEffortId);
         Map<String, Object> result = ServiceUtil.returnSuccess();
@@ -353,7 +364,8 @@ public class PersonErpService {
         String actualStartDate = (String) context.get("actualStartDate");
         //预计完成时间
         String estimatedCompletionDate = (String) context.get("estimatedCompletionDate");
-
+        //父活动Id
+        String  parentId = (String)  context.get("parentId");
         //可见范围
         String scopeEnumId = (String) context.get("scopeEnumId");
         if (scopeEnumId == null) {
@@ -368,8 +380,13 @@ public class PersonErpService {
             tmend = Timestamp.valueOf(estimatedCompletionDate);
         }
 
+        Map<String, Object> createWorkEffortMap = null;
+        if(parentId!=null){//代表这是一个子活动
+            UtilMisc.toMap("userLogin", userLogin,"workEffortParentId",parentId, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", actualStartDate, "locationDesc", locationDesc, "estimatedCompletionDate", tmend);
+        }else {
+            UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", actualStartDate, "locationDesc", locationDesc, "estimatedCompletionDate", tmend, "scopeEnumId", scopeEnumId);
+        }
 
-        Map<String, Object> createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", actualStartDate, "locationDesc", locationDesc, "estimatedCompletionDate", tmend, "scopeEnumId", scopeEnumId);
         Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort", createWorkEffortMap);
         //NEW WORKEFFORT_ID
         String workEffortId = (String) serviceResultByCreateWorkEffortMap.get("workEffortId");
@@ -377,7 +394,6 @@ public class PersonErpService {
         //Create Party Role
         GenericValue isExsitsAdmin = delegator.findOne("PartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", "ACTIVITY_ADMIN"), false);
         GenericValue isExsitsMember = delegator.findOne("PartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER"), false);
-
 
         Map<String, Object> createPartyRoleAdminMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_ADMIN");
         Map<String, Object> createPartyRoleMemberMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER");
@@ -396,13 +412,46 @@ public class PersonErpService {
         dispatcher.runSync("assignPartyToWorkEffort", createMemberAssignPartyMap);
 
 
-        Map<String, Object> inputMap = new HashMap<String, Object>();
 
+        //5.群发邀请函
+        String contacts = (String) context.get("contactsList");
+
+        if(contacts!=null){
+            String [] arrays   = contacts.split(",");
+            forEachInvitationParty(arrays,dispatcher,userLogin,workEffortId,delegator);
+        }
+
+
+        Map<String, Object> inputMap = new HashMap<String, Object>();
         inputMap.put("workEffortId", workEffortId);
+
         Map<String, Object> result = ServiceUtil.returnSuccess();
         result.put("resultMap", inputMap);
         inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
         return result;
+    }
+
+    /**
+     * 群发邀请函
+     * @param contact
+     * @param dispatcher
+     * @param userLogin
+     * @param delegator
+     */
+    private static void forEachInvitationParty(String[] contact, LocalDispatcher dispatcher, GenericValue userLogin, String workEffortId, Delegator delegator)throws GenericEntityException, GenericServiceException {
+        if(contact!=null && contact.length>0){
+            for(int index =0;index<contact.length;index++){
+                GenericValue isExsitsInvitation = delegator.findOne("PartyRole", UtilMisc.toMap("partyId", contact[index], "roleTypeId", "ACTIVITY_INVITATION"), false);
+
+                if(null==isExsitsInvitation){
+                    Map<String, Object> createPartyRoleInvitationMap = UtilMisc.toMap("userLogin", userLogin, "partyId", contact[index], "roleTypeId", "ACTIVITY_INVITATION");
+                    dispatcher.runSync("createPartyRole", createPartyRoleInvitationMap);
+                }
+                Map<String, Object> createMemberAssignPartyMap = UtilMisc.toMap("userLogin", userLogin, "partyId", contact[index], "roleTypeId", "ACTIVITY_INVITATION", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+                dispatcher.runSync("assignPartyToWorkEffort", createMemberAssignPartyMap);
+            }
+        }
+
     }
 
     /**

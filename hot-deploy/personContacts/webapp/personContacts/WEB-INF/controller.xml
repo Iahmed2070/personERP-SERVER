@@ -190,6 +190,14 @@
         <response name="error" type="request" value="json"/>
     </request-map>
 
+    <!-- 创建子活动 -->
+    <request-map uri="createChildActivity">
+        <security https="false" auth="false" />
+        <event type="service" invoke="createChildActivity"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://personContacts/widget/PersonContactsScreens.xml#main"/>
     <view-map name="mainInterface" type="screen" page="component://personContacts/widget/PersonContactsScreens.xml#mainInterface"/>

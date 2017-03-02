@@ -160,12 +160,14 @@
     </service>
 
 
-    <!-- 开始进行一个新的活动-->
+    <!-- 开始进行一个新的活动、子活动-->
     <service name="createNewEvent" engine="java"
              location="com.banfftech.personerp.PersonErpService" invoke="createNewEvent" auth="false">
         <description>开始一个新的活动</description>
         <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="parentId" type="String" mode="IN" optional="true"/><!-- 父活动id -->
         <attribute name="workEffortName" type="String" mode="IN" optional="true"/>
+        <attribute name="contactsList" type="String" mode="IN" optional="true"/><!-- 受邀群体 -->
         <attribute name="description" type="String" mode="IN" optional="true"/>
         <attribute name="locationDesc" type="String" mode="IN" optional="true"/>
         <attribute name="actualStartDate" type="String" mode="IN" optional="true"/>
@@ -178,7 +180,7 @@
         <attribute name="inputMap" type="java.util.HashMap" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
-
+    <!-- app 登录 -->
     <service name="userAppLogin" engine="java"
              location="main.java.com.banfftech.personerp.PersonEventLoginWorker" invoke="userAppLogin" auth="false">
         <description>用户手机登录</description>
@@ -189,4 +191,7 @@
         <attribute name="inputMap" type="java.util.HashMap" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+
+
+
 </services>

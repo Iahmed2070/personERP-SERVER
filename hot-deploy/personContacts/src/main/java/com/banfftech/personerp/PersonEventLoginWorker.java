@@ -71,14 +71,14 @@ public class PersonEventLoginWorker {
      * @param context
      * @return
      */
-    public static Map<String, Object> userAppLogin(DispatchContext dctx, Map<String, Object> context) {
+    public static Map<String, Object> userAppLogin(DispatchContext dctx, Map<String, Object> context)throws GenericEntityException {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
         String userLoginId = (String) context.get("userLoginId");
        // String captcha = (String) context.get("captcha");
         //String appType = (String) context.get("appType");
-
+        GenericValue userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId",userLoginId), false);
         String token = null;
         Map<String, Object> result = ServiceUtil.returnSuccess();
         long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe","tarjeta.expirationTime","172800L",delegator));
@@ -106,6 +106,8 @@ public class PersonEventLoginWorker {
         inputMap.put("tarjeta", token);
 
         inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+
+        inputMap.put("partyId",userLogin.get("partyId"));
 
         result.put("resultMap",inputMap);
 //        GenericValue customer;

@@ -1,10 +1,6 @@
 package com.banfftech.personerp;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
@@ -758,8 +754,17 @@ public class PersonErpQueryService {
                     "http://localhost:3400/personContacts/control/stream?contentId=" + gv.get("contentId"));
             partyContent.add(partyContentMap);
         }
+
+        //子活动列表
+        List<GenericValue> childActivityList = delegator.findList("WorkEffort",EntityCondition
+                .makeCondition(UtilMisc.toMap("workEffortParentId",workEffortId)),null,
+                null, null, false);
+
+
         inputMap.put("eventDetail",EventsDetail);
         inputMap.put("partyJoinEventsList",partyContent);
+        inputMap.put("childActivityList",childActivityList);
+
         inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
         resultMap.put("resultMap", inputMap);
         return resultMap;
@@ -790,21 +795,27 @@ public class PersonErpQueryService {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = (String) userLogin.get("partyId");
         String roleTypeId = (String) context.get("roleTypeId");
-        if(roleTypeId==null){
-            roleTypeId="ACTIVITY_MEMBER";
-        }
+
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         //GenericValue person = delegator.findOne("Person", false, UtilMisc.toMap("partyId", partyId));
         // 查询联系人partyId
         EntityCondition findConditions = null;
-        findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", partyId,"roleTypeId",roleTypeId,"workEffortTypeId","Event"));
+
+            findConditions = EntityCondition
+                    .makeCondition(UtilMisc.toMap("partyId", partyId,"roleTypeId",roleTypeId,"workEffortTypeId","Event"));
+
         List<GenericValue> partyEventsList = null;
 //        partyEventsList = delegator.findList("MarketingCampaignAndRole", findConditions, UtilMisc.toSet("partyId","campaignName","startDate"),
 //                UtilMisc.toList("-startDate"), null, false);
-
-        partyEventsList = delegator.findList("WorkEffortAndPartyAssign", findConditions, UtilMisc.toSet("partyId","workEffortName","estimatedStartDate","description","locationDesc","estimatedCompletionDate"),
-                UtilMisc.toList("-estimatedStartDate"), null, false);
+        Set<String> seletField = new HashSet<String>();
+        seletField.add("partyId");
+        seletField.add("workEffortName");
+        seletField.add("estimatedStartDate");
+        seletField.add("description");
+        seletField.add("locationDesc");
+        seletField.add("estimatedCompletionDate");
+        seletField.add("workEffortId");
+        partyEventsList = delegator.findList("WorkEffortAndPartyAssign", findConditions,seletField,UtilMisc.toList("-estimatedStartDate"), null, false);
 
         inputMap.put("partyEventsList",partyEventsList);
         inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
