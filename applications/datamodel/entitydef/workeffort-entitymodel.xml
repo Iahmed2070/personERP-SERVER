@@ -886,8 +886,9 @@ under the License.
       <relation type="one" fk-name="WKEF_SURVAPL_WKE" rel-entity-name="WorkEffort">
         <key-map field-name="workEffortId"/>
       </relation>
-      <relation type="one" fk-name="WKEF_SURVAPL_PSSA" rel-entity-name="ProductStoreSurveyAppl">
-        <key-map field-name="surveyId" rel-field-name="productStoreSurveyId"/>
-      </relation>
+      <!--
+      <relation type="one" fk-name="WKEF_SURVAPL_PSSA" rel-entity-name="ProductStoreSurveyAppl">-->
+        <!--<key-map field-name="surveyId" rel-field-name="productStoreSurveyId"/>-->
+      <!--</relation>-->
     </entity>
 </entitymodel>
