@@ -21,6 +21,186 @@ import sun.net.www.content.text.Generic;
 public class PersonErpQueryService {
     public static final String module = PersonErpQueryService.class.getName();
 
+
+    /**
+     * 活动的账务列表
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     */
+    public static Map<String, Object> findActivityPayment(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        //workEffortId
+        String workEffortId = (String) context.get("workEffortId");
+
+        //查询投票项目列表
+        EntityCondition findConditionsToPayList  = EntityCondition
+                .makeCondition(UtilMisc.toMap("workEffortId", workEffortId));
+        List<GenericValue> payList = delegator.findList("PartyPaymentInfoAndPerson", findConditionsToPayList, null,
+                null, null, false);
+
+        inputMap.put("payList",payList);
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        resultMap.put("resultMap", inputMap);
+        return resultMap;
+    }
+
+
+        /**
+         * 查询投票项列表
+         * @param dctx
+         * @param context
+         * @return
+         * @throws GenericEntityException
+         */
+    public static Map<String, Object> findActivityPollQuestions(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue userLogin = (GenericValue)context.get("userLogin");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        //surveyId
+        String surveyId = (String) context.get("surveyId");
+
+        //查询投票项目列表
+        EntityCondition findConditionsToVoteList = null;
+        findConditionsToVoteList = EntityCondition
+                .makeCondition(UtilMisc.toMap("surveyId",surveyId));
+        List<GenericValue> questionList = delegator.findList("SurveyQuestionAndAppl",findConditionsToVoteList,UtilMisc.toSet("surveyId","question","surveyQuestionId"),
+                null, null, false);
+
+        //问题及问题已投票数量
+        Map<String,List<Map<String,Object>>> fatMethodReturnMap = new HashMap<String, List<Map<String, Object>>>();//方法返回Map.历史最胖变量
+        //查询投票项目的回答列表
+        if(null!=questionList && questionList.size()>0){
+            fatMethodReturnMap =  countResponceAnswer(delegator,dispatcher,userLogin,questionList);
+        }
+
+
+        inputMap.put("questions",fatMethodReturnMap.get("questions"));
+        inputMap.put("partyResponceAnswer",fatMethodReturnMap.get("partyResponceAnswer"));
+
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        resultMap.put("resultMap", inputMap);
+        return resultMap;
+    }
+
+    /**
+     * 查询投票项目的回答列表
+     * @param delegator
+     * @param dispatcher
+     * @param userLogin
+     * @param questions
+     * @param questionList
+     * @param responceAnswer
+     */
+    private static Map<String,List<Map<String,Object>>> countResponceAnswer(Delegator delegator, LocalDispatcher dispatcher, GenericValue userLogin,  List<GenericValue> questionList) throws GenericEntityException {
+
+        //用户实际想看的问题及问题的回答数
+        List<Map<String,Object>> questions           = new ArrayList<Map<String, Object>>();
+        //对问题回答了的用户列表
+        List<Map<String,Object>> partyResponceAnswer = new ArrayList<Map<String, Object>>();
+
+        //将上述两个List存放在此用于返回
+        //TODO FIX BUG
+        Map<String,List<Map<String,Object>>> fatMethodReturnMap = new HashMap<String, List<Map<String, Object>>>();
+
+        //又开始遍历、这一次为的是组装投票项和他的已投数量
+         EntityCondition findConditionsToAnswerList = null;
+         for(GenericValue question : questionList){
+             //用户实际想要看的question
+             Map<String,Object> realQuestion = new HashMap<String, Object>();
+             findConditionsToAnswerList = EntityCondition
+                     .makeCondition(UtilMisc.toMap("surveyQuestionId",question.get("surveyQuestionId")));
+             List<GenericValue> answerList = delegator.findList("SurveyResponseAndAnswerAndPerson",findConditionsToAnswerList,null,
+                     null, null, false);
+             //该问题投票数
+             realQuestion.put("answerCount",answerList.size()+"");
+             //该问题的名称
+             realQuestion.put("question",question.get("question"));
+             //问题的主键
+             realQuestion.put("surveyQuestionId",question.get("surveyQuestionId"));
+             //投票标题的主键
+             realQuestion.put("surveyId",question.get("surveyId"));
+
+             //组装好的问题及回答数放入list
+             questions.add(realQuestion);
+
+             //关于投票问题和已投票的人的列表的获得
+             if(null != answerList){
+                 partyResponceAnswer.add(forAddPersonToView(answerList));
+             }
+
+         }
+
+        //投票问题、已回答人数
+        fatMethodReturnMap.put("questions",questions);
+        //投票问题和实际回答的人
+        fatMethodReturnMap.put("partyResponceAnswer",partyResponceAnswer);
+
+        return fatMethodReturnMap;
+    }
+
+    /**
+     * 对该问题投票过的用户剥离出来用于显示
+     * @param answerList
+     * @return
+     */
+    private static Map<String, Object> forAddPersonToView(List<GenericValue> answerList) {
+        //已投票的用户列表
+
+        for(GenericValue gv :answerList){
+            Map<String, Object> questionAndUser = new HashMap<String, Object>();
+            questionAndUser.put("question", gv.get("question"));
+            questionAndUser.put("userName",gv.get("lastName")+""+gv.get("firstName")+"");
+            //问题
+            return questionAndUser;
+
+            //Content
+        }
+            return null;
+    }
+
+
+    /**
+     * 查询投票标题列表
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     */
+    public static Map<String, Object> findActivityPollQuestionsTitle(DispatchContext dctx, Map<String, Object> context)
+            throws GenericEntityException {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        String partyId = (String) context.get("partyId");
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        //活动ID
+        String workEffortId = (String) context.get("workEffortId");
+
+        EntityCondition findConditionsToVoteList = null;
+        findConditionsToVoteList = EntityCondition
+                .makeCondition(UtilMisc.toMap("workEffortId",workEffortId));
+        List<GenericValue> voteList = delegator.findList("ActivityVotes",findConditionsToVoteList,UtilMisc.toSet("surveyId","fromDate","surveyName"),
+                null, null, false);
+
+
+        inputMap.put("activityPollQuestionsTitle",voteList);
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        resultMap.put("resultMap", inputMap);
+        return resultMap;
+    }
     /**
      * 查询用户信息
      *
@@ -578,7 +758,8 @@ public class PersonErpQueryService {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
-        String partyId = (String) context.get("partyId");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = userLogin==null? (String)context.get("partyId"):(String)userLogin.get("partyId");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         Map<String, Object> inputMap = new HashMap<String, Object>();
         // 查询联系人partyId
@@ -754,6 +935,8 @@ public class PersonErpQueryService {
             throws GenericEntityException {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = (String) userLogin.get("partyId");
         Locale locale = (Locale) context.get("locale");
         Map<String, Object> inputMap = new HashMap<String, Object>();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
@@ -765,7 +948,7 @@ public class PersonErpQueryService {
                 .makeCondition(UtilMisc.toMap("workEffortId", workEffortId));
         List<GenericValue> EventsDetail = null;
 
-        EventsDetail = delegator.findList("WorkEffort", findConditions, UtilMisc.toSet("workEffortId","workEffortName","estimatedStartDate","description","locationDesc","estimatedCompletionDate"),
+        EventsDetail = delegator.findList("WorkEffort", findConditions, UtilMisc.toSet("workEffortId","workEffortName","actualStartDate","description","locationDesc","estimatedCompletionDate"),
                 null, null, false);
 
         //参与的人员其实是头像列表
@@ -791,6 +974,21 @@ public class PersonErpQueryService {
                 .makeCondition(UtilMisc.toMap("workEffortParentId",workEffortId)),null,
                 null, null, false);
 
+
+        //TODO 优化鉴权 ,我是不是组织者
+        EntityCondition findPermissionConditions   = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyId", partyId,"workEffortId",workEffortId));
+
+        List<GenericValue> whoAmI = null;
+        Set<String> seletField = new HashSet<String>();
+        seletField.add("partyId");
+        seletField.add("workEffortId");
+        whoAmI = delegator.findList("WorkEffortAndPartyAssign", findPermissionConditions,seletField,null, null, false);
+        if(whoAmI!=null && whoAmI.size()>1){
+            inputMap.put("iAmAdmin","Y");
+        }else{
+            inputMap.put("iAmAdmin","N");
+        }
 
         inputMap.put("eventDetail",EventsDetail);
         inputMap.put("partyJoinEventsList",partyContent);
@@ -841,12 +1039,12 @@ public class PersonErpQueryService {
         Set<String> seletField = new HashSet<String>();
         seletField.add("partyId");
         seletField.add("workEffortName");
-        seletField.add("estimatedStartDate");
+        seletField.add("actualStartDate");
         seletField.add("description");
         seletField.add("locationDesc");
         seletField.add("estimatedCompletionDate");
         seletField.add("workEffortId");
-        partyEventsList = delegator.findList("WorkEffortAndPartyAssign", findConditions,seletField,UtilMisc.toList("-estimatedStartDate"), null, false);
+        partyEventsList = delegator.findList("WorkEffortAndPartyAssign", findConditions,seletField,UtilMisc.toList("-actualStartDate"), null, false);
 
         inputMap.put("partyEventsList",partyEventsList);
         inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));

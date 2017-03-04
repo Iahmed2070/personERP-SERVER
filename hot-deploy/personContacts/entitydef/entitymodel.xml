@@ -200,6 +200,58 @@
 
 	</view-entity>
 
+
+	<!-- 参与投票的回答的人的详细详细 -->
+	<view-entity entity-name="SurveyResponseAndAnswerAndPerson">
+		<member-entity entity-name="SurveyResponseAndAnswer" entity-alias="SRAA"/>
+		<member-entity entity-name="SurveyQuestion" entity-alias="SQ"/>
+		<member-entity entity-name="Person" entity-alias="P"/>
+
+		<!-- 暂不关联Content -->
+		<alias name="answerPartyId" field="partyId" entity-alias="SRAA"/>
+		<alias name="questionId" field="surveyQuestionId" entity-alias="SQ"/>
+		<alias name="question" field="question" entity-alias="SQ"/>
+
+		<alias name="surveyQuestionId" field="surveyQuestionId" entity-alias="SRAA"/>
+		<alias name="partyId" field="partyId" entity-alias="P"/>
+		<alias name="booleanResponse" field="booleanResponse" entity-alias="SRAA"/>
+
+
+		<alias name="firstName" field="firstName" entity-alias="P"/>
+		<alias name="lastName" field="lastName" entity-alias="P"/>
+
+		<view-link entity-alias="SRAA" rel-entity-alias="SQ">
+			<key-map field-name="surveyQuestionId" rel-field-name="surveyQuestionId" />
+		</view-link>
+		<view-link entity-alias="SRAA" rel-entity-alias="P">
+			<key-map field-name="partyId" rel-field-name="partyId" />
+		</view-link>
+
+		<entity-condition>
+			<condition-list>
+				<condition-expr field-name="booleanResponse" entity-alias="SRAA" operator="equals" value="Y"/>
+			</condition-list>
+
+		</entity-condition>
+	</view-entity>
+
+	<!-- 投票标题列表视图 -->
+	<view-entity entity-name="ActivityVotes">
+		<member-entity entity-name="WorkEffortSurveyAppl" entity-alias="WS"/>
+		<member-entity entity-name="Survey" entity-alias="S"/>
+
+		<alias name="workEffortId" field="workEffortId" entity-alias="WS"/>
+		<alias name="surveyId" field="surveyId" entity-alias="S"/>
+		<alias name="surveyName" field="surveyName" entity-alias="S"/>
+		<alias name="fromDate" field="fromDate" entity-alias="WS"/>
+
+
+		<view-link entity-alias="WS" rel-entity-alias="S">
+			<key-map field-name="surveyId" rel-field-name="surveyId" />
+		</view-link>
+	</view-entity>
+
+
     <!-- 活动中的活动项 -->
 	<view-entity entity-name="ActivityAndProject">
 		<member-entity entity-name="WorkEffort" entity-alias="ACTIVITY"/>
@@ -236,7 +288,7 @@
 	</view-entity>
 
 
-
+<!-- SSMS -->
 	<entity entity-name="SmsValidateCode" package-name="org.ofbiz.personerp.sms" title="短信验证码">
 		<description>短信验证码，过期的 且 isValid=Y 的数据都可以清理</description>
 		<field name="teleNumber" type="id"></field>
@@ -249,4 +301,42 @@
 		<prim-key field="captcha"/>
 		<prim-key field="fromDate"/>
 	</entity>
+	<!-- Account :PaymentTemp -->
+	<entity entity-name="PartyPaymentInfo" package-name="org.ofbiz.personerp" title="PartyPaymentInfo">
+		<description>这是临时记录金额的表</description>
+		<field name="tmpId" type="id"></field>
+		<field name="partyIdFrom" type="value"></field>
+		<field name="partyIdTo" type="value"></field>
+		<field name="workEffortId" type="value"></field>
+		<field name="payDate" type="value"></field>
+		<field name="invoiceApplied" type="currency-amount"></field><!-- 应 -->
+		<field name="amountApplied" type="currency-amount"></field><!-- 实 -->
+		<prim-key field="tmpId"/>
+	</entity>
+
+<!-- 缴费人员视图 -->
+	<view-entity entity-name="PartyPaymentInfoAndPerson">
+		<member-entity entity-name="PartyPaymentInfo" entity-alias="PP"/>
+
+		<member-entity entity-name="Person" entity-alias="P"/>
+
+		<!-- 暂不关联Content -->
+		<alias name="partyIdFrom" field="partyIdFrom" entity-alias="PP"/>
+		<alias name="partyId" field="partyId" entity-alias="P"/>
+		<alias name="workEffortId" field="workEffortId" entity-alias="PP"/>
+
+		<alias name="payDate" field="payDate" entity-alias="PP"/>
+		<alias name="invoiceApplied" field="invoiceApplied" entity-alias="PP"/>
+		<alias name="amountApplied" field="amountApplied" entity-alias="PP"/>
+
+		<alias name="firstName" field="firstName" entity-alias="P"/>
+		<alias name="lastName" field="lastName" entity-alias="P"/>
+
+
+		<view-link entity-alias="PP" rel-entity-alias="P">
+			<key-map field-name="partyIdFrom" rel-field-name="partyId" />
+		</view-link>
+
+	</view-entity>
+
 </entitymodel>

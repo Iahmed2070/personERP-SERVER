@@ -215,16 +215,39 @@
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- 用户参与投票 -->
-    <request-map uri="partyPollQuestions">
+    <request-map uri="doPollQuestion">
         <security https="false" auth="false" />
-        <!--<event type="service" invoke="createSurveyAndQuestions"/>-->
+        <event type="service" invoke="doPollQuestion"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- 当前活动的投票标题列表 -->
+    <request-map uri="findActivityPollQuestionsTitle">
+        <security https="false" auth="false" />
+        <event type="service" invoke="findActivityPollQuestionsTitle"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+    <!-- 当前活动的标题的投票项目列表及投票情况 -->
     <request-map uri="findActivityPollQuestions">
         <security https="false" auth="false" />
-        <!--<event type="service" invoke="findActivityProjects"/>-->
+        <event type="service" invoke="findActivityPollQuestions"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+    <!-- 组织者创建一次收缴Payment -->
+    <request-map uri="createPartyPayment">
+        <security https="false" auth="false" />
+        <event type="service" invoke="createPartyPaymentInfo"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+    <!-- 这个活动相关的账务信息 -->
+    <request-map uri="findActivityPayment">
+        <security https="false" auth="false" />
+        <event type="service" invoke="findActivityPayment"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>

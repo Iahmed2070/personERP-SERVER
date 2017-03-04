@@ -1,5 +1,6 @@
 package com.banfftech.personerp;
 
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.util.*;
 
@@ -244,6 +245,118 @@ public class PersonErpService {
 
 
     /**
+     *创建支付临时数据
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws InterruptedException
+     */
+    public static Map<String, Object> createPartyPaymentInfo(DispatchContext dctx, Map<String, ? extends Object> context)
+            throws  GenericEntityException, GenericServiceException, InterruptedException {
+
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        // 登陆
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        //组织者
+        String partyIdTo = (String) userLogin.get("partyId");
+
+        //参与人
+        String partyIdFrom = (String) context.get("partyIdFrom");
+        //应付
+        String invoiceApplied =   context.get("invoiceApplied")==null?"0":(String) context.get("invoiceApplied");
+        //活动
+        String workEffortId = (String) context.get("workEffortId");
+        //实缴
+        String amountApplied =  context.get("amountApplied")==null?"0":(String) context.get("amountApplied");
+        // 时间
+        String payDate = (String) context.get("payDate");
+
+        GenericValue newPay = delegator.makeValue("PartyPaymentInfo");
+        newPay.set("tmpId", delegator.getNextSeqId("PartyPaymentInfo"));
+        newPay.set("partyIdTo", partyIdTo);
+        newPay.set("partyIdFrom", partyIdFrom);
+        newPay.set("invoiceApplied", new BigDecimal(invoiceApplied) );
+        newPay.set("workEffortId", workEffortId);
+        newPay.set("amountApplied", new BigDecimal(amountApplied));
+        newPay.set("payDate",payDate);
+
+        newPay.create();
+
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+
+        resultMap.put("resultMsg",inputMap);
+        return resultMap;
+    }
+
+
+    /**
+     * 用户确认投票
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws InterruptedException
+     */
+    public static Map<String, Object> doPollQuestion(DispatchContext dctx, Map<String, ? extends Object> context)
+            throws  GenericEntityException, GenericServiceException, InterruptedException {
+
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        // 登陆
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        // 报名人id
+        String partyId = (String) userLogin.get("partyId");
+        //投票项目Id
+        String surveyQuestionId = (String) context.get("surveyQuestionId");
+        //投票Id
+        String surveyId = (String) context.get("surveyId");
+
+        Locale locale = (Locale) context.get("locale");
+
+        //创建Response Awser
+        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        Map<String,Object> answersMap = new HashMap<String, Object>();
+        answersMap.put("answers","{"+surveyQuestionId+"=Y}");
+        Map<String, Object> createSurveyInMap =
+                UtilMisc.toMap("userLogin", userLogin,
+                       "answers",answersMap,
+                        "partyId",partyId,
+                        "surveyId",surveyId);
+        Map<String, Object> createSurveyReturnMap = dispatcher.runSync("createSurveyResponse", createSurveyInMap);
+        String surveyResponseId = (String) createSurveyReturnMap.get("surveyResponseId");
+        String surveyMultiRespColId = (String) createSurveyReturnMap.get("surveyMultiRespColId");
+
+
+        EntityCondition findConditionsToVoteList = null;
+        findConditionsToVoteList = EntityCondition
+                .makeCondition(UtilMisc.toMap("surveyResponseId", surveyResponseId,
+                        "surveyQuestionId", surveyQuestionId, "surveyMultiRespColId", "_NA_"));
+        //创建surveyResponseAnswer
+        GenericValue surveyResponseAnswer =  EntityUtil.getFirst(delegator.findList("SurveyResponseAnswer",findConditionsToVoteList , null, null, null, false));
+//        surveyResponseAnswer.set("surveyMultiRespColId", "_NA_");
+        surveyResponseAnswer.set("surveyQuestionId", surveyQuestionId);
+        surveyResponseAnswer.set("surveyResponseId", surveyResponseId);
+        surveyResponseAnswer.set("booleanResponse","Y");
+        surveyResponseAnswer.store();
+
+
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        resultMap.put("resultMap", inputMap);
+        return resultMap;
+    }
+
+
+    /**
      * 创建投票标题和投票项
      * @param dctx
      * @param context
@@ -271,8 +384,8 @@ public class PersonErpService {
         //String description = (String) context.get("description");
         //允许匿名投票,默认'否'N
         String isAnonymous =  context.get("isAnonymous")==null?"N":(String)context.get("isAnonymous");
-        //允许重复投票,默认'是'Y
-        String allowMultiple = context.get("allowMultiple")==null?"Y":(String)context.get("allowMultiple");
+        //允许重复投票,默认'是'N
+        String allowMultiple = context.get("allowMultiple")==null?"N":(String)context.get("allowMultiple");
         //允许投票被更新,默认'是'Y
         String allowUpdate = context.get("allowUpdate")==null?"Y":(String)context.get("allowUpdate");
         //投票项描述 多个 暂不提供
@@ -285,7 +398,7 @@ public class PersonErpService {
         String surveyQuestionTypeId   = "BOOLEAN";
 
         //将单个项分成数组进行循环创建
-        String [] questionsArray = questions.split(",");
+        String [] questionsArray = questions.split("&");
 
 
 
@@ -299,12 +412,22 @@ public class PersonErpService {
                         "allowUpdate",allowUpdate);
         Map<String, Object> createSurveyResultMap = dispatcher.runSync("createSurvey", createSurveyInMap);
         //得到投票标题主键
-        String surveyId = createSurveyResultMap.get("surveyId");
+        String surveyId = (String)createSurveyResultMap.get("surveyId");
+
 
         //第二步、创建调查对应的问题
         forEachCreateQuestionsToSurvey(surveyQuestionTypeId,surveyQuestionCategoryId,userLogin,surveyId,delegator,dispatcher,questionsArray);
 
-        //TODO 第三步、将投票与活动关联起来
+
+        //第三步、将投票与活动关联起来
+
+        Map<String, Object> createSurveyAppMap =
+                UtilMisc.toMap("userLogin", userLogin,
+                        "surveyId", surveyId,
+                        "workEffortId",workEffortId ,
+                        "fromDate",new Timestamp(new Date().getTime())
+                       );
+        dispatcher.runSync("createWorkEffortSurveyAppl", createSurveyAppMap);
 
         Map<String, Object> inputMap = new HashMap<String, Object>();
         Map<String, Object> result = ServiceUtil.returnSuccess();
@@ -375,9 +498,14 @@ public class PersonErpService {
                 .makeCondition(UtilMisc.toMap("partyId", partyId,"roleTypeId","ACTIVITY_INVITATION","workEffortTypeId","Event"));
        List<GenericValue> partyExsitEvents =   delegator.findList("WorkEffortAndPartyAssign", findConditions, null, null, null, false);
         if(null!=partyExsitEvents){
-            //DO unassignPartyFromWorkEffort
-            Map<String, Object> updateMemberAssignPartyMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_INVITATION", "fromDate", partyExsitEvents.get(0).get("fromDate"), "workEffortId", workEffortId);
-            dispatcher.runSync("unassignPartyFromWorkEffort", updateMemberAssignPartyMap);
+            //DO unassignPartyFromWorkEffort\
+            for(GenericValue gv : partyExsitEvents){
+                if(workEffortId.equals((String) gv.get("workEffortId"))){
+                    Map<String, Object> updateMemberAssignPartyMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_INVITATION", "fromDate", gv.get("fromDate"), "workEffortId", workEffortId);
+                    dispatcher.runSync("unassignPartyFromWorkEffort", updateMemberAssignPartyMap);
+                }
+            }
+
         }
             Map<String, Object> createMemberAssignPartyMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
             dispatcher.runSync("assignPartyToWorkEffort", createMemberAssignPartyMap);

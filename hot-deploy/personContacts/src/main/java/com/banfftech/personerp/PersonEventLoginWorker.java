@@ -250,6 +250,12 @@ public class PersonEventLoginWorker {
 			return "success";
 		}
 
+
+
+        //TODO  User Check  使用阿里大鱼
+
+
+
         if (userLogin != null) {
             //in case  in different tenants
             String currentDelegatorName = delegator.getDelegatorName();

@@ -49,7 +49,7 @@
     <service name="findContactsInfo" engine="java"
             location="com.banfftech.personerp.PersonErpQueryService" invoke="findContactsInfo" auth="false">
         <description>查询用户信息</description>
-        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service> 
     <service name="addContacts" engine="java"
@@ -177,7 +177,56 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+    <!-- 活动的投票列表 -->
+    <service name="findActivityPollQuestionsTitle" engine="java"
+             location="com.banfftech.personerp.PersonErpQueryService" invoke="findActivityPollQuestionsTitle" auth="false">
+        <description>创建新的标签并且关联联系人</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 
+    <!-- 投票项目列表 -->
+    <service name="findActivityPollQuestions" engine="java"
+             location="com.banfftech.personerp.PersonErpQueryService" invoke="findActivityPollQuestions" auth="false">
+        <description>创建新的标签并且关联联系人</description>
+        <attribute name="surveyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- 创建支付-->
+
+    <service name="createPartyPaymentInfo" engine="java"
+             location="com.banfftech.personerp.PersonErpService" invoke="createPartyPaymentInfo" auth="false">
+        <description>创建支付</description>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceApplied" type="String" mode="IN" optional="false"/>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="amountApplied" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- 活动的账务信息 -->
+    <service name="findActivityPayment" engine="java"
+             location="com.banfftech.personerp.PersonErpQueryService" invoke="findActivityPayment" auth="false">
+        <description>账务信息列表</description>
+
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+
+
+    <!-- 用户点击投票 -->
+    <service name="doPollQuestion" engine="java"
+             location="com.banfftech.personerp.PersonErpService" invoke="doPollQuestion" auth="false">
+        <description>当前用户点击了投票</description>
+        <attribute name="surveyQuestionId" type="String" mode="IN" optional="false"/>
+        <attribute name="surveyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 
     <!-- 创建新的标签并且关联联系人 -->
     <service name="lableAndRelationContact" engine="java"
@@ -235,6 +284,13 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+    <!-- 组织者接受录入了一笔活动付款 -->
+    <service name="createInvoiceAndPayment" engine="java"
+             location="com.banfftech.personerp.PersonErpService" invoke="createInvoiceAndPayment" auth="false">
+        <description>创建活动项</description>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 
 
 </services>
