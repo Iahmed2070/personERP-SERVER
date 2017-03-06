@@ -28,7 +28,7 @@
 
     <!-- web applications; will be mounted when using the embedded container -->
     <webapp name="personactivity"
-        title="活动"
+        title="activity"
         server="default-server"
         location="webapp/personactivity"
         base-permission="OFBTOOLS,PERSONACTIVITY"

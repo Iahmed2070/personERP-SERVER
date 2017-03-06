@@ -9,6 +9,20 @@
         <value xml:lang="en">OFBiz: PersonContacts</value>
         <value xml:lang="zh-TW">OFBiz: PersonContacts</value>
     </property>
+
+    <property key="PeCaptchaCheckFailedError">
+        <value xml:lang="en">captcha check failed</value>
+        <value xml:lang="zh">验证码不正确</value>
+    </property>
+    <property key="PeInternalServiceError">
+        <value xml:lang="en">Internal service error, please contact the platform administrator</value>
+        <value xml:lang="zh">内部服务错误，请联系平台管理员</value>
+    </property>
+    <property key="PeCaptchaNotExistError">
+        <value xml:lang="en">captcha not exist</value>
+        <value xml:lang="zh">验证码不存在</value>
+    </property>
+
     <property key="PersonContactsCompanySubtitle">
         <value xml:lang="en">Part of the Apache OFBiz Family of Open Source Software</value>
         <value xml:lang="it">Un modulo della famiglia di software open source Apache OFBiz</value>
@@ -31,5 +45,9 @@
     <property key="success">
         <value xml:lang="en">Success</value>
         <value xml:lang="zh">成功</value>
+    </property>
+    <property key="PeLoginSuccess">
+        <value xml:lang="en">PeLoginSuccess</value>
+        <value xml:lang="zh">PE平台登录成功</value>
     </property>
 </resource>

@@ -22,6 +22,7 @@ package main.java.com.banfftech.personerp;
 import com.auth0.jwt.JWTExpiredException;
 import com.auth0.jwt.JWTSigner;
 import com.auth0.jwt.JWTVerifier;
+import org.apache.ofbiz.entity.util.EntityUtil;
 import com.auth0.jwt.JWTVerifyException;
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.UtilMisc;
@@ -35,12 +36,16 @@ import org.apache.ofbiz.security.*;
 import org.apache.ofbiz.security.Security;
 import org.apache.ofbiz.security.SecurityConfigurationException;
 import org.apache.ofbiz.security.SecurityFactory;
+import org.apache.ofbiz.entity.condition.EntityOperator;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.webapp.control.ContextFilter;
 import org.apache.ofbiz.webapp.WebAppUtil;
+import org.apache.ofbiz.entity.condition.EntityConditionList;
 import org.apache.ofbiz.webapp.control.LoginWorker;
+import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.webapp.stats.VisitHandler;
 import org.apache.ofbiz.service.ServiceUtil;
+import org.apache.ofbiz.entity.condition.EntityCondition;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,10 +55,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SignatureException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Common Workers
@@ -75,128 +77,80 @@ public class PersonEventLoginWorker {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
-        String userLoginId = (String) context.get("userLoginId");
+        String userLoginId = (String) context.get("userLoginId");//teleNumber
        // String captcha = (String) context.get("captcha");
         //String appType = (String) context.get("appType");
         GenericValue userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId",userLoginId), false);
         String token = null;
         Map<String, Object> result = ServiceUtil.returnSuccess();
-        long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe","tarjeta.expirationTime","172800L",delegator));
-        String iss = EntityUtilProperties.getPropertyValue("pe","tarjeta.issuer",delegator);
-        String tokenSecret = EntityUtilProperties.getPropertyValue("pe","tarjeta.secret",delegator);
-        //开始时间
-        final long iat = System.currentTimeMillis() / 1000L; // issued at claim
-        //Token到期时间
-        final long exp = iat + expirationTime;
-        //生成Token
-        final JWTSigner signer = new JWTSigner(tokenSecret);
-        final HashMap<String, Object> claims = new HashMap<String, Object>();
-        claims.put("iss", iss);
-
-        claims.put("user", userLoginId);
-
-        claims.put("delegatorName", delegator.getDelegatorName());
-        claims.put("exp", exp);
-        claims.put("iat", iat);
-        token = signer.sign(claims);
-        //修改验证码状态
+        String captcha = (String) context.get("captcha");
 
         Map<String, Object> inputMap = new HashMap<String, Object>();
 
-        inputMap.put("tarjeta", token);
 
-        inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
 
-        inputMap.put("partyId",userLogin.get("partyId"));
-
-        result.put("resultMap",inputMap);
-//        GenericValue customer;
-//        try {
-//            customer = CloudCardHelper.getUserByTeleNumber(delegator, teleNumber);
-//        } catch (GenericEntityException e) {
-//            Debug.logError(e.getMessage(), module);
-//            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "CloudCardInternalServiceError", locale));
-//        }
-//        Map<String,Object> customerMap = FastMap.newInstance();
-//        if(UtilValidate.isEmpty(customer) && "biz".equals(appType)){
-//            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "CloudCardUserNotExistError", locale));
-//        }else if(UtilValidate.isEmpty(customer) && "user".equals(appType)){
-//            context.put("organizationPartyId", "Company");
-//            context.put("ensureCustomerRelationship", true);
-//            customerMap = CloudCardHelper.getOrCreateCustomer(dctx, context);
-//        }
-//        //返回机构Id
-//        List<String> organizationList = FastList.newInstance();
-//        if(null != customer){
-//            organizationList = CloudCardHelper.getOrganizationPartyId(delegator, customer.get("partyId").toString());
-//        }else{
-//            organizationList = CloudCardHelper.getOrganizationPartyId(delegator, customerMap.get("customerPartyId").toString());
-//        }
-//
-//        if(UtilValidate.isNotEmpty(organizationList)){
-//            result.put("organizationPartyId", organizationList.get(0));
-//        }
-//
-//        //判断商户app登录权限
-//        if("biz".equals(appType)){
-//            if(null == result.get("organizationPartyId")){
-//                Debug.logError(teleNumber+"不是商户管理人员，不能登录 商户app", module);
-//                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "CloudCardBizLoginIsNotManager", locale));
-//            }
-//        }
-//
 //        //查找用户验证码是否存在
-//        EntityConditionList<EntityCondition> captchaConditions = EntityCondition
-//                .makeCondition(EntityCondition.makeCondition("teleNumber", EntityOperator.EQUALS, teleNumber),EntityUtil.getFilterByDateExpr(),EntityCondition.makeCondition("isValid", EntityOperator.EQUALS, "N"));
-//        List<GenericValue> smsList = FastList.newInstance();
-//        try {
-//            smsList = delegator.findList("SmsValidateCode", captchaConditions, null,
-//                    UtilMisc.toList("-" + ModelEntity.CREATE_STAMP_FIELD), null, false);
-//        } catch (GenericEntityException e) {
-//            Debug.logError(e.getMessage(), module);
-//            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "CloudCardInternalServiceError", locale));
-//        }
-//
-//        if(UtilValidate.isEmpty(smsList)){
-//            return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "CloudCardCaptchaNotExistError", locale));
-//        }else{
-//            GenericValue sms = smsList.get(0);
-//
-//            if(sms.get("captcha").equals(captcha)){
-//                //有效时间
-//                long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("cloudcard","token.expirationTime","172800L",delegator));
-//                String iss = EntityUtilProperties.getPropertyValue("cloudcard","token.issuer",delegator);
-//                String tokenSecret = EntityUtilProperties.getPropertyValue("cloudcard","token.secret",delegator);
-//                //开始时间
-//                final long iat = System.currentTimeMillis() / 1000L; // issued at claim
-//                //Token到期时间
-//                final long exp = iat + expirationTime;
-//                //生成Token
-//                final JWTSigner signer = new JWTSigner(tokenSecret);
-//                final HashMap<String, Object> claims = new HashMap<String, Object>();
-//                claims.put("iss", iss);
-//                if(null != customer){
-//                    claims.put("user", customer.get("userLoginId"));
-//                }else{
-//                    claims.put("user", customerMap.get("userLoginId"));
-//                }
-//                claims.put("delegatorName", delegator.getDelegatorName());
-//                claims.put("exp", exp);
-//                claims.put("iat", iat);
-//                token = signer.sign(claims);
-//                //修改验证码状态
-//                sms.set("isValid", "Y");
-//                try {
-//                    sms.store();
-//                } catch (GenericEntityException e) {
-//                    Debug.logError(e.getMessage(), module);
-//                    return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "CloudCardInternalServiceError", locale));
-//                }
-//                result.put("token", token);
-//            }else{
-//                return ServiceUtil.returnError(UtilProperties.getMessage(resourceError, "CloudCardCaptchaCheckFailedError", locale));
-//            }
-//        }
+        EntityConditionList<EntityCondition> captchaConditions = EntityCondition
+                .makeCondition(EntityCondition.makeCondition("teleNumber", EntityOperator.EQUALS, userLoginId),EntityUtil.getFilterByDateExpr(),EntityCondition.makeCondition("isValid", EntityOperator.EQUALS, "N"));
+        List<GenericValue> smsList = new ArrayList<GenericValue>();
+        try {
+            smsList = delegator.findList("SmsValidateCode", captchaConditions, null,
+                    UtilMisc.toList("-" + ModelEntity.CREATE_STAMP_FIELD), null, false);
+        } catch (GenericEntityException e) {
+            Debug.logError(e.getMessage(), module);
+            //org.apache.ofbiz.base.util.UtilProperties.getMessage("PeInternalServiceError", "success", locale)
+            return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeInternalServiceError", locale));
+        }
+
+        if(UtilValidate.isEmpty(smsList)){
+            return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeCaptchaNotExistError", locale));
+        }else{
+            GenericValue sms = smsList.get(0);
+
+            if(sms.get("captcha").equals(captcha)){
+                //有效时间
+                long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe","tarjeta.expirationTime","172800L",delegator));
+                String iss = EntityUtilProperties.getPropertyValue("pe","tarjeta.issuer",delegator);
+                String tokenSecret = EntityUtilProperties.getPropertyValue("pe","tarjeta.secret",delegator);
+                //开始时间
+                final long iat = System.currentTimeMillis() / 1000L; // issued at claim
+                //Token到期时间
+                final long exp = iat + expirationTime;
+                //生成Token
+                final JWTSigner signer = new JWTSigner(tokenSecret);
+                final HashMap<String, Object> claims = new HashMap<String, Object>();
+                claims.put("iss", iss);
+
+                claims.put("user", userLoginId);
+
+                claims.put("delegatorName", delegator.getDelegatorName());
+                claims.put("exp", exp);
+                claims.put("iat", iat);
+                token = signer.sign(claims);
+
+
+
+                //修改验证码状态
+                sms.set("isValid", "Y");
+                try {
+                    sms.store();
+                } catch (GenericEntityException e) {
+                    Debug.logError(e.getMessage(), module);
+                    //org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeInternalServiceError", locale)
+                    return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeInternalServiceError", locale));
+                }
+
+                inputMap.put("tarjeta", token);
+
+                inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels", "PeLoginSuccess", locale));
+
+                inputMap.put("partyId",userLogin.get("partyId"));
+
+                result.put("resultMap",inputMap);
+            }else{
+                return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeCaptchaCheckFailedError", locale));
+            }
+        }
 
         return result;
     }

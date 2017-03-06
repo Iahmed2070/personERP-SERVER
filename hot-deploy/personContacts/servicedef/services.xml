@@ -292,5 +292,21 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+    <!-- 获得登录的验证码 -->
+    <service name="getLoginCaptcha" engine="java"
+             location="com.banfftech.personerp.PersonErpService" invoke="getLoginCaptcha" auth="false">
+        <description>获取登录验证码</description>
+        <attribute name="teleNumber" type="String" mode="IN" optional="false"/>
+    </service>
+
+
+
+    <service name="appRegister" engine="java"
+             location="com.banfftech.personerp.PersonErpService" invoke="appRegister" auth="false">
+        <description>appRegister</description>
+        <attribute name="teleNumber" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
 
 </services>

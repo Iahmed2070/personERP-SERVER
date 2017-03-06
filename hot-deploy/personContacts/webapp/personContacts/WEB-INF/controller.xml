@@ -42,6 +42,25 @@
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
+
+
+    <!-- 平台注册 -->
+    <request-map uri="appRegister">
+        <security https="false" auth="false" />
+        <event type="service" invoke="appRegister"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+
+    <!-- 验证码发送申请 -->
+    <request-map uri="getLoginCaptcha">
+        <security https="false" auth="false" />
+        <event type="service" invoke="getLoginCaptcha"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
     <!-- 查询联系人信息 -->
 	<request-map uri="findContactInfo">
 		<security https="false" auth="false" />
