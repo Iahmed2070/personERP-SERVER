@@ -277,12 +277,21 @@
              location="main.java.com.banfftech.personerp.PersonEventLoginWorker" invoke="userAppLogin" auth="false">
         <description>用户手机登录</description>
         <attribute name="userLoginId" type="String" mode="IN" optional="false"/>
-        <!--暂无验证码<attribute name="captcha" type="String" mode="IN" optional="false"/>-->
+        <attribute name="captcha" type="String" mode="IN" optional="false"/>
         <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
         <!--<attribute name="organizationPartyId" type="String" mode="OUT" optional="true"/>-->
         <attribute name="inputMap" type="java.util.HashMap" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+    <!-- 检查用户是否存在 -->
+    <service name="isUserLoginExsits" engine="java"
+             location="main.java.com.banfftech.personerp.PersonEventLoginWorker" invoke="isUserLoginExsits" auth="false">
+        <description>用户手机登录</description>
+        <attribute name="userLoginId" type="String" mode="IN" optional="false"/>
+
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
 
     <!-- 组织者接受录入了一笔活动付款 -->
     <service name="createInvoiceAndPayment" engine="java"
@@ -297,14 +306,17 @@
              location="com.banfftech.personerp.PersonErpService" invoke="getLoginCaptcha" auth="false">
         <description>获取登录验证码</description>
         <attribute name="teleNumber" type="String" mode="IN" optional="false"/>
+        <attribute name="smsType" type="String" mode="IN" optional="false"/>
     </service>
 
 
-
-    <service name="appRegister" engine="java"
-             location="com.banfftech.personerp.PersonErpService" invoke="appRegister" auth="false">
+    <!-- App用户注册 -->
+    <service name="userAppRegister" engine="java"
+             location="com.banfftech.personerp.PersonErpService" invoke="userAppRegister" auth="false">
         <description>appRegister</description>
         <attribute name="teleNumber" type="String" mode="IN" optional="false"/>
+        <attribute name="nickName" type="String" mode="IN" optional="false"/>
+        <attribute name="captcha" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 

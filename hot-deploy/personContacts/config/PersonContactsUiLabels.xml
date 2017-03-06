@@ -50,4 +50,10 @@
         <value xml:lang="en">PeLoginSuccess</value>
         <value xml:lang="zh">PE平台登录成功</value>
     </property>
+
+    <property key="PeLoginExsit">
+        <value xml:lang="en">Pe LoginAccount is Exsit!</value>
+        <value xml:lang="zh">该账号已被注册!</value>
+    </property>
+
 </resource>

@@ -67,6 +67,30 @@ public class PersonEventLoginWorker {
 
     public static final String TOKEN_KEY_ATTR = "tarjeta";
 
+
+    /**
+     * 是否已经注册用户
+     * @param dctx
+     * @param context
+     * @return
+     * @throws GenericEntityException
+     */
+    public static Map<String, Object> isUserLoginExsits(DispatchContext dctx, Map<String, Object> context)throws GenericEntityException {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        String userLoginId = (String) context.get("userLoginId");//teleNumber
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        GenericValue userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
+        if(null!= userLogin){
+            inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels", "PeLoginExsit", locale));
+        }else{
+            inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        }
+        result.put("resultMap",inputMap);
+        return result;
+    }
     /**
      * App登录
      * @param dctx
@@ -91,7 +115,7 @@ public class PersonEventLoginWorker {
 
 //        //查找用户验证码是否存在
         EntityConditionList<EntityCondition> captchaConditions = EntityCondition
-                .makeCondition(EntityCondition.makeCondition("teleNumber", EntityOperator.EQUALS, userLoginId),EntityUtil.getFilterByDateExpr(),EntityCondition.makeCondition("isValid", EntityOperator.EQUALS, "N"));
+                .makeCondition(EntityCondition.makeCondition("teleNumber", EntityOperator.EQUALS, userLoginId),EntityUtil.getFilterByDateExpr(),EntityCondition.makeCondition("isValid", EntityOperator.EQUALS, "N"),EntityCondition.makeCondition("smsType", EntityOperator.EQUALS, "LOGIN"));
         List<GenericValue> smsList = new ArrayList<GenericValue>();
         try {
             smsList = delegator.findList("SmsValidateCode", captchaConditions, null,

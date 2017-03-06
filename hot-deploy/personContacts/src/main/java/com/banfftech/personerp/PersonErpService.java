@@ -8,6 +8,7 @@ import java.util.*;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.base.util.UtilValidate;
+import org.apache.ofbiz.entity.condition.EntityConditionList;
 import org.apache.ofbiz.entity.Delegator;
 import org.apache.ofbiz.entity.GenericEntityException;
 import org.apache.ofbiz.service.GenericServiceException;
@@ -261,6 +262,88 @@ public class PersonErpService {
     }
 
 
+    /**
+     * 用户注册
+     * @param dctx
+     * @param context
+     * @return
+     */
+    public static Map<String, Object> userAppRegister(DispatchContext dctx, Map<String, Object> context) throws GenericServiceException,GenericEntityException{
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+
+        //TODO 1. CHECK CAPTCHA
+        String teleNumber = (String) context.get("teleNumber");//手机号 也就是userLoginId
+        String captcha    = (String) context.get("captcha");//验证码
+        String nickname   = (String) context.get("nickname");//昵称
+       GenericValue userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
+
+        //        //查找用户验证码是否存在
+        EntityConditionList<EntityCondition> captchaConditions = EntityCondition
+                .makeCondition(EntityCondition.makeCondition("teleNumber", EntityOperator.EQUALS, teleNumber),EntityUtil.getFilterByDateExpr(),EntityCondition.makeCondition("isValid", EntityOperator.EQUALS, "N"),EntityCondition.makeCondition("smsType", EntityOperator.EQUALS, "REGISTER"));
+        List<GenericValue> smsList = new ArrayList<GenericValue>();
+        try {
+            smsList = delegator.findList("SmsValidateCode", captchaConditions, null,
+                    UtilMisc.toList("-" + ModelEntity.CREATE_STAMP_FIELD), null, false);
+        } catch (GenericEntityException e) {
+            org.apache.ofbiz.base.util.Debug.logError(e.getMessage(), module);
+            //org.apache.ofbiz.base.util.UtilProperties.getMessage("PeInternalServiceError", "success", locale)
+            return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeInternalServiceError", locale));
+        }
+
+        if(UtilValidate.isEmpty(smsList)){
+            return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeCaptchaNotExistError", locale));
+        }else{
+            GenericValue sms = smsList.get(0);
+
+            if(sms.get("captcha").equals(captcha)){
+                //创建Party Person
+                Map<String, Object> createPartyInMap =
+                        UtilMisc.toMap("userLogin", userLogin,
+                                "nickname",nickname,
+                                "firstName","设置",
+                                "lastName","未");
+//                inputFieldMap.put("gender", gender);
+                Map<String, Object> createPerson = null;
+                createPerson = dispatcher.runSync("createUpdatePerson", createPartyInMap);
+                String partyId = (String) createPerson.get("partyId");
+                //创建UserLogin
+                Map<String, Object> createUserLoginInMap =
+                        UtilMisc.toMap("userLogin", userLogin,
+                                "userLoginId",teleNumber,
+                                "partyId",partyId,
+                                "currentPassword","ofbiz","currentPasswordVerify","ofbiz"
+                                );
+
+                Map<String, Object> createUserLogin = null;
+                createUserLogin = dispatcher.runSync("createUserLogin", createUserLoginInMap);
+
+
+                //TODO 5. GRANT ABOUT PE PERMISSION 授予权限
+                Map<String, Object> createPartyRoleMemberMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER");
+                dispatcher.runSync("createPartyRole", createPartyRoleMemberMap);
+                createPartyRoleMemberMap =  UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_ADMIN");
+                dispatcher.runSync("createPartyRole", createPartyRoleMemberMap);
+                createPartyRoleMemberMap =  UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_INVITATION");
+                dispatcher.runSync("createPartyRole", createPartyRoleMemberMap);
+
+                Map<String, Object> createPartyRoleSecurityGroupMap = UtilMisc.toMap("userLogin", userLogin, "userLoginId",teleNumber, "groupId", "FULLADMIN");
+                dispatcher.runSync("addUserLoginToSecurityGroup", createPartyRoleSecurityGroupMap);
+
+            }
+        }
+
+
+
+        Map<String,Object> result = ServiceUtil.returnSuccess();
+        Map<String, Object> inputMap = new HashMap<String, Object>();    inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        result.put("resultMap", inputMap);
+        return result;
+    }
+
+
+
 
     /**
      * 获取登录验证码
@@ -273,6 +356,7 @@ public class PersonErpService {
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
         String teleNumber = (String) context.get("teleNumber");
+        String smsType = (String) context.get("smsType");//LOGIN 或 REGISTER
 
         java.sql.Timestamp nowTimestamp  = org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp();
 
@@ -320,11 +404,11 @@ public class PersonErpService {
 
         if(sendSMS){
             //生成验证码
-            String captcha = org.apache.ofbiz.base.util.UtilFormatOut.padString(String.valueOf(Math.round((Math.random() * 10e6))), 10, false, '0');
+            String captcha = org.apache.ofbiz.base.util.UtilFormatOut.padString(String.valueOf(Math.round((Math.random() * 10e6))), 2, false, '0');
              Map<String,Object> smsValidateCodeMap = UtilMisc.toMap();
             smsValidateCodeMap.put("teleNumber", teleNumber);
             smsValidateCodeMap.put("captcha", captcha);
-            smsValidateCodeMap.put("smsType", "LOGIN");
+            smsValidateCodeMap.put("smsType", smsType);
             smsValidateCodeMap.put("isValid", "N");
             smsValidateCodeMap.put("fromDate", nowTimestamp);
             smsValidateCodeMap.put("thruDate", org.apache.ofbiz.base.util.UtilDateTime.adjustTimestamp(nowTimestamp, Calendar.SECOND, validTime));

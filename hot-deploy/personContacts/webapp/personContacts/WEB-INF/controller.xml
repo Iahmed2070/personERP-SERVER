@@ -45,15 +45,24 @@
 
 
     <!-- 平台注册 -->
-    <request-map uri="appRegister">
+    <request-map uri="userAppRegister">
         <security https="false" auth="false" />
-        <event type="service" invoke="appRegister"/>
+        <event type="service" invoke="userAppRegister"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
 
 
-    <!-- 验证码发送申请 -->
+    <!-- Ajax 判断是否已注册用户 -->
+    <request-map uri="isUserLoginExsits">
+        <security https="false" auth="false" />
+        <event type="service" invoke="isUserLoginExsits"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+
+    <!-- 验证码发送申请 To Login Logic -->
     <request-map uri="getLoginCaptcha">
         <security https="false" auth="false" />
         <event type="service" invoke="getLoginCaptcha"/>
