@@ -18,4 +18,6 @@
   <load-component component-location="passport"/>
   <load-component component-location="personContacts"/>
   <load-component component-location="personactivity"/>
+  <load-component component-location="peplatform"/>
+  <load-component component-location="pewebview"/>
 </component-loader>

@@ -16,11 +16,11 @@
     <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.secret" systemPropertyValue="{{secret used for signing}}" description="tarjeta的secret"/>
 
 
-    <SystemProperty systemResourceId="cloudcard" systemPropertyId="sms.appkey" systemPropertyValue="23654770" description="短信平台appkey"/>
-    <SystemProperty systemResourceId="cloudcard" systemPropertyId="sms.intervalTime" systemPropertyValue="60" description="第二次与第一次短信发送间隔时间"/>
-    <SystemProperty systemResourceId="cloudcard" systemPropertyId="sms.secret" systemPropertyValue="9c58a5fa366e2aabd8a62363c4c228c6" description="短信平台secret"/>
-    <SystemProperty systemResourceId="cloudcard" systemPropertyId="sms.smsFreeSignName" systemPropertyValue="丕屹" description="短信平台配置签名"/>
-    <SystemProperty systemResourceId="cloudcard" systemPropertyId="sms.smsTemplateCode" systemPropertyValue="SMS_52105414" description="短信平台模版号"/>
-    <SystemProperty systemResourceId="cloudcard" systemPropertyId="sms.url" systemPropertyValue="http://gw.api.tbsandbox.com/router/rest" description="短信平台请求地址"/>
-    <SystemProperty systemResourceId="cloudcard" systemPropertyId="sms.validTime" systemPropertyValue="900" description="短信使用有效时间"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.appkey" systemPropertyValue="23654770" description="短信平台appkey"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.intervalTime" systemPropertyValue="60" description="第二次与第一次短信发送间隔时间"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.secret" systemPropertyValue="9c58a5fa366e2aabd8a62363c4c228c6" description="短信平台secret"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.smsFreeSignName" systemPropertyValue="丕屹" description="短信平台配置签名"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.smsTemplateCode" systemPropertyValue="SMS_52105414" description="短信平台模版号"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.url" systemPropertyValue="http://gw.api.tbsandbox.com/router/rest" description="短信平台请求地址"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.validTime" systemPropertyValue="900" description="短信使用有效时间"/>
 </entity-engine-xml>

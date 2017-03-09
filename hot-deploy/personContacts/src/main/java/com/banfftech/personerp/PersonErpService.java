@@ -2,6 +2,8 @@ package com.banfftech.personerp;
 
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
@@ -20,6 +22,10 @@ import org.apache.ofbiz.entity.util.EntityUtilProperties;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
 import sun.net.www.content.text.Generic;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.ofbiz.entity.condition.EntityOperator;
@@ -39,6 +45,7 @@ import java.io.DataInputStream;
 import java.io.FileOutputStream;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import java.io.IOException;
+import main.java.com.banfftech.personerp.util.EncrypDES;
 import javax.servlet.ServletException;
 
 import java.io.IOException;
@@ -55,11 +62,11 @@ public class PersonErpService {
     private static String smsTemplateCode = null;
 
     public static void getSmsProperty(Delegator delegator){
-        url = EntityUtilProperties.getPropertyValue("cloudcard","sms.url",delegator);
-        appkey = EntityUtilProperties.getPropertyValue("cloudcard","sms.appkey",delegator);
-        secret = EntityUtilProperties.getPropertyValue("cloudcard","sms.secret",delegator);
-        smsFreeSignName = EntityUtilProperties.getPropertyValue("cloudcard","sms.smsFreeSignName",delegator);
-        smsTemplateCode = EntityUtilProperties.getPropertyValue("cloudcard","sms.smsTemplateCode",delegator);
+        url = EntityUtilProperties.getPropertyValue("pe","sms.url",delegator);
+        appkey = EntityUtilProperties.getPropertyValue("pe","sms.appkey",delegator);
+        secret = EntityUtilProperties.getPropertyValue("pe","sms.secret",delegator);
+        smsFreeSignName = EntityUtilProperties.getPropertyValue("pe","sms.smsFreeSignName",delegator);
+        smsTemplateCode = EntityUtilProperties.getPropertyValue("pe","sms.smsTemplateCode",delegator);
     }
 
 
@@ -346,7 +353,8 @@ public class PersonErpService {
 
 
     /**
-     * 获取登录验证码
+     * GetCaptcha
+     * @author S.Y.L
      * @param dctx
      * @param context
      * @return
@@ -373,14 +381,12 @@ public class PersonErpService {
                     delegator.findList("SmsValidateCode", captchaCondition, null,UtilMisc.toList("-" + ModelEntity.CREATE_STAMP_FIELD), null, false)
             );
         } catch (GenericEntityException e) {
-
-            //UtilProperties.getMessage(resourceError, "CloudCardGetCAPTCHAFailedError", locale)
-//            return ServiceUtil.returnError("CloudCardGetCAPTCHAFailedError");
+            //TODO ADD EXCEPTION
         }
 
 
-        int validTime = Integer.valueOf(EntityUtilProperties.getPropertyValue("cloudcard","sms.validTime","900",delegator));
-        int intervalTime = Integer.valueOf(EntityUtilProperties.getPropertyValue("cloudcard","sms.intervalTime","60",delegator));
+        int validTime = Integer.valueOf(EntityUtilProperties.getPropertyValue("pe","sms.validTime","900",delegator));
+        int intervalTime = Integer.valueOf(EntityUtilProperties.getPropertyValue("pe","sms.intervalTime","60",delegator));
 
 
         boolean sendSMS = false;
@@ -429,6 +435,42 @@ public class PersonErpService {
         return ServiceUtil.returnSuccess();
     }
 
+    /**
+     * SendMessageInvitation
+     * @Author S.Y.L
+     * @param dctx
+     * @param context
+     * @return
+     */
+    public static Map<String, Object> sendInvitation(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dispatcher.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        //ActivityId
+        String workEffortId = (String) context.get("workEffortId");
+        //ContactInfoMation
+        String contact = (String) context.get("contact");
+        //SendFrom
+        String partyId = (String) context.get("partyId");
+        //Str Add Str
+        StringBuffer stringBuffer = new StringBuffer();
+        //TODO 获得邀请人的名称
+        GenericValue person = delegator.findOne("Person", false, UtilMisc.toMap("partyId", partyId));
+        //Get Activity Admin NikeName
+        String nikeName = (String) person.get("nickname");
+        stringBuffer.append("nikeName:"+nikeName+",");
+        stringBuffer.append("workEffortId:"+workEffortId+",");
+        stringBuffer.append("contact:"+"["+workEffortId+"]");
+        //TODO DES 加密请求参数
+        EncrypDES de1 = new EncrypDES();
+        byte[] encontent = de1.Encrytor(stringBuffer.toString());
+        //TODO 发送邀请短信
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Map<String, Object> inputMap = new HashMap<String, Object>();    inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        result.put("resultMap", inputMap);
+        return result;
+    }
 
     /**
      * 发送
@@ -446,12 +488,14 @@ public class PersonErpService {
         //初始化短信发送配置文件
         getSmsProperty(delegator);
         //发送短信
-        TaobaoClient client = new DefaultTaobaoClient(url, appkey, secret);
+        //暂时先写死、此处应当放入配置文件
+        TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23654770", "9c58a5fa366e2aabd8a62363c4c228c6");
         AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
         req.setExtend("");
         req.setSmsType("normal");
         req.setSmsFreeSignName(smsFreeSignName);
-        req.setSmsParamString("{number:'"+code+"',product:'"+product+"'}");
+        String json="{\"number\":\""+code+"\"}";
+        req.setSmsParamString(json);
         req.setRecNum(phone);
         req.setSmsTemplateCode(smsTemplateCode);
         AlibabaAliqinFcSmsNumSendResponse rsp = null;
@@ -517,7 +561,7 @@ public class PersonErpService {
 
         inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
 
-        resultMap.put("resultMsg",inputMap);
+        resultMap.put("resultMap",inputMap);
         return resultMap;
     }
 
@@ -888,19 +932,26 @@ public class PersonErpService {
         }
         Timestamp tm = null;
         Timestamp tmend = null;
-        if (actualStartDate != null) {
+        if (actualStartDate != null && !actualStartDate.trim().equals("")) {
             tm = Timestamp.valueOf(actualStartDate);
         }
-        if (estimatedCompletionDate != null) {
+        if (estimatedCompletionDate != null && !estimatedCompletionDate.trim().equals("")) {
             tmend = Timestamp.valueOf(estimatedCompletionDate);
         }
 
         Map<String, Object> createWorkEffortMap = null;
         if(parentId!=null){//代表这是一个子活动
-            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin,"workEffortParentId",parentId, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", actualStartDate, "locationDesc", locationDesc, "estimatedCompletionDate", tmend);
+            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin,"workEffortParentId",parentId, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "locationDesc", locationDesc);
         }else {
-            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", actualStartDate, "locationDesc", locationDesc, "estimatedCompletionDate", tmend, "scopeEnumId", scopeEnumId);
+            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", locationDesc, "scopeEnumId", scopeEnumId);
         }
+        if(tm!=null){
+            createWorkEffortMap.put("actualStartDate", actualStartDate);
+        }
+        if(tmend!=null){
+            createWorkEffortMap.put("estimatedCompletionDate", tmend);
+        }
+
 
         Map<String, Object> serviceResultByCreateWorkEffortMap = dispatcher.runSync("createWorkEffort", createWorkEffortMap);
         //NEW WORKEFFORT_ID

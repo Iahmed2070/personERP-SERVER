@@ -194,13 +194,13 @@
     </service>
 
     <!-- 创建支付-->
-
     <service name="createPartyPaymentInfo" engine="java"
              location="com.banfftech.personerp.PersonErpService" invoke="createPartyPaymentInfo" auth="false">
         <description>创建支付</description>
         <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
         <attribute name="invoiceApplied" type="String" mode="IN" optional="false"/>
         <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="payDate" type="String" mode="IN" optional="false"/>
         <attribute name="amountApplied" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
@@ -317,6 +317,17 @@
         <attribute name="teleNumber" type="String" mode="IN" optional="false"/>
         <attribute name="nickName" type="String" mode="IN" optional="false"/>
         <attribute name="captcha" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+    <!-- 发起专属活动邀请(短信) -->
+    <service name="sendInvitation" engine="java"
+             location="com.banfftech.personerp.PersonErpService" invoke="sendInvitation" auth="false">
+        <description>发起专属活动邀请</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="contact" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 

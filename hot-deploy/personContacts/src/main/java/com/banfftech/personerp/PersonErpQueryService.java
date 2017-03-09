@@ -183,7 +183,8 @@ public class PersonErpQueryService {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
-        String partyId = (String) context.get("partyId");
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String partyId = (String) userLogin.get("partyId");
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         Map<String, Object> inputMap = new HashMap<String, Object>();
         //活动ID
@@ -942,13 +943,14 @@ public class PersonErpQueryService {
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
         String workEffortId = (String) context.get("workEffortId");
 
+        GenericValue createPerson = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
         //活动详情
         EntityCondition findConditions = null;
         findConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("workEffortId", workEffortId));
-        List<GenericValue> EventsDetail = null;
+        List<GenericValue> eventsDetail = null;
 
-        EventsDetail = delegator.findList("WorkEffort", findConditions, UtilMisc.toSet("workEffortId","workEffortName","actualStartDate","description","locationDesc","estimatedCompletionDate"),
+        eventsDetail = delegator.findList("WorkEffort", findConditions, UtilMisc.toSet("workEffortId","workEffortName","actualStartDate","description","locationDesc","estimatedCompletionDate"),
                 null, null, false);
 
         //参与的人员其实是头像列表
@@ -989,11 +991,13 @@ public class PersonErpQueryService {
         }else{
             inputMap.put("iAmAdmin","N");
         }
-
-        inputMap.put("eventDetail",EventsDetail);
+        List<GenericValue> personList = new ArrayList<GenericValue>();
+        personList.add(createPerson);
+        inputMap.put("createPersonInfoList", personList);
+        inputMap.put("eventDetail", eventsDetail);
         inputMap.put("partyJoinEventsList",partyContent);
         inputMap.put("childActivityList",childActivityList);
-
+        inputMap.put("partyId",partyId);
         inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
         resultMap.put("resultMap", inputMap);
         return resultMap;
