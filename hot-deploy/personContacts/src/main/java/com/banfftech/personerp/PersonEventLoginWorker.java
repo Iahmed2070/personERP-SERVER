@@ -172,6 +172,7 @@ public class PersonEventLoginWorker {
 
                 result.put("resultMap",inputMap);
             }else{
+                Debug.logError("---------------------------------------------------------CaptERROR,xi"+sms.get("captcha")+""+"|"+captcha);
                 return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeCaptchaCheckFailedError", locale));
             }
         }
