@@ -168,6 +168,9 @@ public class PersonEventLoginWorker {
 
                 inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels", "PeLoginSuccess", locale));
 
+                if(userLogin.get("partyId") == null){//没有找到用户
+                    return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeUserNotFundError", locale));
+                }
                 inputMap.put("partyId",userLogin.get("partyId"));
 
                 result.put("resultMap",inputMap);
