@@ -903,10 +903,9 @@ public class PersonErpService {
      */
     public static Map<String, Object> createNewEvent(DispatchContext dctx, Map<String, ? extends Object> context)
             throws IOException, GenericEntityException, GenericServiceException, InterruptedException {
-
+        //服务头部
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dctx.getDelegator();
-
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
 
@@ -930,6 +929,8 @@ public class PersonErpService {
         if (scopeEnumId == null) {
             scopeEnumId = "WES_PUBLIC";
         }
+        //经纬度
+        String specialTerms = (String) context.get("specialTerms");
         Timestamp tm = null;
         Timestamp tmend = null;
         if (actualStartDate != null && !actualStartDate.trim().equals("")) {
@@ -941,9 +942,9 @@ public class PersonErpService {
 
         Map<String, Object> createWorkEffortMap = null;
         if(parentId!=null){//代表这是一个子活动
-            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin,"workEffortParentId",parentId, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "locationDesc", locationDesc);
+            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin,"workEffortParentId",parentId, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "locationDesc", locationDesc,"specialTerms",specialTerms);
         }else {
-            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", locationDesc, "scopeEnumId", scopeEnumId);
+            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", locationDesc, "scopeEnumId", scopeEnumId,"specialTerms",specialTerms);
         }
         if(tm!=null){
             createWorkEffortMap.put("actualStartDate", actualStartDate);
@@ -979,13 +980,13 @@ public class PersonErpService {
 
 
 
-        //5.群发邀请函
-        String contacts = (String) context.get("contactsList");
+        //5.群发邀请函 这个功能暂时不需要了
+//        String contacts = (String) context.get("contactsList");
 
-        if(contacts!=null){
-            String [] arrays   = contacts.split(",");
-            forEachInvitationParty(arrays,dispatcher,userLogin,workEffortId,delegator);
-        }
+//        if(contacts!=null){
+//            String [] arrays   = contacts.split(",");
+//            forEachInvitationParty(arrays,dispatcher,userLogin,workEffortId,delegator);
+//        }
 
 
         Map<String, Object> inputMap = new HashMap<String, Object>();

@@ -949,8 +949,16 @@ public class PersonErpQueryService {
         findConditions = EntityCondition
                 .makeCondition(UtilMisc.toMap("workEffortId", workEffortId));
         List<GenericValue> eventsDetail = null;
-
-        eventsDetail = delegator.findList("WorkEffort", findConditions, UtilMisc.toSet("workEffortId","workEffortName","actualStartDate","description","locationDesc","estimatedCompletionDate"),
+        //要查询的字段
+        Set<String> fieldSet = new HashSet<String>();
+        fieldSet.add("workEffortId");
+        fieldSet.add("workEffortName");
+        fieldSet.add("actualStartDate");
+        fieldSet.add("description");
+        fieldSet.add("locationDesc");
+        fieldSet.add("estimatedCompletionDate");
+        fieldSet.add("specialTerms");
+        eventsDetail = delegator.findList("WorkEffort", findConditions, fieldSet,
                 null, null, false);
 
         //参与的人员其实是头像列表

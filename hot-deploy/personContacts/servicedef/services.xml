@@ -259,7 +259,10 @@
         <attribute name="partyId" type="String" mode="IN" optional="true"/>
         <attribute name="parentId" type="String" mode="IN" optional="true"/><!-- 父活动id -->
         <attribute name="workEffortName" type="String" mode="IN" optional="true"/>
-        <attribute name="contactsList" type="String" mode="IN" optional="true"/><!-- 受邀群体 -->
+        <!-- 受邀群体 -->
+        <!--<attribute name="contactsList" type="String" mode="IN" optional="true"/>-->
+        <attribute name="specialTerms" type="String" mode="IN" optional="true"/>
+
         <attribute name="description" type="String" mode="IN" optional="true"/>
         <attribute name="locationDesc" type="String" mode="IN" optional="true"/>
         <attribute name="actualStartDate" type="String" mode="IN" optional="true"/>
