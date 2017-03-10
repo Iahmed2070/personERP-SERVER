@@ -155,7 +155,7 @@
             <check-errors/>
         </if-empty>
         <set field="answers" from-field="parameters.answers"/>
-
+       <log level="info" message="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! answers = ${answers} {answers}!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"/>
         <!-- make sure all required fields were responded to -->
         <iterate list="surveyQuestionAndApplList" entry="surveyQuestionAndAppl">
             <!-- for validation get SurveyMultiResp and SurveyMultiRespColumn entries and if exist process for each surveyMultiRespColId -->
