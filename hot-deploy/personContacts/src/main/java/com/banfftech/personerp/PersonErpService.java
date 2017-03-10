@@ -944,7 +944,7 @@ public class PersonErpService {
         if(parentId!=null){//代表这是一个子活动
             createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin,"workEffortParentId",parentId, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "locationDesc", locationDesc,"specialTerms",specialTerms);
         }else {
-            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate", locationDesc, "scopeEnumId", scopeEnumId,"specialTerms",specialTerms);
+            createWorkEffortMap = UtilMisc.toMap("userLogin", userLogin, "currentStatusId", "CAL_IN_PLANNING", "workEffortName", workEffortName, "workEffortTypeId", "EVENT", "description", description, "actualStartDate","locationDesc",locationDesc, "scopeEnumId", scopeEnumId,"specialTerms",specialTerms);
         }
         if(tm!=null){
             createWorkEffortMap.put("actualStartDate", actualStartDate);
