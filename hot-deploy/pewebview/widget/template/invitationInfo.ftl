@@ -23,7 +23,7 @@
 
 
 <div class="xj">
-    <p>ÈýÔÂÀ¥ÂØÐÐ </p>
+    <p>ç™»å±± </p>
     <p>2016-03-08</p>
 </div>
 
@@ -31,13 +31,13 @@
 
 <div id="wrap">
     <div id="tit">
-        <span class="select">»î¶¯ÏêÇé</span>
-        <span>¶¼ÓÐÐ©Ë­</span>
+        <span class="select">æ´»åŠ¨è¯¦æƒ…</span>
+        <span>éƒ½æœ‰äº›è°</span>
     </div>
     <div class="clear"></div>
     <div id="con">
         <div class="con show">
-            <h3>×éÖ¯Õß:ÍõÀ¤¡¢ÀîÄþ</h3>
+            <h3>ç»„ç»‡è€…:çŽ‹å¤ã€æŽå®</h3>
         </div>
         <div class="con">
             <ul class="ren">
@@ -48,7 +48,7 @@
                     </div>
                     <div class="xqy-p1">
                         <span>a</span>
-                        <span style="margin-left:1rem;">À´×Ô'Í¬Ñ§' </span>
+                        <span style="margin-left:1rem;">æ¥è‡ª 'åŒå­¦'</span>
 
                     </div>
                     <div class="clear"></div>
@@ -61,10 +61,10 @@
 
 <div class="foot">
     <div>
-        <a href="#">¾Ü¾ø</a>
+        <a href="#">æ‹’ç»</a>
     </div>
     <div>
-        <a href="#">±¨Ãû</a>
+        <a href="#">å‚åŠ </a>
     </div>
 </div>
 

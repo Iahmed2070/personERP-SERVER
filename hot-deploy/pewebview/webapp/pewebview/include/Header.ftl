@@ -1,7 +1,7 @@
 <html>
 <head>
     <title>
-        »î¶¯±¨Ãû
+        æ´»åŠ¨
     </title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -16,7 +16,7 @@
                     function(){
 
                         $('#tit span').click(function() {
-                            var i = $(this).index();//ÏÂ±êµÚÒ»ÖÖÐ´·¨
+                            var i = $(this).index();//ï¿½Â±ï¿½ï¿½Ò»ï¿½ï¿½Ð´ï¿½ï¿½
                             $(this).addClass('select').siblings().removeClass('select');
                             $('.con').eq(i).show().siblings().hide();
                         });
@@ -24,11 +24,11 @@
 
                         TouchSlide({
                             slideCell:"#slideBox",
-                            titCell:".hd ul", //??Æô×Ô¶¯·Ö?? autoPage:true £¬´ËÊ±Éè?? titCell Îªµ¼º½ÔªËØ°ü¹ü²ã
+                            titCell:".hd ul",
                             mainCell:".bd ul",
                             effect:"leftLoop",
-                            autoPage:true,//×Ô¶¯·ÖÒ³
-                            autoPlay:true //×Ô¶¯²¥·Å
+                            autoPage:true,
+                            autoPlay:true
                         });
                     }
             );
@@ -78,14 +78,14 @@
         .in { width:2.2rem; height:1rem; border:1px solid #ed304e; border-radius:7px; text-align:center; line-height:1rem; color:#ed304e; font-size:.6rem; float:left; margin:1rem 0 0 1rem;}
 
 
-        .slideBox{ position:relative; overflow:hidden; margin-bottom:10px;width:100%;/* ÉèÖÃ½¹µãÍ¼×î´ó¿í¶È */ }
+        .slideBox{ position:relative; overflow:hidden; margin-bottom:10px;width:100%; }
         .slideBox .hd{ position:absolute; height:28px; line-height:28px; bottom:0; z-index:1;width: 100%;text-align: center; }
         .slideBox .hd li{ display:inline-block; width:.4rem; height:.4rem; border-radius:15px; background:#fff; text-indent:-9999px; overflow:hidden; margin:0 6px;   }
         .slideBox .hd li.on{ background:#fe798e;  }
         .slideBox .bd{ position:relative; z-index:0; }
         .slideBox .bd li{ position:relative; text-align:center;  }
-        .slideBox .bd li img{ vertical-align:top; width:100%;/* Í¼Æ¬¿í¶È100%£¬´ïµ½×ÔÊÊÓ¦Ð§¹û */}
-        .slideBox .bd li a{ -webkit-tap-highlight-color:rgba(0,0,0,0);  }  /* È¥µôÁ´½Ó´¥Ãþ¸ßÁÁ */
+        .slideBox .bd li img{ vertical-align:top; width:100%;}
+        .slideBox .bd li a{ -webkit-tap-highlight-color:rgba(0,0,0,0);  }
         .slideBox .bd li .tit{ display:block; width:100%;  position:absolute; bottom:0; text-indent:10px; height:28px; line-height:28px; background:url(images/focusBg.png) repeat-x; color:#fff;  text-align:left;  }
 
 
@@ -118,12 +118,6 @@
         .foot div:nth-child(2) { float:right; width:48%; text-align:center; font-size:.8rem; height:100%; border-radius:.5rem; background-color:#fe798e}
         .foot div:nth-child(2) a { font-size:.8rem; color:#fff; display:block;padding: .6rem 0;}
 
-
-
-
-
-
-        /*µ¯³ö²ã*/
         .cd-popup {
             position: fixed;
             left: 0;
