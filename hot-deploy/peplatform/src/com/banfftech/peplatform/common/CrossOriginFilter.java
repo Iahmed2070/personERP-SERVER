@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- *这个过滤器是为了解决JS跨域问题
+ * 这个过滤器是为了解决JS跨域问题
+ * @author 陈宇
  */
 public class CrossOriginFilter implements Filter {
 

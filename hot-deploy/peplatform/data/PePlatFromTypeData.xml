@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <!--参与者与组织者的角色类型定义-->
+    <RoleType createdStamp="2017-02-14 14:49:24.0" createdTxStamp="2017-02-14 14:49:24.0" description="活动参与者" lastUpdatedStamp="2017-02-14 14:49:24.0" lastUpdatedTxStamp="2017-02-14 14:49:24.0" roleTypeId="ACTIVITY_MEMBER"/>
+    <RoleType createdStamp="2017-02-14 14:49:59.0" createdTxStamp="2017-02-14 14:49:59.0" description="活动组织者" lastUpdatedStamp="2017-02-14 14:49:59.0" lastUpdatedTxStamp="2017-02-14 14:49:59.0" roleTypeId="ACTIVITY_ADMIN"/>
+    <RoleType createdStamp="2017-02-14 14:49:59.0" createdTxStamp="2017-02-14 14:49:59.0" description="活动受邀者" lastUpdatedStamp="2017-02-14 14:49:59.0" lastUpdatedTxStamp="2017-02-14 14:49:59.0" roleTypeId="ACTIVITY_INVITATION"/>
+
+
+    <!--ACTIVITY CONFIG-->
+    <ContentType contentTypeId="ACTIVITY_BACKGROUND" createdStamp="2017-02-23 15:39:35.0" createdTxStamp="2017-02-23 15:39:35.0" description="活动背景图/预设背景图" lastUpdatedStamp="2017-02-23 15:39:35.0" lastUpdatedTxStamp="2017-02-23 15:39:35.0"/>
+    <ContentType contentTypeId="ACTIVITY_PICTURE" createdStamp="2017-02-23 15:41:04.0" createdTxStamp="2017-02-23 15:41:04.0" description="活动图片照片墙" lastUpdatedStamp="2017-02-23 15:41:04.0" lastUpdatedTxStamp="2017-02-23 15:41:04.0"/>
+    <ContentType contentTypeId="ACTIVITY_LINKGROUP" createdStamp="2017-02-23 15:41:04.0" createdTxStamp="2017-02-23 15:41:04.0" description="活动可见组" lastUpdatedStamp="2017-02-23 15:41:04.0" lastUpdatedTxStamp="2017-02-23 15:41:04.0"/>
+    <!-- Tarjeta CONFIG -->
+    <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.expirationTime" systemPropertyValue="1296000" description="tarjeta的有效时间"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.issuer" systemPropertyValue="pe" description="tarjeta的issuer"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="tarjeta.secret" systemPropertyValue="{{secret used for signing}}" description="tarjeta的secret"/>
+    <!-- SSMS CONFIG -->
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.appkey" systemPropertyValue="23654770" description="短信平台appkey"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.intervalTime" systemPropertyValue="60" description="第二次与第一次短信发送间隔时间"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.secret" systemPropertyValue="9c58a5fa366e2aabd8a62363c4c228c6" description="短信平台secret"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.smsFreeSignName" systemPropertyValue="丕屹" description="短信平台配置签名"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.smsTemplateCode" systemPropertyValue="SMS_52105414" description="短信平台模版号"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.url" systemPropertyValue="http://gw.api.tbsandbox.com/router/rest" description="短信平台请求地址"/>
+    <SystemProperty systemResourceId="pe" systemPropertyId="sms.validTime" systemPropertyValue="900" description="短信使用有效时间"/>
+</entity-engine-xml>

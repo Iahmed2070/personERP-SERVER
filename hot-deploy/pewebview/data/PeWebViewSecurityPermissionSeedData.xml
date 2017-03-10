@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <SecurityPermission description="View operations in the PeWebView Component." permissionId="PEWEBVIEW_VIEW"/>
+    <SecurityPermission description="Create operations in the PeWebView Component." permissionId="PEWEBVIEW_CREATE"/>
+    <SecurityPermission description="Update operations in the PeWebView Component." permissionId="PEWEBVIEW_UPDATE"/>
+    <SecurityPermission description="Delete operations in the PeWebView Component." permissionId="PEWEBVIEW_DELETE"/>
+    <SecurityPermission description="ALL operations in the PeWebView Component." permissionId="PEWEBVIEW_ADMIN"/>
+
+    <SecurityGroupPermission groupId="SUPER" permissionId="PEWEBVIEW_ADMIN"/>
+
+</entity-engine-xml>

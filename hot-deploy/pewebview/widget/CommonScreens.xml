@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://ofbiz.apache.org/Widget-Screen" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <screen name="main-decorator">
+        <section>
+            <actions>
+                <property-map resource="PeWebViewUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+
+                <set field="layoutSettings.companyName" from-field="uiLabelMap.PeWebViewCompanyName" global="true"/>
+                <set field="layoutSettings.companySubtitle" from-field="uiLabelMap.PeWebViewCompanySubtitle" global="true"/>
+
+                <set field="activeApp" value="pewebview" global="true"/>
+                <set field="applicationMenuName" value="MainAppBar" global="true"/>
+                <set field="applicationMenuLocation" value="component://pewebview/widget/PeWebViewMenus.xml" global="true"/>
+                <set field="applicationTitle" value="${uiLabelMap.PeWebViewApplication}" global="true"/>
+            </actions>
+            <widgets>
+                <include-screen name="GlobalDecorator" location="component://common/widget/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="PeWebViewCommonDecorator">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <section>
+                            <condition>
+                                <if-has-permission permission="PEWEBVIEW" action="_VIEW"/>
+                            </condition>
+                            <widgets>
+                                <decorator-section-include name="body"/>
+                            </widgets>
+                            <fail-widgets>
+                                <label style="h3">${uiLabelMap.PeWebViewViewPermissionError}</label>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Simple Screen -->
+    <screen name="MobileProductEnquiryCommonDecorator">
+        <section>
+            <actions>
+
+            </actions>
+            <widgets>
+
+                <platform-specific>
+                    <html><html-template location="component://pewebview/webapp/pewebview/include/Header.ftl"/></html>
+                </platform-specific>
+
+                <container style="container">
+
+                    <decorator-section-include name="body"/>
+
+                </container>
+
+                <platform-specific>
+                    <html><html-template location="component://pewebview/webapp/pewebview/include/Footer.ftl"/></html>
+                </platform-specific>
+
+
+            </widgets>
+        </section>
+    </screen>
+
+</screens>
