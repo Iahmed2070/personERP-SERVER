@@ -47,46 +47,13 @@
                         <img src="../images/touxiang.png" />
                     </div>
                     <div class="xqy-p1">
-                        <span>金龙熙</span>
+                        <span>a</span>
                         <span style="margin-left:1rem;">来自'同学' </span>
 
                     </div>
                     <div class="clear"></div>
                 </li>
-                <li>
-                    <div  class="xqy-p">
-                        <img src="../images/touxiang.png" />
-                    </div>
-                    <div class="xqy-p1">
-                        <span>沈寅麟</span>
-                        <span style="margin-left:1rem;">他是'同事' </span>
 
-                    </div>
-                    <div class="clear"></div>
-                </li>
-
-                <li>
-                    <div  class="xqy-p">
-                        <img src="../images/touxiang.png" />
-                    </div>
-                    <div class="xqy-p1">
-                        <span>童文戟</span>
-                        <span style="margin-left:1rem;">他喜踢'足球' </span>
-
-                    </div>
-                    <div class="clear"></div>
-                </li>
-                <li>
-                    <div  class="xqy-p">
-                        <img src="../images/touxiang.png" />
-                    </div>
-                    <div class="xqy-p1">
-                        <span> 冯浩</span>
-                        <span style="margin-left:1rem;">  他来自'网球联盟' </span>
-
-                    </div>
-                    <div class="clear"></div>
-                </li>
             </ul>
         </div>
     </div>
@@ -97,7 +64,7 @@
         <a href="#">拒绝</a>
     </div>
     <div>
-        <a href="#">现在就报名</a>
+        <a href="#">报名</a>
     </div>
 </div>
 
