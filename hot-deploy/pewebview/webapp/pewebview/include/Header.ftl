@@ -7,14 +7,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <#--<script language="javascript" src="/pewebview/js/jquery-3.1.1.min.js"></script>-->
-    <#--<script language="javascript" src="/pewebview/js/common.js"></script>-->
-    <#--<script language="javascript" src="/pewebview/js/TouchSlide.1.1.js"></script>-->
     <script language="javascript" type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.7.2/jquery.min.js"></script>
     <script>
             $(
                     function(){
-
+                        /**
+                         * Submit Form Demo Function
+                         * Author:S.Y.L
+                         */
+                        $("a[id='join']").click(
+                                function(){
+                                    var userJoin = {
+                                        workEffortId:$("#workEffortId").val(),
+                                        tel:$("#tel").val(),
+                                        nickName:$("#nickName").val()
+                                    };
+                                    var url = "newPartyJoinActivity";
+                                    $.ajax({
+                                        type: 'POST',
+                                        url: url,
+                                        data:userJoin,
+                                        success : function(data) {
+                                            alert("Join Success!");
+                                        },
+                                        error:function(data){
+                                            alert("ERROR :"+data.status);
+                                        }
+                                    });
+                                }
+                        );
                         $('#tit span').click(function() {
                             var i = $(this).index();//�±��һ��д��
                             $(this).addClass('select').siblings().removeClass('select');
@@ -242,7 +263,10 @@
             }
         }
     </style>
-
 </head>
-
 <body>
+<form name="newPartyJoinActivity" id="2017newPartyJoinActivity.do" action="2017newPartyAsJoinActivity.do">
+    <input type="hidden" id="workEffortId" name="workEffortId" value="${(eventsDetail.workEffortId)!}" />
+    <input type="hidden" id="tel" name="tel" value="${(invitationPersonInfo.tel)!}" />
+    <input type="hidden" id="nickName" name="nickName" value="${(invitationPersonInfo.custName)!}" />
+</form>

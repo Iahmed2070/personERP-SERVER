@@ -6,6 +6,9 @@
          elements found in the common-controller.xml file. -->
     <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
 
+    <!-- Activity Control -->
+    <include location="component://personactivity/webapp/personactivity/WEB-INF/controller.xml"/>
+
     <description>PeWebView Component Site Configuration File</description>
 
     <!-- Events to run on every request before security (chains exempt) -->

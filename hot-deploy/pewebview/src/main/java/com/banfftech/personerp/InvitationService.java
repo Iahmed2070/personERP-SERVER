@@ -77,16 +77,18 @@ public class InvitationService {
         String tel = null;
         //受邀人姓名
         String custName = null;
-
+        //邀请人姓名
+        String fromParty = null;
         //组装受邀人信息
         Map<String,Object> invitationPersonInfo = new HashMap<String, Object>();
 
         //有参数，开始分割获取
         if(null!=p_ctx && p_ctx.length()>1){
             String [] ptx_array = p_ctx.split(",");
-              workEffortId = ptx_array[1].substring(ptx_array[1].indexOf(":"),ptx_array[1].indexOf(",")-1);
-              tel = ptx_array[2].substring(ptx_array[2].indexOf(":"),ptx_array[2].indexOf(",")-1);
-              custName = ptx_array[3].substring(ptx_array[3].indexOf(":"),ptx_array[3].indexOf(",")-1);
+              fromParty    = ptx_array[0].substring(ptx_array[0].indexOf(":")+1);
+              workEffortId = ptx_array[1].substring(ptx_array[1].indexOf(":")+1);
+              tel = ptx_array[2].substring(ptx_array[2].indexOf(":")+1);
+              custName = ptx_array[3].substring(ptx_array[3].indexOf(":")+1);
               invitationPersonInfo = new HashMap<String, Object>();
               invitationPersonInfo.put("tel",tel);
               invitationPersonInfo.put("custName",custName);
@@ -122,7 +124,8 @@ public class InvitationService {
         if(null!=invitationPersonInfo){
             resultMap.put("invitationPersonInfo",invitationPersonInfo);
         }
-        //TODO SOME LOGI
+
+
 
         //参与的人员其实是头像列表
         EntityCondition findConditionsToPartyContent = null;

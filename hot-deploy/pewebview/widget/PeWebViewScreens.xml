@@ -19,7 +19,8 @@
                 <set field="eventsDetail" value="${resultMap.eventsDetail}"/>
                 <!-- Join Person lIST -->
                 <set field="partyJoinEventsList" value="${resultMap.partyJoinEventsList}"/>
-
+                <!-- Invitation Person Info -->
+                <set field="invitationPersonInfo" value="${resultMap.invitationPersonInfo}"/>
             </actions>
             <widgets>
                 <decorator-screen name="MobileProductEnquiryCommonDecorator" location="${parameters.mainDecoratorLocation}">

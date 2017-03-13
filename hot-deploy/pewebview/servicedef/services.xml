@@ -17,8 +17,8 @@
         <description>取得活动详情</description>
         <attribute name="workEffortId" type="String" mode="IN" optional="true"/>
         <attribute name="p_ctx" type="String" mode="IN" optional="true"/>
-        <attribute name="eventsDetail" type="Map" mode="OUT" optional="false"/>
-        <attribute name="invitationPersonInfo" type="Map" mode="OUT" optional="false"/>
+        <attribute name="eventsDetail" type="Map" mode="OUT" optional="true"/>
+        <attribute name="invitationPersonInfo" type="Map" mode="OUT" optional="true"/>
         <attribute name="partyJoinEventsList" type="List" mode="OUT" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>

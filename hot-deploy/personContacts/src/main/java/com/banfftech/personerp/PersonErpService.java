@@ -283,7 +283,7 @@ public class PersonErpService {
         String teleNumber = (String) context.get("teleNumber");//手机号 也就是userLoginId
         String captcha    = (String) context.get("captcha");//验证码
         String nickname   = (String) context.get("nickname");//昵称
-       GenericValue userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
+        GenericValue userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
 
         //        //查找用户验证码是否存在
         EntityConditionList<EntityCondition> captchaConditions = EntityCondition
@@ -442,7 +442,7 @@ public class PersonErpService {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
-        String messageInfo = "http://114.215.200.46:3400/pewebview/control/showActivityDetail?param="+"23123213";
+        String messageInfo = "http://114.215.200.46:3400/pewebview/control/showActivityDetail?p_ctx="+"23123213";
         AppConfig config =  new AppConfig();
         config.setAppId("13407");
         config.setAppKey("d0f68f840616a7cd8586ce63d6c77c03");
@@ -809,17 +809,18 @@ public class PersonErpService {
 
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dctx.getDelegator();
+        GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
         // 登陆
         GenericValue userLogin = (GenericValue)context.get("userLogin");
         // 报名人id
-        String partyId = (String)userLogin.get("partyId");
+        String partyId = (String) userLogin.get("partyId");
         Locale locale = (Locale) context.get("locale");
 
 
         //活动的id
         String workEffortId = (String) context.get("workEffortId");
 
-        Map<String, Object> createPartyRoleMemberMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER");
+        Map<String, Object> createPartyRoleMemberMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER");
         GenericValue isExsitsMember = delegator.findOne("PartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER"), false);
         if (null == isExsitsMember) {
             dispatcher.runSync("createPartyRole", createPartyRoleMemberMap);
@@ -836,13 +837,13 @@ public class PersonErpService {
             //DO unassignPartyFromWorkEffort\
             for(GenericValue gv : partyExsitEvents){
                 if(workEffortId.equals((String) gv.get("workEffortId"))){
-                    Map<String, Object> updateMemberAssignPartyMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_INVITATION", "fromDate", gv.get("fromDate"), "workEffortId", workEffortId);
+                    Map<String, Object> updateMemberAssignPartyMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACTIVITY_INVITATION", "fromDate", gv.get("fromDate"), "workEffortId", workEffortId);
                     dispatcher.runSync("unassignPartyFromWorkEffort", updateMemberAssignPartyMap);
                 }
             }
 
         }
-            Map<String, Object> createMemberAssignPartyMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+            Map<String, Object> createMemberAssignPartyMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
             dispatcher.runSync("assignPartyToWorkEffort", createMemberAssignPartyMap);
 
         Map<String, Object> inputMap = new HashMap<String, Object>();
