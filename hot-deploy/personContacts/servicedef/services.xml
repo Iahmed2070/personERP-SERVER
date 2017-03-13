@@ -333,6 +333,10 @@
         <attribute name="partyId" type="String" mode="IN" optional="false"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
-
-
+    <!-- Test Send Shit Msg -->
+    <!--<service name="sendFuckMss" engine="java"-->
+             <!--location="com.banfftech.personerp.PersonErpService" invoke="sendFuckMss" auth="false">-->
+        <!--<description>发起专属活动邀请</description>-->
+        <!--<attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>-->
+    <!--</service>-->
 </services>

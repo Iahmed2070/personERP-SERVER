@@ -6,6 +6,20 @@
         <section>
             <actions>
                 <set field="headerItem" value="main"/><!-- this highlights the selected menu-item with name "main" -->
+                <!-- I18N Config-->
+                <property-map resource="PeWebViewUiLabels" map-name="activityUiLabelMap" global="true"/>
+
+                <!--ActivityId -->
+                <set field="workEffortId" value="${parameters.workEffortId}"/>
+                <!-- Find Event Detail -->
+                <service service-name="getInvitationDetail" result-map="resultMap">
+                    <field-map field-name="workEffortId"/>
+                </service>
+                <!-- Detail Info -->
+                <set field="eventsDetail" value="${resultMap.eventsDetail}"/>
+                <!-- Join Person lIST -->
+                <set field="partyJoinEventsList" value="${resultMap.partyJoinEventsList}"/>
+
             </actions>
             <widgets>
                 <decorator-screen name="MobileProductEnquiryCommonDecorator" location="${parameters.mainDecoratorLocation}">

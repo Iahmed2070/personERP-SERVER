@@ -962,8 +962,7 @@ public class PersonErpQueryService {
                 null, null, false);
 
         //参与的人员其实是头像列表
-        EntityCondition findConditionsToPartyContent = null;
-        findConditionsToPartyContent = EntityCondition
+        EntityCondition findConditionsToPartyContent  = EntityCondition
                 .makeCondition(UtilMisc.toMap("workEffortId",workEffortId));
         List<GenericValue> partyJoinEventsList = null;
         partyJoinEventsList = delegator.findList("WorkEffortPartyAssignmentAndJoinParty",findConditionsToPartyContent,UtilMisc.toSet("workEffortId","partyId","contentId"),

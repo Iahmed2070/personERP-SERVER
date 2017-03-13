@@ -20,4 +20,37 @@
         <value xml:lang="zh">不允许你浏览这个页面�?</value>
         <value xml:lang="zh_CN">不允許您檢視這�?�頁�?.</value>
     </property>
+    <property key="PersonActivityDetail">
+        <value xml:lang="en">Activity Detail Info</value>
+        <value xml:lang="zh">活动详情</value>
+        <value xml:lang="zh-TW">活动详情</value>
+    </property>
+    <property key="WhoJoinActivity">
+        <value xml:lang="en">Who Join Activity?</value>
+        <value xml:lang="zh">都有谁参加</value>
+        <value xml:lang="zh-TW">活动详情</value>
+    </property>
+    <property key="ActivityTime">
+        <value xml:lang="en">Activity Start Time</value>
+        <value xml:lang="zh">活动时间</value>
+        <value xml:lang="zh-TW">活动时间</value>
+    </property>
+    <property key="ActivityTimeNotFound">
+        <value xml:lang="en">Activity Time Not Found</value>
+        <value xml:lang="zh">活动的时间还没定下来</value>
+        <value xml:lang="zh-TW">活动时间未决定</value>
+    </property>
+
+    <property key="ActivityJoin">
+        <value xml:lang="en">JOIN</value>
+        <value xml:lang="zh">报名</value>
+        <value xml:lang="zh-TW">参与</value>
+    </property>
+
+    <property key="ActivityRefused">
+        <value xml:lang="en">Refused  the fuck Activity</value>
+        <value xml:lang="zh">拒绝</value>
+        <value xml:lang="zh-TW">不参与</value>
+    </property>
+
 </resource>

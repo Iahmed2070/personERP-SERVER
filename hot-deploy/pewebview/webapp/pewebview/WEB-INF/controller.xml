@@ -22,7 +22,14 @@
 
     <!-- Request Mappings -->
     <request-map uri="main"><security https="false" auth="false"/><response name="success" type="view" value="main"/></request-map>
-    
+
+    <request-map uri="showActivityDetail">
+        <security https="false" auth="false" />
+        <response name="success" type="view" value="main"/>
+    </request-map>
+
+
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://pewebview/widget/PeWebViewScreens.xml#main"/>
+    <!--<view-map name="main" type="screen" page="component://pewebview/widget/PeWebViewScreens.xml#main"/>-->
 </site-conf>
