@@ -72,7 +72,9 @@
            <a id="join" href="javascript:joinActivity();">${activityUiLabelMap.ActivityJoin}</a>
     </#if>
      <#if !invitationPersonInfo?has_content>
-            <a href="javascript:alert('Show Model Block TODO GetUserInfomation Logic Code ...')">${activityUiLabelMap.ActivityJoin}</a>
+       <a href="javascript:;" name="bounceInA" class="bounceIn">${activityUiLabelMap.ActivityJoin}</a>
+
+
      </#if>
     </div>
 </div>
@@ -81,10 +83,25 @@
 
 <!-- Juest Null Info -->
 <#if !eventsDetail?has_content>
-Activity NOT FOUND . You Can Shutdown YourComp
+Activity NOT FOUND.
 </#if>
+<div id="dialogBg"></div>
+<div id="dialog" class="animated">
+    <img class="dialogIco" width="50" height="50" src="../images/ico.png" alt="" />
+    <div class="dialogTop">
+        <a href="javascript:;" class="claseDialogBtn">CLOSE</a>
+    </div>
+    <form action="" method="post" id="editForm">
+        <ul class="editInfos">
 
-
+            <li><label><font color="#ff0000">* </font>TELE<input type="text"
+                                                                 name="" required value="" class="ipt" /></label></li>
+            <li><label><font color="#ff0000">* </font>NAME<input type="text"
+                                                                 name="" required value="" class="ipt" /></label></li>
+            <li><input type="submit" value="JOIN NOW" class="submitBtn" /></li>
+        </ul>
+    </form>
+</div>
 
 <#--<#assign nowTimestamp = Static["org.apache.ofbiz.base.util.UtilDateTime"].nowTimestamp()>-->
 

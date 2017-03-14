@@ -7,10 +7,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
     <script language="javascript" type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.7.2/jquery.min.js"></script>
     <script>
+            /**
+             * 黑暗录入Form
+             */
+            var w,h,className;
+            function getSrceenWH(){
+                w = $(window).width();
+                h = $(window).height();
+                $('#dialogBg').width(w).height(h);
+            }
+
+            window.onresize = function(){
+                getSrceenWH();
+            }
+            $(window).resize();
+            /**
+             * 黑暗录入Form
+             */
+
+
             $(
                     function(){
+
+                        //显示弹框
+                        $("a[name='bounceInA']").click(function(){
+
+                            className = $(this).attr('class');
+                            $('#dialogBg').fadeIn(300);
+                            $('#dialog').removeAttr('class').addClass('animated '+className+'').fadeIn();
+                        });
+
+                        //关闭弹窗
+                        $('.claseDialogBtn').click(function(){
+                            $('#dialogBg').fadeOut(300,function(){
+                                $('#dialog').addClass('bounceOutUp').fadeOut();
+                            });
+                        });
+
+
+
                         /**
                          * Submit Form Demo Function
                          * Author:S.Y.L
@@ -51,11 +89,32 @@
                             autoPage:true,
                             autoPlay:true
                         });
+
+
+
+
                     }
             );
 
     </script>
     <style>
+        /*------------------- 华丽分割线 -----------------------*/
+
+        #dialogBg{width:100%;height:100%;background-color:#000000;opacity:.8;filter:alpha(opacity=60);position:fixed;top:0;left:0;z-index:9999;display:none;}
+        #dialog{ width: 300px; height: 240px; margin: 0 auto; display: none; background-color: #ffffff; position: fixed; top: 50%; left: 50%; margin: -120px 0 0 -150px; z-index: 10000; border: 1px solid #ccc; border-radius: 10px; -webkit-border-radius: 10px; box-shadow: 3px 2px 4px rgba(0,0,0,0.2); -webkit-box-shadow: 3px 2px 4px rgba(0,0,0,0.2); }
+        .dialogTop{width:90%;margin:0 auto;border-bottom:1px dotted #ccc;letter-spacing:1px;padding:10px 0;text-align:right;}
+        .dialogIco{width:50px;height:50px;position:absolute;top:-25px;left:50%;margin-left:-25px;}
+        .editInfos{padding:15px 0;}
+        .editInfos li{width:90%;margin:8px auto auto;text-align: center;}
+        .ipt{border:1px solid #ccc;padding:5px;border-radius:3px;-webkit-border-radius:3px;box-shadow:0 0 3px #ccc inset;-webkit-box-shadow:0 0 3px #ccc inset;margin-left:5px;}
+        .ipt:focus{outline:none;border-color:#66afe9;box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);-webkit-box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);}
+        .submitBtn{width:90px;height:30px;line-height:30px;font-family:"微软雅黑","microsoft yahei";cursor:pointer;margin-top:10px;display:inline-block;border-radius:5px;-webkit-border-radius:5px;text-align:center;background-color:#428bca;color:#fff;box-shadow: 0 -3px 0 #2a6496 inset;-webkit-box-shadow: 0 -3px 0 #2a6496 inset;}
+
+
+
+
+
+
         *{box-sizing: border-box;}
         ul,li,dl,dt,dd{list-style:none;}
         body{font-size:12px; font-family:Gotham, "Helvetica Neue", Helvetica, Arial, sans-serif; background:#FFF;}
@@ -262,6 +321,9 @@
                 margin: 8em auto;
             }
         }
+
+
+
     </style>
 </head>
 <body>
