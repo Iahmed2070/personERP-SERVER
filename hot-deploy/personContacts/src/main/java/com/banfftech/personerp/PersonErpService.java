@@ -481,7 +481,7 @@ public class PersonErpService {
         //TODO 获得邀请人的名称
         GenericValue person = delegator.findOne("Person", false, UtilMisc.toMap("partyId", partyId));
         //TODO 获得活动名称
-        GenericValue event = delegator.findOne("WorkEffort", false, UtilMisc.toMap("WorkEffortId", workEffortId));
+        GenericValue event = delegator.findOne("WorkEffort", false, UtilMisc.toMap("workEffortId", workEffortId));
         //Get Activity Admin NikeName
         String nikeName =  person.get("nickname")==null?person.get("lastName")+""+person.get("firstName"):(String) person.get("nickname");
         String workEffortName = (String)event.get("workEffortName");
