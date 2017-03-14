@@ -527,6 +527,9 @@ public class PersonErpService {
             config.setAppKey("d0f68f840616a7cd8586ce63d6c77c03");
             config.setSignType("normal");
             MESSAGEXsend submail = new MESSAGEXsend(config);
+            if(tel.indexOf("-")>0){
+                tel = tel.replaceAll("-","");
+            }
             submail.addTo(tel);
             submail.setProject("ps6Xa4");
             submail.addVar("fromparty", nikeName);
