@@ -25,7 +25,7 @@
 
     <!-- Request Mappings -->
     <request-map uri="main"><security https="false" auth="false"/><response name="success" type="view" value="main"/></request-map>
-
+    <!-- 活动信息 -->
     <request-map uri="showActivityDetail">
         <security https="false" auth="false" />
         <response name="success" type="view" value="main"/>
@@ -34,5 +34,6 @@
 
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://pewebview/widget/PeWebViewScreens.xml#main"/>
+    <!--<view-map name="joinSuccess" type="screen" page="component://pewebview/widget/PeWebViewScreens.xml#joinSuccess"/>-->
     <!--<view-map name="main" type="screen" page="component://pewebview/widget/PeWebViewScreens.xml#main"/>-->
 </site-conf>

@@ -16,4 +16,22 @@
         </section>
     </screen>
 
+
+    <screen name="joinSuccess">
+        <section>
+            <actions>
+                <property-map resource="PersonActivityUiLabels" map-name="uiLabel" global="true"/>
+            </actions>
+            <widgets>
+
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://personactivity/widget/template/joinSuccess.ftl"></html-template>
+                            </html>
+                        </platform-specific>
+
+            </widgets>
+        </section>
+    </screen>
+
 </screens>

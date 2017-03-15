@@ -21,6 +21,25 @@
         <value xml:lang="zh-TW">不允許您檢視這�?�頁�?.</value>
     </property>
 
+    <property key="Congratulations">
+        <value xml:lang="en">Congratulations!</value>
+        <value xml:lang="zh">恭喜!</value>
+        <value xml:lang="zh-TW">恭喜!</value>
+    </property>
+    <property key="JoinSuccess">
+        <value xml:lang="en">Join Success!</value>
+        <value xml:lang="zh">您已经成功报名该活动!</value>
+        <value xml:lang="zh-TW">您已经成功报名该活动!</value>
+    </property>
+    <property key="InstallApp">
+        <value xml:lang="en">Install App</value>
+        <value xml:lang="zh">扫一扫!马上安装我们的APP应用!</value>
+        <value xml:lang="zh-TW">扫一扫!马上安装我们的APP应用!</value>
+    </property>
 
-
+    <property key="AppDesc">
+        <value xml:lang="en">balabala Desc</value>
+        <value xml:lang="zh">在这里您可以与朋友们一起,参加、组织、分享各种精彩活动！</value>
+        <value xml:lang="zh-TW">在这里您可以与朋友们一起,参加、组织、分享各种精彩活动！</value>
+    </property>
 </resource>

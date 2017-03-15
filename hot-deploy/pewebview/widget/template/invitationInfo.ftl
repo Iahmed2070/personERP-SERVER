@@ -91,14 +91,14 @@ Activity NOT FOUND.
     <div class="dialogTop">
         <a href="javascript:;" class="claseDialogBtn">CLOSE</a>
     </div>
-    <form action="" method="post" id="editForm">
+    <form action="newPartyJoinActivity" method="post" id="editForm">
         <ul class="editInfos">
-
-            <li><label><font color="#ff0000">* </font>TELE<input type="text"
-                                                                 name="" required value="" class="ipt" /></label></li>
-            <li><label><font color="#ff0000">* </font>NAME<input type="text"
-                                                                 name="" required value="" class="ipt" /></label></li>
-            <li><input type="submit" value="JOIN NOW" class="submitBtn" /></li>
+            <li><label><font color="#ff0000">* </font>${activityUiLabelMap.Tel}<input type="text"
+                                                                 name="nickName" required value="" class="ipt" /></label></li>
+            <li><label><font color="#ff0000">* </font>${activityUiLabelMap.NickName}<input type="text"
+                                                                 name="tel" required value="" class="ipt" /></label></li>
+             <input type="hidden" name="workEffortId" value="${(workEffortId)!}" />
+            <li><input type="submit" value="${activityUiLabelMap.ActivityJoin}" class="submitBtn" /></li>
         </ul>
     </form>
 </div>

@@ -53,4 +53,17 @@
         <value xml:lang="zh-TW">不参与</value>
     </property>
 
+
+
+    <property key="Tel">
+        <value xml:lang="en">PhoneNumber</value>
+        <value xml:lang="zh">手机</value>
+        <value xml:lang="zh-TW">手机</value>
+    </property>
+    <property key="NickName">
+        <value xml:lang="en">NAME</value>
+        <value xml:lang="zh">昵称</value>
+        <value xml:lang="zh-TW">昵称</value>
+    </property>
+
 </resource>

@@ -6,6 +6,7 @@
          elements found in the common-controller.xml file. -->
     <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
 
+    <!--<include location="component://pewebview/webapp/pewebview/WEB-INF/controller.xml"/>-->
     <description>PersonActivity Component Site Configuration File</description>
 
     <!-- Events to run on every request before security (chains exempt) -->
@@ -25,10 +26,16 @@
     <!-- Add Party & Join Activity -->
     <request-map uri="newPartyJoinActivity"><security https="false" auth="false"/>
         <event type="service" invoke="newPartyJoinActivity" />
-        <response name="success" type="request" value="json" />
+        <response name="success" type="request-redirect" value="joinSuccess">
+        </response>
         <response name="error" type="request" value="json" />
     </request-map>
-
+    <!--成功页面-->
+    <request-map uri="joinSuccess">
+        <security https="false" auth="false" />
+        <response name="success" type="view" value="joinSuccess"/>
+    </request-map>
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://personactivity/widget/PersonActivityScreens.xml#main"/>
+    <view-map name="joinSuccess" type="screen" page="component://personactivity/widget/PersonActivityScreens.xml#joinSuccess"/>
 </site-conf>
