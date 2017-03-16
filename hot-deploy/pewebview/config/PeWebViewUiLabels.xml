@@ -65,5 +65,27 @@
         <value xml:lang="zh">昵称</value>
         <value xml:lang="zh-TW">昵称</value>
     </property>
+    <property key="Sorry">
+        <value xml:lang="en">Sorry,</value>
+        <value xml:lang="zh">抱歉,</value>
+        <value xml:lang="zh-TW">抱歉,</value>
+    </property>
+
+    <property key="PearNotFound">
+        <value xml:lang="en">But Pear(Activity)  Not Found</value>
+        <value xml:lang="zh">但我们没有找到您要的梨  ):</value>
+        <value xml:lang="zh-TW">但我们没有找到您要的梨  ):</value>
+    </property>
+
+    <property key="PhoneNumberExcetion">
+        <value xml:lang="en">Please Make Sure! Your Input Is Not Donald Trump Bank Palance!</value>
+        <value xml:lang="zh">梨哥检测到您输入的手机号是火星移动,地球无法使用..</value>
+        <value xml:lang="zh-TW">梨哥检测到您输入的手机号是火星移动,地球无法使用..</value>
+    </property>
+    <property key="NickNameExcetion">
+        <value xml:lang="en">Nick Name Empty!</value>
+        <value xml:lang="zh">您必须告诉我们怎么称呼您！</value>
+        <value xml:lang="zh-TW">您必须告诉我们怎么称呼您！</value>
+    </property>
 
 </resource>

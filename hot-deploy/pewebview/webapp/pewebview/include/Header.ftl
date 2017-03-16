@@ -10,8 +10,31 @@
 
     <script language="javascript" type="text/javascript" src="http://apps.bdimg.com/libs/jquery/1.7.2/jquery.min.js"></script>
     <script>
-            /**
-             * 黑暗录入Form
+        //Check Mobile Function
+        function checkMobile(sMobile){
+           // var sMobile = $("input[name='tel']").val();
+            alert(sMobile);
+            if(!(/^1\d{10}$/.test(sMobile))){
+                var message = $("#message").val();
+                alert(message);
+                return false;
+            }
+            return true;
+        }
+        //Check Person Nick Name
+        function checkPersonNickName(nickName){
+            if(nickName == null || nickName=="" || nickName === "" ){
+                alert("nicheng wei kong");
+                var message = $("#messageForNickName").val();
+                alert(message);
+                return false;
+            }
+            return true;
+        }
+
+
+             /**
+             * PersonInfo Input Form
              */
             var w,h,className;
             function getSrceenWH(){
@@ -31,16 +54,34 @@
 
             $(
                     function(){
+                        //Form Commit Check
+                        $("form[name='mobileform']").submit(
+                                function(){
 
-                        //显示弹框
+                                    var isPersonRight = true;
+                                    //Do Check Phone Number
+                                    if(!checkMobile(this.tel.value)){
+                                        isPersonRight = false;
+                                    }
+
+                                    //Do Check Person NickName IS Empty
+                                    if(!checkPersonNickName(this.nickName.value)){
+                                        isPersonRight = false;
+                                    }
+
+                                    alert(isPersonRight);
+                                    return isPersonRight;
+                                }
+                        );
+
+                        //Show Dialog
                         $("a[name='bounceInA']").click(function(){
-
                             className = $(this).attr('class');
                             $('#dialogBg').fadeIn(300);
                             $('#dialog').removeAttr('class').addClass('animated '+className+'').fadeIn();
                         });
 
-                        //关闭弹窗
+                        //Close Window
                         $('.claseDialogBtn').click(function(){
                             $('#dialogBg').fadeOut(300,function(){
                                 $('#dialog').addClass('bounceOutUp').fadeOut();
@@ -107,7 +148,7 @@
         .editInfos{padding:15px 0;}
         .editInfos li{width:90%;margin:8px auto auto;text-align: center;}
         .ipt{border:1px solid #ccc;padding:5px;border-radius:3px;-webkit-border-radius:3px;box-shadow:0 0 3px #ccc inset;-webkit-box-shadow:0 0 3px #ccc inset;margin-left:5px;}
-        .ipt:focus{outline:none;border-color:#66afe9;box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);-webkit-box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);}
+        /*.ipt:focus{outline:none;border-color:#66afe9;box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);-webkit-box-shadow:0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);}*/
         .submitBtn{width:90px;height:30px;line-height:30px;font-family:"微软雅黑","microsoft yahei";cursor:pointer;margin-top:10px;display:inline-block;border-radius:5px;-webkit-border-radius:5px;text-align:center;background-color:#428bca;color:#fff;box-shadow: 0 -3px 0 #2a6496 inset;-webkit-box-shadow: 0 -3px 0 #2a6496 inset;}
 
 
@@ -327,7 +368,11 @@
     </style>
 </head>
 <body>
+<input type="hidden" id="message" value="${activityUiLabelMap.PhoneNumberExcetion}"/>
+<input type="hidden" id="messageForNickName" value="${activityUiLabelMap.NickNameExcetion}"/>
+
 <form name="newPartyJoinActivity" id="2017newPartyJoinActivity.do" action="2017newPartyAsJoinActivity.do">
+
     <input type="hidden" id="workEffortId" name="workEffortId" value="${(eventsDetail.workEffortId)!}" />
     <input type="hidden" id="tel" name="tel" value="${(invitationPersonInfo.tel)!}" />
     <input type="hidden" id="nickName" name="nickName" value="${(invitationPersonInfo.custName)!}" />

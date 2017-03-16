@@ -83,7 +83,8 @@
 
 <!-- Juest Null Info -->
 <#if !eventsDetail?has_content>
-Activity NOT FOUND.
+<img src="../images/ActivityNotFound.png"/>
+<span style="font-size: 29px;color:#aae77f;">${activityUiLabelMap.Sorry}</span><br/><span style="font-size: 25px;color: #fe798e;">${activityUiLabelMap.PearNotFound}</span>
 </#if>
 <div id="dialogBg"></div>
 <div id="dialog" class="animated">
@@ -91,12 +92,12 @@ Activity NOT FOUND.
     <div class="dialogTop">
         <a href="javascript:;" class="claseDialogBtn">CLOSE</a>
     </div>
-    <form action="newPartyJoinActivity" method="post" id="editForm">
+    <form action="newPartyJoinActivity" method="post" name="mobileform" id="mobileform">
         <ul class="editInfos">
-            <li><label><font color="#ff0000">* </font>${activityUiLabelMap.Tel}<input type="text"
-                                                                 name="nickName" required value="" class="ipt" /></label></li>
             <li><label><font color="#ff0000">* </font>${activityUiLabelMap.NickName}<input type="text"
-                                                                 name="tel" required value="" class="ipt" /></label></li>
+                                                                 name="nickName" id="nickName"   class="ipt" /></label></li>
+            <li><label><font color="#ff0000">* </font>${activityUiLabelMap.Tel}<input type="text"
+                                                                 name="tel" id="tel"   class="ipt" /></label></li>
              <input type="hidden" name="workEffortId" value="${(workEffortId)!}" />
             <li><input type="submit" value="${activityUiLabelMap.ActivityJoin}" class="submitBtn" /></li>
         </ul>
