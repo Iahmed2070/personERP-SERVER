@@ -12,11 +12,8 @@
     <script>
         //Check Mobile Function
         function checkMobile(sMobile){
-           // var sMobile = $("input[name='tel']").val();
-            alert(sMobile);
             if(!(/^1\d{10}$/.test(sMobile))){
                 var message = $("#message").val();
-                alert(message);
                 return false;
             }
             return true;
@@ -24,9 +21,9 @@
         //Check Person Nick Name
         function checkPersonNickName(nickName){
             if(nickName == null || nickName=="" || nickName === "" ){
-                alert("nicheng wei kong");
+
                 var message = $("#messageForNickName").val();
-                alert(message);
+
                 return false;
             }
             return true;
@@ -69,7 +66,7 @@
                                         isPersonRight = false;
                                     }
 
-                                    alert(isPersonRight);
+
                                     return isPersonRight;
                                 }
                         );
@@ -372,7 +369,6 @@
 <input type="hidden" id="messageForNickName" value="${activityUiLabelMap.NickNameExcetion}"/>
 
 <form name="newPartyJoinActivity" id="2017newPartyJoinActivity.do" action="2017newPartyAsJoinActivity.do">
-
     <input type="hidden" id="workEffortId" name="workEffortId" value="${(eventsDetail.workEffortId)!}" />
     <input type="hidden" id="tel" name="tel" value="${(invitationPersonInfo.tel)!}" />
     <input type="hidden" id="nickName" name="nickName" value="${(invitationPersonInfo.custName)!}" />
