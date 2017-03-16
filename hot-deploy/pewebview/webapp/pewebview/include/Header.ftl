@@ -104,7 +104,7 @@
                                         url: url,
                                         data:userJoin,
                                         success : function(data) {
-                                            location.href = "pewebview/control/joinSuccess?join=y";
+                                            location.href = "/pewebview/control/joinSuccess?join=y";
                                         },
                                         error:function(data){
                                             alert("ERROR :"+data.status);
