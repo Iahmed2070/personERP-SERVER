@@ -965,16 +965,23 @@ public class PersonErpQueryService {
         EntityCondition findConditionsToPartyContent  = EntityCondition
                 .makeCondition(UtilMisc.toMap("workEffortId",workEffortId));
         List<GenericValue> partyJoinEventsList = null;
-        partyJoinEventsList = delegator.findList("WorkEffortPartyAssignmentAndJoinParty",findConditionsToPartyContent,UtilMisc.toSet("workEffortId","partyId","contentId"),
+        partyJoinEventsList = delegator.findList("WorkEffortPartyAssignmentAndJoinParty",findConditionsToPartyContent,UtilMisc.toSet("workEffortId","partyId","nickname","lastName","firstName"),
                 null, null, false);
+
         List<Map<String,Object>> partyContent = new ArrayList<Map<String, Object>>();
         if(null!=partyJoinEventsList)
         for(GenericValue gv : partyJoinEventsList){
             Map<String,Object> partyContentMap = new HashMap<String, Object>();
             partyContentMap.put("partyId",
                     gv.get("partyId"));
-            partyContentMap.put("headPortrait",
-                    "http://localhost:3400/personContacts/control/stream?contentId=" + gv.get("contentId"));
+            partyContentMap.put("nickName",
+                    gv.get("nickname"));
+            partyContentMap.put("lastName",
+                    gv.get("lastName"));
+            partyContentMap.put("firstName",
+                    gv.get("firstName"));
+//            partyContentMap.put("headPortrait",
+//                    "http://localhost:3400/personContacts/control/stream?contentId=" + gv.get("contentId"));
             partyContent.add(partyContentMap);
         }
 

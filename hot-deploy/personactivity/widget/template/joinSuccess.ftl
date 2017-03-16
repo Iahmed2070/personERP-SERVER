@@ -5,7 +5,7 @@
     <meta http-equiv="cache-control" content="max-age=0" />
     <meta http-equiv="cache-control" content="no-cache" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>h5滑动页面插件</title>
+    <title>DON'T SPLIT PEAR</title>
 
     <style type="text/css">
         .H5FullscreenPage .H5FullscreenPage-wrap {

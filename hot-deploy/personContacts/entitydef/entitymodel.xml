@@ -198,23 +198,33 @@
 	<!-- 活动中的人员/头像内容-->
 	<view-entity entity-name="WorkEffortPartyAssignmentAndJoinParty">
 		<member-entity entity-name="WorkEffortPartyAssignment" entity-alias="WP"/>
-		<member-entity entity-name="PartyContent" entity-alias="PC"/>
-
+		<!--<member-entity entity-name="PartyContent" entity-alias="PC"/>-->
+		<member-entity entity-name="Person" entity-alias="Person"/>
 
 		<alias entity-alias="WP" field="partyId" name="partyId"/>
+		<alias entity-alias="WP" field="roleTypeId" name="roleTypeId"/>
 		<alias entity-alias="WP" field="workEffortId" name="workEffortId"/>
-		<alias entity-alias="PC" field="partyId" name="partyId"/>
-		<alias entity-alias="PC" field="contentId" name="contentId"/>
-		<alias entity-alias="PC" field="partyContentTypeId" name="partyContentTypeId"/>
+		<alias entity-alias="Person" field="lastName" name="lastName"/>
+		<alias entity-alias="Person" field="firstName" name="firstName"/>
+		
+		<alias entity-alias="Person" field="nickname" name="nickname"/>
+		<!--<alias entity-alias="PC" field="partyId" name="partyId"/>-->
+		<!--<alias entity-alias="PC" field="contentId" name="contentId"/>-->
+		<!--<alias entity-alias="PC" field="partyContentTypeId" name="partyContentTypeId"/>-->
 
-		<view-link entity-alias="WP" rel-entity-alias="PC" >
+		<view-link entity-alias="WP" rel-entity-alias="Person" >
 			<key-map  field-name="partyId"/>
+		</view-link>
 			<entity-condition>
+				<!--<condition-list>-->
+				<!--<condition-expr field-name="partyContentTypeId" entity-alias="PC" operator="equals" value="LGOIMGURL"/>-->
+				<!--</condition-list>-->
+
 				<condition-list>
-					<condition-expr field-name="partyContentTypeId" entity-alias="PC" operator="equals" value="LGOIMGURL"/>
+					<condition-expr field-name="roleTypeId" entity-alias="WP" operator="equals" value="ACTIVITY_MEMBER"/>
 				</condition-list>
 			</entity-condition>
-		</view-link>
+
 
 
 	</view-entity>
