@@ -359,7 +359,7 @@
 		<alias name="amountApplied" field="amountApplied" entity-alias="PP"/>
 		<alias name="firstName" field="firstName" entity-alias="P"/>
 		<alias name="lastName" field="lastName" entity-alias="P"/>
-		<alias name="nickname" field="nickname" entity-alias="P"/>
+		<alias name="nickName" field="nickname" entity-alias="P"/>
 
 		<view-link entity-alias="PP" rel-entity-alias="P">
 			<key-map field-name="partyIdFrom" rel-field-name="partyId" />
