@@ -357,7 +357,6 @@
 		<alias name="payDate" field="payDate" entity-alias="PP"/>
 		<alias name="invoiceApplied" field="invoiceApplied" entity-alias="PP"/>
 		<alias name="amountApplied" field="amountApplied" entity-alias="PP"/>
-
 		<alias name="firstName" field="firstName" entity-alias="P"/>
 		<alias name="lastName" field="lastName" entity-alias="P"/>
 		<alias name="nickname" field="nickname" entity-alias="P"/>
