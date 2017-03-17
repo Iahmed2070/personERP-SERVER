@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="http://ofbiz.apache.org/Widget-Screen" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
-
+    <!-- Show Main Page -->
     <screen name="main">
         <section>
             <actions>
@@ -16,21 +16,19 @@
         </section>
     </screen>
 
-
+    <!-- Show Success Page -->
     <screen name="joinSuccess">
         <section>
             <actions>
                 <property-map resource="PersonActivityUiLabels" map-name="uiLabel" global="true"/>
             </actions>
-            <widgets>
-
-                        <platform-specific>
-                            <html>
-                                <html-template location="component://personactivity/widget/template/joinSuccess.ftl"></html-template>
-                            </html>
-                        </platform-specific>
-
-            </widgets>
+                <widgets>
+                    <platform-specific>
+                        <html>
+                             <html-template location="component://personactivity/widget/template/joinSuccess.ftl"></html-template>
+                        </html>
+                    </platform-specific>
+                </widgets>
         </section>
     </screen>
 

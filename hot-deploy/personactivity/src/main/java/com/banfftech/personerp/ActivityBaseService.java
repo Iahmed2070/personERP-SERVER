@@ -45,6 +45,7 @@ public class ActivityBaseService {
 
     /**
      * PartyJoin
+     * @author S.Y.L
      * @param dctx
      * @param context
      * @return
@@ -83,7 +84,7 @@ public class ActivityBaseService {
             createPerson = dispatcher.runSync("createUpdatePerson", createPartyInMap);
             String partyId = (String) createPerson.get("partyId");
 
-            //创建UserLogin
+            //CreateUserLogin
             Map<String, Object> createUserLoginInMap =
                     UtilMisc.toMap("userLogin", userLogin,
                             "userLoginId",tel,
@@ -107,6 +108,9 @@ public class ActivityBaseService {
         }else{
             joinParty = userLoginExsit;
         }
+
+
+
 
         //IF EXSITS Join
         Map<String, Object> translationActivityMap = UtilMisc.toMap("userLogin", joinParty, "workEffortId", workEffortId);

@@ -48,9 +48,23 @@
              * 黑暗录入Form
              */
 
-
+            function getCookie(name)
+            {
+                var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+                if(arr=document.cookie.match(reg))
+                    return unescape(arr[2]);
+                else
+                    return null;
+            }
             $(
                     function(){
+
+                        var isJoin = getCookie("join");
+
+                        if(isJoin+"" === "success"){
+
+                            location.href = "/pewebview/control/joinSuccess";
+                        }
                         //Form Commit Check
                         $("form[name='mobileform']").submit(
                                 function(){
@@ -104,7 +118,7 @@
                                         url: url,
                                         data:userJoin,
                                         success : function(data) {
-                                            location.href = "/pewebview/control/joinSuccess?join=y";
+                                            location.href = "/pewebview/control/joinSuccess";
                                         },
                                         error:function(data){
                                             alert("ERROR :"+data.status);

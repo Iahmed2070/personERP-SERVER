@@ -844,11 +844,10 @@ public class PersonErpService {
                     dispatcher.runSync("unassignPartyFromWorkEffort", updateMemberAssignPartyMap);
                 }
             }
-
         }
-            Map<String, Object> createMemberAssignPartyMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
-            dispatcher.runSync("assignPartyToWorkEffort", createMemberAssignPartyMap);
 
+        Map<String, Object> createMemberAssignPartyMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+        dispatcher.runSync("assignPartyToWorkEffort", createMemberAssignPartyMap);
         Map<String, Object> inputMap = new HashMap<String, Object>();
         inputMap.put("workEffortId",workEffortId);
         Map<String, Object> result = ServiceUtil.returnSuccess();
