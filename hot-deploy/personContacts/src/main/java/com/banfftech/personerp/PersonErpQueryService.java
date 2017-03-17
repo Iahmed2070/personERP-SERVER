@@ -2,6 +2,8 @@ package com.banfftech.personerp;
 
 import java.util.*;
 
+import org.apache.ofbiz.entity.condition.EntityConditionList;
+import org.apache.ofbiz.entity.GenericEntity;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.base.util.UtilValidate;
@@ -1050,6 +1052,12 @@ public class PersonErpQueryService {
 
             findConditions = EntityCondition
                     .makeCondition(UtilMisc.toMap("partyId", partyId,"roleTypeId",roleTypeId,"workEffortTypeId","Event"));
+        EntityCondition findConditions2 =  EntityCondition
+                .makeCondition("workEffortParentId", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
+
+        EntityConditionList<EntityCondition> captchaConditions = EntityCondition
+                .makeCondition(findConditions,findConditions2);
+
 
         List<GenericValue> partyEventsList = null;
 //        partyEventsList = delegator.findList("MarketingCampaignAndRole", findConditions, UtilMisc.toSet("partyId","campaignName","startDate"),
@@ -1062,7 +1070,7 @@ public class PersonErpQueryService {
         seletField.add("locationDesc");
         seletField.add("estimatedCompletionDate");
         seletField.add("workEffortId");
-        partyEventsList = delegator.findList("WorkEffortAndPartyAssign", findConditions,seletField,UtilMisc.toList("-actualStartDate"), null, false);
+        partyEventsList = delegator.findList("WorkEffortAndPartyAssign", captchaConditions,seletField,UtilMisc.toList("-actualStartDate"), null, false);
 
         inputMap.put("partyEventsList",partyEventsList);
         inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
