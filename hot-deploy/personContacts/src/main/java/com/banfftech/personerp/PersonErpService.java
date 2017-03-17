@@ -521,8 +521,8 @@ public class PersonErpService {
             stringBuffer.append("name:"+ name);
             String encontent = stringBuffer.toString();
             //发送给邀请人
-            //String messageInfo = "http://114.215.200.46:3400/pewebview/control/showActivityDetail?p_ctx="+encontent;
-            String messageInfo = "http://t.im/nosplitpear?p_ctx="+encontent;
+            String messageInfo = "http://www.vivafoo.com:3400/pewebview/control/showActivityDetail?p_ctx="+encontent;
+            //String messageInfo = "http://t.im/nosplitpear?p_ctx="+encontent;
             AppConfig config =  new AppConfig();
             config.setAppId("13407");
             config.setAppKey("d0f68f840616a7cd8586ce63d6c77c03");
