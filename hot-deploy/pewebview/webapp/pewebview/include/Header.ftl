@@ -58,10 +58,10 @@
             }
             $(
                     function(){
+                        var cookieCheck = $("#workEffortId").val();
+                        var isJoin = getCookie(cookieCheck);
 
-                        var isJoin = getCookie("join");
-
-                        if(isJoin+"" === "success"){
+                        if(isJoin+"" === "join"){
 
                             location.href = "/pewebview/control/joinSuccess";
                         }

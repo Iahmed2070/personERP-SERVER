@@ -58,6 +58,7 @@ public class ActivityBaseService {
         Locale locale = (Locale) context.get("locale");
         Delegator delegator = dispatcher.getDelegator();
         Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+
         GenericValue userLogin = delegator.findOne("UserLogin", false, UtilMisc.toMap("userLoginId", "admin"));
 
 
@@ -116,7 +117,7 @@ public class ActivityBaseService {
         Map<String, Object> translationActivityMap = UtilMisc.toMap("userLogin", joinParty, "workEffortId", workEffortId);
         Map<String, Object> transaltionResult = dispatcher.runSync("translationActivity", translationActivityMap);
 
-
+        resultMap.put("workEffortId",workEffortId);
         return resultMap;
     }
 }

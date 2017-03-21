@@ -668,7 +668,8 @@
 
 
         (function(){
-            setCookie("join","success");
+            var workEffortId = $("#workEffortId").val();
+            setCookie(workEffortId,"join");
             var opt = {
                 'type' : 1,
                 'pageShow' : function(){},
@@ -1088,6 +1089,7 @@
 </head>
 <body class="H5FullscreenPage">
 <div class="H5FullscreenPage-wrap">
+    <input id="workEffortId" name="workEffortId" value="${(workEffortId)!}"/>
     <div class="item item1">
         <br/>
         <br/>

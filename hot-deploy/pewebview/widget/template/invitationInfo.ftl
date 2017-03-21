@@ -98,7 +98,7 @@
                                                                  name="nickName" id="nickName"   class="ipt" /></label></li>
             <li><label><font color="#ff0000">* </font>${activityUiLabelMap.Tel}<input type="text"
                                                                  name="tel" id="tel"   class="ipt" /></label></li>
-             <input type="hidden" name="workEffortId" value="${(workEffortId)!}" />
+             <input type="hidden" name="workEffortId" id="workEffortId" value="${(workEffortId)!}" />
             <li><input type="submit" value="${activityUiLabelMap.ActivityJoin}" class="submitBtn" /></li>
         </ul>
     </form>

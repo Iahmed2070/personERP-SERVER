@@ -14,7 +14,7 @@
     <service name="newPartyJoinActivity" engine="java"
              location="main.java.com.banfftech.personerp.ActivityBaseService" invoke="newPartyJoinActivity" auth="false">
         <description>Join Activity</description>
-        <attribute name="workEffortId" type="String" mode="IN" optional="true"/>
+        <attribute name="workEffortId" type="String" mode="INOUT" optional="true"/>
         <attribute name="nickName" type="String" mode="IN" optional="true"/>
         <attribute name="tel" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
