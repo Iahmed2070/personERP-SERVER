@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>PeVote Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+
+
+
+    <!-- Activity User Vote Service -->
+
+    <!-- Create Vote And Questions -->
+    <service name="createSurveyAndQuestions" engine="java"
+             location="main.java.com.banfftech.personerp.vote.ActivityVoteServices" invoke="createSurveyAndQuestions" auth="false">
+        <description>Create Vote And Questions</description>
+
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/><!-- ActivityID -->
+        <attribute name="surveyName" type="String" mode="IN" optional="false"/><!-- VoteTitle -->
+        <attribute name="isAnonymous" type="String" mode="IN" optional="true"/><!-- 允许匿名投票,默认'否'N -->
+        <attribute name="allowMultiple" type="String" mode="IN" optional="true"/><!-- 允许重复投票,默认'是'Y -->
+        <attribute name="allowUpdate" type="String" mode="IN" optional="true"/><!-- 允许投票被更新,默认'是'Y -->
+        <!-- Default Poll Questions 1002   -->
+        <!-- surveyQuestionTypeId 'BOOLEAN'-->
+        <attribute name="questions" type="String" mode="IN" optional="true"/><!-- Questions Name Array -->
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+    <!-- User Do Anwser -->
+    <service name="doPollQuestion" engine="java"
+             location="main.java.com.banfftech.personerp.vote.ActivityVoteServices" invoke="doPollQuestion" auth="false">
+        <description>User Do Anwser</description>
+        <attribute name="surveyQuestionId" type="String" mode="IN" optional="false"/>
+        <attribute name="surveyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- Activity User Vote Service -->
+    
+</services>

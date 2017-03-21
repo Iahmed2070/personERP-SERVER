@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>PeVote Query Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+
+
+
+    <!-- Query Activity Vote List -->
+    <service name="queryActivityVoteList" engine="java"
+             location="main.java.com.banfftech.personerp.vote.ActivityVoteQueryServices" invoke="queryActivityVoteList" auth="false">
+        <description>Vote List</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- Query Vote Questions Answer List -->
+    <service name="queryActivityVoteQuestions" engine="java"
+             location="main.java.com.banfftech.personerp.vote.ActivityVoteQueryServices" invoke="queryActivityVoteQuestions" auth="false">
+        <description>Vote Questions And Answer</description>
+        <attribute name="surveyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+    
+</services>

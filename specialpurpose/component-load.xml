@@ -20,4 +20,5 @@
   <load-component component-location="personactivity"/>
   <load-component component-location="peplatform"/>
   <load-component component-location="pewebview"/>
+  <load-component component-location="pevote"/>
 </component-loader>

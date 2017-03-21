@@ -3,6 +3,18 @@
         xmlns="http://ofbiz.apache.org/Site-Conf" xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
     <!-- Include Common Controller -->
     <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
+    <!-- Vote For Activity -->
+    <include location="component://pevote/webapp/pevote/WEB-INF/activityVote-controller.xml"/>
+
+
+
+
+
+
+
+
+
+
     <description>PePlatFrom Component Site Configuration File</description>
 
     <preprocessor>

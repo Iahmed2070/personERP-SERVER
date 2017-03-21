@@ -695,108 +695,108 @@ public class PersonErpService {
     }
 
 
-    /**
-     * 创建投票标题和投票项
-     * @param dctx
-     * @param context
-     * @return
-     * @throws IOException
-     * @throws GenericEntityException
-     * @throws GenericServiceException
-     * @throws InterruptedException
-     */
-    public static Map<String, Object> createSurveyAndQuestions(DispatchContext dctx, Map<String, ? extends Object> context)
-            throws  GenericEntityException, GenericServiceException, InterruptedException {
+//    /**
+//     * 创建投票标题和投票项
+//     * @param dctx
+//     * @param context
+//     * @return
+//     * @throws IOException
+//     * @throws GenericEntityException
+//     * @throws GenericServiceException
+//     * @throws InterruptedException
+//     */
+//    public static Map<String, Object> createSurveyAndQuestions(DispatchContext dctx, Map<String, ? extends Object> context)
+//            throws  GenericEntityException, GenericServiceException, InterruptedException {
+//
+//        LocalDispatcher dispatcher = dctx.getDispatcher();
+//        Delegator delegator = dctx.getDelegator();
+//        // 登陆
+//        GenericValue userLogin = (GenericValue) context.get("userLogin");
+//        // 报名人id
+//        String partyId = (String) userLogin.get("partyId");
+//        Locale locale = (Locale) context.get("locale");
+//        //活动的id
+//        String workEffortId = (String) context.get("workEffortId");
+//        //投票标题
+//        String surveyName = (String) context.get("surveyName");
+//        //投票描述
+//        //String description = (String) context.get("description");
+//        //允许匿名投票,默认'否'N
+//        String isAnonymous =  context.get("isAnonymous")==null?"N":(String)context.get("isAnonymous");
+//        //允许重复投票,默认'是'N
+//        String allowMultiple = context.get("allowMultiple")==null?"N":(String)context.get("allowMultiple");
+//        //允许投票被更新,默认'是'Y
+//        String allowUpdate = context.get("allowUpdate")==null?"Y":(String)context.get("allowUpdate");
+//        //投票项描述 多个 暂不提供
+//        //String qsDescriptions = (String) context.get("qsDescriptions");
+//        //投票项名称 多个
+//        String questions = (String) context.get("questions");
+//        //投票项分类 默认Poll Questions 投票类型 1002
+//        String surveyQuestionCategoryId = "1002";
+//        //投票项目类型 默认布尔值
+//        String surveyQuestionTypeId   = "BOOLEAN";
+//
+//        //将单个项分成数组进行循环创建
+//        String [] questionsArray = questions.split("&");
+//
+//
+//
+//        //第一步、创建调查
+//        Map<String, Object> createSurveyInMap =
+//                UtilMisc.toMap("userLogin", userLogin,
+//                        "partyId", partyId,
+//                        "surveyName",surveyName,
+//                        "isAnonymous",isAnonymous,
+//                        "allowMultiple",allowMultiple,
+//                        "allowUpdate",allowUpdate);
+//        Map<String, Object> createSurveyResultMap = dispatcher.runSync("createSurvey", createSurveyInMap);
+//        //得到投票标题主键
+//        String surveyId = (String)createSurveyResultMap.get("surveyId");
+//
+//
+//        //第二步、创建调查对应的问题
+//        forEachCreateQuestionsToSurvey(surveyQuestionTypeId,surveyQuestionCategoryId,userLogin,surveyId,delegator,dispatcher,questionsArray);
+//
+//
+//        //第三步、将投票与活动关联起来
+//
+//        Map<String, Object> createSurveyAppMap =
+//                UtilMisc.toMap("userLogin", userLogin,
+//                        "surveyId", surveyId,
+//                        "workEffortId",workEffortId ,
+//                        "fromDate",new Timestamp(new Date().getTime())
+//                       );
+//        dispatcher.runSync("createWorkEffortSurveyAppl", createSurveyAppMap);
+//
+//        Map<String, Object> inputMap = new HashMap<String, Object>();
+//        Map<String, Object> result = ServiceUtil.returnSuccess();
+//        result.put("resultMap", inputMap);
+//        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+//        return result;
+//    }
 
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dctx.getDelegator();
-        // 登陆
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        // 报名人id
-        String partyId = (String) userLogin.get("partyId");
-        Locale locale = (Locale) context.get("locale");
-        //活动的id
-        String workEffortId = (String) context.get("workEffortId");
-        //投票标题
-        String surveyName = (String) context.get("surveyName");
-        //投票描述
-        //String description = (String) context.get("description");
-        //允许匿名投票,默认'否'N
-        String isAnonymous =  context.get("isAnonymous")==null?"N":(String)context.get("isAnonymous");
-        //允许重复投票,默认'是'N
-        String allowMultiple = context.get("allowMultiple")==null?"N":(String)context.get("allowMultiple");
-        //允许投票被更新,默认'是'Y
-        String allowUpdate = context.get("allowUpdate")==null?"Y":(String)context.get("allowUpdate");
-        //投票项描述 多个 暂不提供
-        //String qsDescriptions = (String) context.get("qsDescriptions");
-        //投票项名称 多个
-        String questions = (String) context.get("questions");
-        //投票项分类 默认Poll Questions 投票类型 1002
-        String surveyQuestionCategoryId = "1002";
-        //投票项目类型 默认布尔值
-        String surveyQuestionTypeId   = "BOOLEAN";
-
-        //将单个项分成数组进行循环创建
-        String [] questionsArray = questions.split("&");
-
-
-
-        //第一步、创建调查
-        Map<String, Object> createSurveyInMap =
-                UtilMisc.toMap("userLogin", userLogin,
-                        "partyId", partyId,
-                        "surveyName",surveyName,
-                        "isAnonymous",isAnonymous,
-                        "allowMultiple",allowMultiple,
-                        "allowUpdate",allowUpdate);
-        Map<String, Object> createSurveyResultMap = dispatcher.runSync("createSurvey", createSurveyInMap);
-        //得到投票标题主键
-        String surveyId = (String)createSurveyResultMap.get("surveyId");
-
-
-        //第二步、创建调查对应的问题
-        forEachCreateQuestionsToSurvey(surveyQuestionTypeId,surveyQuestionCategoryId,userLogin,surveyId,delegator,dispatcher,questionsArray);
-
-
-        //第三步、将投票与活动关联起来
-
-        Map<String, Object> createSurveyAppMap =
-                UtilMisc.toMap("userLogin", userLogin,
-                        "surveyId", surveyId,
-                        "workEffortId",workEffortId ,
-                        "fromDate",new Timestamp(new Date().getTime())
-                       );
-        dispatcher.runSync("createWorkEffortSurveyAppl", createSurveyAppMap);
-
-        Map<String, Object> inputMap = new HashMap<String, Object>();
-        Map<String, Object> result = ServiceUtil.returnSuccess();
-        result.put("resultMap", inputMap);
-        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
-        return result;
-    }
-
-    /**
-     * 循环创建投票项目
-     * @param surveyId
-     * @param delegator
-     * @param dispatcher
-     * @param questionsArray
-     * @throws GenericEntityException
-     * @throws GenericServiceException
-     */
-    private static void forEachCreateQuestionsToSurvey(String surveyQuestionTypeId,String surveyQuestionCategoryId,GenericValue userLogin,String surveyId, Delegator delegator, LocalDispatcher dispatcher, String[] questionsArray)throws  GenericEntityException, GenericServiceException {
-        if(questionsArray!=null && questionsArray.length>0){
-            for(int index =0;index<questionsArray.length;index++){
-                      Map<String, Object> createSurveyQuestionsInMap =
-                              UtilMisc.toMap("userLogin", userLogin,
-                                      "surveyId",surveyId,
-                                      "question",questionsArray[index],
-                                      "surveyQuestionCategoryId",surveyQuestionCategoryId,
-                                      "surveyQuestionTypeId",surveyQuestionTypeId);
-                    dispatcher.runSync("createSurveyQuestion", createSurveyQuestionsInMap);
-            }
-        }
-    }
+//    /**
+//     * 循环创建投票项目
+//     * @param surveyId
+//     * @param delegator
+//     * @param dispatcher
+//     * @param questionsArray
+//     * @throws GenericEntityException
+//     * @throws GenericServiceException
+//     */
+//    private static void forEachCreateQuestionsToSurvey(String surveyQuestionTypeId,String surveyQuestionCategoryId,GenericValue userLogin,String surveyId, Delegator delegator, LocalDispatcher dispatcher, String[] questionsArray)throws  GenericEntityException, GenericServiceException {
+//        if(questionsArray!=null && questionsArray.length>0){
+//            for(int index =0;index<questionsArray.length;index++){
+//                      Map<String, Object> createSurveyQuestionsInMap =
+//                              UtilMisc.toMap("userLogin", userLogin,
+//                                      "surveyId",surveyId,
+//                                      "question",questionsArray[index],
+//                                      "surveyQuestionCategoryId",surveyQuestionCategoryId,
+//                                      "surveyQuestionTypeId",surveyQuestionTypeId);
+//                    dispatcher.runSync("createSurveyQuestion", createSurveyQuestionsInMap);
+//            }
+//        }
+//    }
 
     /**
      * 报名活动

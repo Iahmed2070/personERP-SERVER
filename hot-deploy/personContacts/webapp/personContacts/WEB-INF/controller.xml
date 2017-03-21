@@ -235,35 +235,36 @@
         <response name="error" type="request" value="json"/>
     </request-map>
 
-    <!-- 创建投票标题及问题 -->
-    <request-map uri="createSurveyAndQuestions">
-        <security https="false" auth="false" />
-        <event type="service" invoke="createSurveyAndQuestions"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
-    <!-- 用户参与投票 -->
-    <request-map uri="doPollQuestion">
-        <security https="false" auth="false" />
-        <event type="service" invoke="doPollQuestion"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
-    <!-- 当前活动的投票标题列表 -->
-    <request-map uri="findActivityPollQuestionsTitle">
-        <security https="false" auth="false" />
-        <event type="service" invoke="findActivityPollQuestionsTitle"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
+    <!-- 投票相关内容已迁移至 VoteControl-->
+    <!--&lt;!&ndash; 创建投票标题及问题 &ndash;&gt;-->
+    <!--<request-map uri="createSurveyAndQuestions">-->
+        <!--<security https="false" auth="false" />-->
+        <!--<event type="service" invoke="createSurveyAndQuestions"/>-->
+        <!--<response name="success" type="request" value="json"/>-->
+        <!--<response name="error" type="request" value="json"/>-->
+    <!--</request-map>-->
+    <!--&lt;!&ndash; 用户参与投票 &ndash;&gt;-->
+    <!--<request-map uri="doPollQuestion">-->
+        <!--<security https="false" auth="false" />-->
+        <!--<event type="service" invoke="doPollQuestion"/>-->
+        <!--<response name="success" type="request" value="json"/>-->
+        <!--<response name="error" type="request" value="json"/>-->
+    <!--</request-map>-->
+    <!--&lt;!&ndash; 当前活动的投票标题列表 &ndash;&gt;-->
+    <!--<request-map uri="findActivityPollQuestionsTitle">-->
+        <!--<security https="false" auth="false" />-->
+        <!--<event type="service" invoke="findActivityPollQuestionsTitle"/>-->
+        <!--<response name="success" type="request" value="json"/>-->
+        <!--<response name="error" type="request" value="json"/>-->
+    <!--</request-map>-->
 
-    <!-- 当前活动的标题的投票项目列表及投票情况 -->
-    <request-map uri="findActivityPollQuestions">
-        <security https="false" auth="false" />
-        <event type="service" invoke="findActivityPollQuestions"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
+    <!--&lt;!&ndash; 当前活动的标题的投票项目列表及投票情况 &ndash;&gt;-->
+    <!--<request-map uri="findActivityPollQuestions">-->
+        <!--<security https="false" auth="false" />-->
+        <!--<event type="service" invoke="findActivityPollQuestions"/>-->
+        <!--<response name="success" type="request" value="json"/>-->
+        <!--<response name="error" type="request" value="json"/>-->
+    <!--</request-map>-->
 
     <!-- 组织者创建一次收缴Payment -->
     <request-map uri="createPartyPayment">
