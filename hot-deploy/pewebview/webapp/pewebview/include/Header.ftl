@@ -14,6 +14,7 @@
         function checkMobile(sMobile){
             if(!(/^1\d{10}$/.test(sMobile))){
                 var message = $("#message").val();
+                alert(message);
                 return false;
             }
             return true;
@@ -23,7 +24,7 @@
             if(nickName == null || nickName=="" || nickName === "" ){
 
                 var message = $("#messageForNickName").val();
-
+                alert(message);
                 return false;
             }
             return true;
@@ -59,6 +60,7 @@
             $(
                     function(){
                         var cookieCheck = $("#workEffortId").val();
+
                         var isJoin = getCookie(cookieCheck);
 
                         if(isJoin+"" === "join"){

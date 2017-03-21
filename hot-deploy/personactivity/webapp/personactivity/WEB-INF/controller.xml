@@ -27,13 +27,15 @@
     <request-map uri="newPartyJoinActivity"><security https="false" auth="false"/>
         <event type="service" invoke="newPartyJoinActivity" />
         <response name="success" type="request-redirect" value="joinSuccess">
+            <redirect-parameter name="workEffortId" from="workEffortId"/>
         </response>
         <response name="error" type="request" value="json" />
     </request-map>
     <!--成功页面-->
     <request-map uri="joinSuccess">
         <security https="false" auth="false" />
-        <response name="success" type="view" value="joinSuccess"/>
+        <response name="success" type="view" value="joinSuccess">
+        </response>
     </request-map>
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://personactivity/widget/PersonActivityScreens.xml#main"/>

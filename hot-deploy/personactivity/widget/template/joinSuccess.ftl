@@ -663,13 +663,19 @@
             var Days = 30;
             var exp = new Date();
             exp.setTime(exp.getTime() + Days*24*60*60*1000);
+
             document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
         }
 
 
         (function(){
-            var workEffortId = $("#workEffortId").val();
-            setCookie(workEffortId,"join");
+            var workEffortId  =  ${workEffortId!'null'}
+
+            if(!(workEffortId == "null")){
+
+                setCookie(workEffortId,"join");
+            }
+
             var opt = {
                 'type' : 1,
                 'pageShow' : function(){},
@@ -1088,8 +1094,8 @@
     </script>
 </head>
 <body class="H5FullscreenPage">
+<input id="workEffortId" name="workEffortId" type="hidden" value="${(workEffortId)!}"/>
 <div class="H5FullscreenPage-wrap">
-    <input id="workEffortId" name="workEffortId" value="${(workEffortId)!}"/>
     <div class="item item1">
         <br/>
         <br/>

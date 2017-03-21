@@ -21,7 +21,7 @@
         <section>
             <actions>
                 <property-map resource="PersonActivityUiLabels" map-name="uiLabel" global="true"/>
-                <set field="workEffortId" value="${parameters.workEffortId}"/>
+                <set field="workEffortId" value="${parameters.workEffortId}" />
             </actions>
                 <widgets>
                     <platform-specific>
