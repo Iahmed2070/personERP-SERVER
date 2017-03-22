@@ -176,30 +176,6 @@
     	<response name="success" type="view" value="mainInterface"/>
    	</request-map>
 
-    <!--我的活动列表-->
-    <request-map uri="findMyEvent">
-        <security https="false" auth="false" />
-        <event type="service" invoke="findMyEvent"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
-
-    <!-- 我的活动详情 -->
-    <request-map uri="findMyEventDetail">
-        <security https="false" auth="false" />
-        <event type="service" invoke="findMyEventDetail"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
-
-    <!-- 创建活动-->
-    <request-map uri="createNewEvent">
-        <security https="false" auth="false" />
-        <!--<event type="java" path="com.banfftech.personerp.PersonErpService" invoke="processRequest"/>-->
-        <event type="service" invoke="createNewEvent"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
 
     <!-- 创建新的标签并且关联到联系人 -->
     <request-map uri="lableAndRelationContact">
@@ -227,68 +203,6 @@
     </request-map>
 
 
-    <!-- 创建活动项,并且创建活动项的invoice -->
-    <request-map uri="createActivityProject">
-        <security https="false" auth="false" />
-        <event type="service" invoke="createActivityProject"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
-
-    <!-- 投票相关内容已迁移至 VoteControl-->
-    <!--&lt;!&ndash; 创建投票标题及问题 &ndash;&gt;-->
-    <!--<request-map uri="createSurveyAndQuestions">-->
-        <!--<security https="false" auth="false" />-->
-        <!--<event type="service" invoke="createSurveyAndQuestions"/>-->
-        <!--<response name="success" type="request" value="json"/>-->
-        <!--<response name="error" type="request" value="json"/>-->
-    <!--</request-map>-->
-    <!--&lt;!&ndash; 用户参与投票 &ndash;&gt;-->
-    <!--<request-map uri="doPollQuestion">-->
-        <!--<security https="false" auth="false" />-->
-        <!--<event type="service" invoke="doPollQuestion"/>-->
-        <!--<response name="success" type="request" value="json"/>-->
-        <!--<response name="error" type="request" value="json"/>-->
-    <!--</request-map>-->
-    <!--&lt;!&ndash; 当前活动的投票标题列表 &ndash;&gt;-->
-    <!--<request-map uri="findActivityPollQuestionsTitle">-->
-        <!--<security https="false" auth="false" />-->
-        <!--<event type="service" invoke="findActivityPollQuestionsTitle"/>-->
-        <!--<response name="success" type="request" value="json"/>-->
-        <!--<response name="error" type="request" value="json"/>-->
-    <!--</request-map>-->
-
-    <!--&lt;!&ndash; 当前活动的标题的投票项目列表及投票情况 &ndash;&gt;-->
-    <!--<request-map uri="findActivityPollQuestions">-->
-        <!--<security https="false" auth="false" />-->
-        <!--<event type="service" invoke="findActivityPollQuestions"/>-->
-        <!--<response name="success" type="request" value="json"/>-->
-        <!--<response name="error" type="request" value="json"/>-->
-    <!--</request-map>-->
-
-    <!-- 组织者创建一次收缴Payment -->
-    <request-map uri="createPartyPayment">
-        <security https="false" auth="false" />
-        <event type="service" invoke="createPartyPaymentInfo"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
-    <!-- 这个活动相关的账务信息 -->
-    <request-map uri="findActivityPayment">
-        <security https="false" auth="false" />
-        <event type="service" invoke="findActivityPayment"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
-
-
-    <!-- 查询活动的活动项目-->
-    <request-map uri="findActivityProjects">
-        <security https="false" auth="false" />
-        <event type="service" invoke="findActivityProjects"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
 
 
     <!-- 生成二维码 -->

@@ -6,26 +6,26 @@
 <body>
 <table style="width:100%">
 	<tr>
-		<td style="width:20%;text-align:right;">½Ó¿Ú:</td>
+		<td style="width:20%;text-align:right;">ï¿½Ó¿ï¿½:</td>
 		<td>
 			<select onchange="showForm(this);">
-				<option>¿Õ</option>
-				<option value="findPerson">»ñÈ¡×Ô¼ºµÄÏêÏ¸ÐÅÏ¢</option>
-				<option value="findContactInfo">»ñÈ¡ÁªÏµÈËÏêÏ¸ÐÅÏ¢</option>
-				<option value="findContacts">»ñÈ¡×Ô¼ºµÄÁªÏµÈËÁÐ±í</option>
-				<option value="findLable">²éÑ¯ÓÃ»§ÓµÓÐµÄ±êÇ©</option>
-				<option value="findLablePerson">²éÑ¯±êÇ©ÄÚ³ÉÔ±</option>
-				<option value="addContacts">Ìí¼ÓÁªÏµÈË</option>
-				<option value="deleteContacts">É¾³ýÁªÏµÈË</option>
-				<option value="updateContacts">¸üÐÂÁªÏµÈËÐÅÏ¢</option>
-				<option value="deleteLable">É¾³ý±êÇ©</option>
-				<option value="createLable">ÐÂ½¨±êÇ©</option>
-				<option value="showPersonAddress">ÐÞ¸ÄµØÖ·Ò³Êý¾Ý</option>
-				<option value="editPersonAddress">ÐÞ¸Ä»òÌí¼ÓÁªÏµÐÅÏ¢</option>
-				<option value="findMyEvent">ÎÒµÄ½üÆÚ»î¶¯ÁÐ±í</option>
-                <option value="createNewEvent">´´½¨»î¶¯</option>
-				<option value="findMyEventDetail">ÎÒµÄ»î¶¯ÏêÇé</option>
-                <option value="lableAndRelationContact">Ê¹ÐÂ½¨µÄ±êÇ©¹ØÁªµ½ÁªÏµÈË</option>
+				<option>ï¿½ï¿½</option>
+				<option value="findPerson">ï¿½ï¿½È¡ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½Ï¢</option>
+				<option value="findContactInfo">ï¿½ï¿½È¡ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ï¿½Ï¢</option>
+				<option value="findContacts">ï¿½ï¿½È¡ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½Ð±ï¿½</option>
+				<option value="findLable">ï¿½ï¿½Ñ¯ï¿½Ã»ï¿½Óµï¿½ÐµÄ±ï¿½Ç©</option>
+				<option value="findLablePerson">ï¿½ï¿½Ñ¯ï¿½ï¿½Ç©ï¿½Ú³ï¿½Ô±</option>
+				<option value="addContacts">ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½</option>
+				<option value="deleteContacts">É¾ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½</option>
+				<option value="updateContacts">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½Ï¢</option>
+				<option value="deleteLable">É¾ï¿½ï¿½ï¿½ï¿½Ç©</option>
+				<option value="createLable">ï¿½Â½ï¿½ï¿½ï¿½Ç©</option>
+				<option value="showPersonAddress">ï¿½Þ¸Äµï¿½Ö·Ò³ï¿½ï¿½ï¿½ï¿½</option>
+				<option value="editPersonAddress">ï¿½Þ¸Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½Ï¢</option>
+				<option value="findMyEvent">ï¿½ÒµÄ½ï¿½ï¿½Ú»î¶¯ï¿½Ð±ï¿½</option>
+                <option value="createNewEvent">ï¿½ï¿½ï¿½ï¿½ï¿½î¶¯</option>
+				<option value="findMyEventDetail">ï¿½ÒµÄ»î¶¯ï¿½ï¿½ï¿½ï¿½</option>
+                <option value="lableAndRelationContact">Ê¹ï¿½Â½ï¿½ï¿½Ä±ï¿½Ç©ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ïµï¿½ï¿½</option>
 
 			</select>
 		</td>
@@ -39,35 +39,35 @@
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
-			<td><input type="button" value="Ìá½»" onclick="getJsonForThis('findPerson','findPerson');"/></td>
+			<td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('findPerson','findPerson');"/></td>
 		</tr>
 	</table>
 </form>	
 <form id="findContactInfo" style="display:none;" class="showOrHid">
 	<table width="100%">
 		<tr>
-			<td style="width:20%;text-align:right;">ÁªÏµÈËpartyId:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½Ïµï¿½ï¿½partyId:</td>
 			<td><input type="text" name="partyId"/></td>
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
-			<td><input type="button" value="Ìá½»" onclick="getJsonForThis('findContactInfo','findContactInfo');"/></td>
+			<td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('findContactInfo','findContactInfo');"/></td>
 		</tr>
 	</table>
 </form>	
 <form id="deleteContacts" style="display:none;" class="showOrHid">
 	<table width="100%">
 		<tr>
-			<td style="width:20%;text-align:right;">ÁªÏµÈËpartyId:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½Ïµï¿½ï¿½partyId:</td>
 			<td><input type="text" name="partyIdFrom"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÓÃ»§partyId:</td>
+			<td style="width:20%;text-align:right;">ï¿½Ã»ï¿½partyId:</td>
 			<td><input type="text" name="partyIdTo"/></td>
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
-			<td><input type="button" value="Ìá½»" onclick="getJsonForThis('deleteContacts','deleteContacts');"/></td>
+			<td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('deleteContacts','deleteContacts');"/></td>
 		</tr>
 	</table>
 </form>	
@@ -79,7 +79,7 @@
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
-			<td><input type="button" value="Ìá½»" onclick="getJsonForThis('findContacts','findContacts');"/></td>
+			<td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('findContacts','findContacts');"/></td>
 		</tr>
 	</table>
 </form>	
@@ -91,7 +91,7 @@
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
-			<td><input type="button" value="Ìá½»" onclick="getJsonForThis('findLable','findLable');"/></td>
+			<td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('findLable','findLable');"/></td>
 		</tr>
 	</table>
 </form>	
@@ -103,7 +103,7 @@
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
-			<td><input type="button" value="Ìá½»" onclick="getJsonForThis('findLablePerson','findLablePerson');"/></td>
+			<td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('findLablePerson','findLablePerson');"/></td>
 		</tr>
 	</table>
 </form>	
@@ -114,52 +114,52 @@
 			<td><input type="text" name="partyId"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÐÕÃû:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½ï¿½ï¿½:</td>
 			<td><input type="text" name="personName"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÐÔ±ð:</td>
+			<td style="width:20%;text-align:right;">ï¿½Ô±ï¿½:</td>
 			<td><input type="text" name="gender"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÊÖ»úºÅÂë:</td>
+			<td style="width:20%;text-align:right;">ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½:</td>
 			<td><input type="text" name="contactNumber"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">µç×ÓÓÊÏä:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:</td>
 			<td><input type="text" name="contactEmail"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">±êÇ©:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½Ç©:</td>
 			<td><input type="text" name="contactGroup"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">¹«Ë¾:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½Ë¾:</td>
 			<td><input type="text" name="contactCompany"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">Ê¡/Ö±Ï½ÊÐ:</td>
+			<td style="width:20%;text-align:right;">Ê¡/Ö±Ï½ï¿½ï¿½:</td>
 			<td><input type="text" name="contactGeoName"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÊÐ:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½:</td>
 			<td><input type="text" name="contactCity"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">Çø:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½:</td>
 			<td><input type="text" name="contactAddress1"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÏêÏ¸µØÖ·:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½Ï¸ï¿½ï¿½Ö·:</td>
 			<td><input type="text" name="contactAddress2"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÓÊÕþ±àÂë:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:</td>
 			<td><input type="text" name="contactPostalCode"/></td>
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
-			<td><input type="button" value="Ìá½»" onclick="getJsonForThis('addContacts','addContacts');"/></td>
+			<td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('addContacts','addContacts');"/></td>
 		</tr>
 	</table>
 </form>	
@@ -170,56 +170,56 @@
 			<td><input type="text" name="partyId"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÐÕ:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½:</td>
 			<td><input type="text" name="firstName"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">Ãû:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½:</td>
 			<td><input type="text" name="lastName"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÐÔ±ð:</td>
+			<td style="width:20%;text-align:right;">ï¿½Ô±ï¿½:</td>
 			<td><input type="text" name="gender"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÊÖ»úºÅÂë:</td>
+			<td style="width:20%;text-align:right;">ï¿½Ö»ï¿½ï¿½ï¿½ï¿½ï¿½:</td>
 			<td><input type="text" name="contactNumber"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">µç×ÓÓÊÏä:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:</td>
 			<td><input type="text" name="contactEmail"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">±êÇ©:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½Ç©:</td>
 			<td><input type="text" name="contactGroup"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">¹«Ë¾:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½Ë¾:</td>
 			<td><input type="text" name="contactCompany"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">Ê¡/Ö±Ï½ÊÐ:</td>
+			<td style="width:20%;text-align:right;">Ê¡/Ö±Ï½ï¿½ï¿½:</td>
 			<td><input type="text" name="contactGeoName"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÊÐ:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½:</td>
 			<td><input type="text" name="contactCity"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">Çø:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½:</td>
 			<td><input type="text" name="contactAddress1"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÏêÏ¸µØÖ·:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½Ï¸ï¿½ï¿½Ö·:</td>
 			<td><input type="text" name="contactAddress2"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÓÊÕþ±àÂë:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:</td>
 			<td><input type="text" name="contactPostalCode"/></td>
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
-			<td><input type="button" value="Ìá½»" onclick="getJsonForThis('updateContacts','updateContacts');"/></td>
+			<td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('updateContacts','updateContacts');"/></td>
 		</tr>
 	</table>
 </form>	
@@ -231,14 +231,14 @@
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
-			<td><input type="button" value="Ìá½»" onclick="getJsonForThis('deleteLable','deleteLable');"/></td>
+			<td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('deleteLable','deleteLable');"/></td>
 		</tr>
 	</table>
 </form>	
 <form id="createLable" style="display:none;" class="showOrHid">
 	<table width="100%">
 		<tr>
-			<td style="width:20%;text-align:right;">±êÇ©Ãû³Æ:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½Ç©ï¿½ï¿½ï¿½ï¿½:</td>
 			<td><input type="text" name="lableName"/></td>
 		</tr>
 		<tr>
@@ -248,7 +248,7 @@
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
-			<td><input type="button" value="Ìá½»" onclick="getJsonForThis('createLable','createLable');"/></td>
+			<td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('createLable','createLable');"/></td>
 		</tr>
 	</table>
 </form>	
@@ -260,34 +260,34 @@
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
-			<td><input type="button" value="Ìá½»" onclick="getJsonForThis('showPersonAddress','showPersonAddress');"/></td>
+			<td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('showPersonAddress','showPersonAddress');"/></td>
 		</tr>
 	</table>
 </form>	
 <form id="editPersonAddress" style="display:none;" class="showOrHid">
 	<table width="100%">
 		<tr>
-			<td style="width:20%;text-align:right;">Ê¡·ÝID:</td>
+			<td style="width:20%;text-align:right;">Ê¡ï¿½ï¿½ID:</td>
 			<td><input type="text" name="stateProvinceGeoId"/>*</td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÊÐID:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½ID:</td>
 			<td><input type="text" name="geoIdCity"/>*</td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÇøID:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½ID:</td>
 			<td><input type="text" name="geoIdArea"/>*</td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÏêÏ¸µØÖ·:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½Ï¸ï¿½ï¿½Ö·:</td>
 			<td><input type="text" name="address1"/>*</td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">µç»°ºÅÂë:</td>
+			<td style="width:20%;text-align:right;">ï¿½ç»°ï¿½ï¿½ï¿½ï¿½:</td>
 			<td><input type="text" name="contactNumber"/>*</td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÓÊÏäµØÖ·:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½ï¿½ï¿½ï¿½Ö·:</td>
 			<td><input type="text" name="email"/>*</td>
 		</tr>
 		<tr>
@@ -303,18 +303,18 @@
 			<td><input type="text" name="attnName"/></td>
 		</tr>
 		<tr>
-			<td style="width:20%;text-align:right;">ÓÊÕþ±àÂë:</td>
+			<td style="width:20%;text-align:right;">ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:</td>
 			<td><input type="text" name="postalCode"/></td>
 		</tr>
 		<tr>
 			<td style="width:20%;text-align:right;">&nbsp;</td>
-			<td><input type="button" value="Ìá½»" onclick="getJsonForThis('editPersonAddress','editPersonAddress');"/></td>
+			<td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('editPersonAddress','editPersonAddress');"/></td>
 		</tr>
 	</table>
 </form>	
 
 
-<!--²éÑ¯ÎÒµÄ»î¶¯/ÊÂ¼þ-->
+<!--ï¿½ï¿½Ñ¯ï¿½ÒµÄ»î¶¯/ï¿½Â¼ï¿½-->
 <form id="findMyEvent" style="display:none;" class="showOrHid">
 	<table width="100%">
 		<tr>
@@ -328,7 +328,7 @@
 		</tr>
 	</table>
 </form>
-<!-- ¿ªÊ¼Ò»¸öÐÂµÄ»î¶¯-->
+<!-- ï¿½ï¿½Ê¼Ò»ï¿½ï¿½ï¿½ÂµÄ»î¶¯-->
 <form id="createNewEvent" style="display:none;" enctype="multipart/form-data" method="post" action="<@ofbizUrl>createNewEvent</@ofbizUrl>"  class="showOrHid">
     <table width="100%">
         <tr>
@@ -367,23 +367,23 @@
 <form id="lableAndRelationContact" style="display:none;" class="showOrHid">
     <table width="100%">
         <tr>
-            <td style="width:20%;text-align:right;">±êÇ©Id:</td>
+            <td style="width:20%;text-align:right;">ï¿½ï¿½Ç©Id:</td>
             <td><input type="text" name="groupId"/></td>
         </tr>
 		<tr>
-            <td style="width:20%;text-align:right;">ÁªÏµÈËÊý×é:</td>
+            <td style="width:20%;text-align:right;">ï¿½ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:</td>
             <td><input type="text" name="partyArray"/></td>
 		</tr>
         <tr>
             <td style="width:20%;text-align:right;">&nbsp;</td>
-            <td><input type="button" value="Ìá½»" onclick="getJsonForThis('lableAndRelationContact','lableAndRelationContact');"/></td>
+            <td><input type="button" value="ï¿½á½»" onclick="getJsonForThis('lableAndRelationContact','lableAndRelationContact');"/></td>
         </tr>
     </table>
 </form>
 
 
 
-<!--²éÑ¯ÎÒµÄ»î¶¯ÏêÇé-->
+<!--ï¿½ï¿½Ñ¯ï¿½ÒµÄ»î¶¯ï¿½ï¿½ï¿½ï¿½-->
 <form id="findMyEventDetail" style="display:none;" class="showOrHid">
     <table width="100%">
         <tr>
@@ -401,7 +401,7 @@
 
 
 
-<!-- ÕâÀïÊÇÓÃÀ´ÏÔÊ¾jsonÊý¾ÝµÄ -->
+<!-- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾jsonï¿½ï¿½ï¿½Ýµï¿½ -->
 <div style="width: 100%;">
     <textarea style="width: 70%;height: 200px;" readonly id="showJson"></textarea>
 </div>

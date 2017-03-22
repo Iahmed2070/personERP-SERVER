@@ -42,4 +42,9 @@
         <value xml:lang="zh">在这里您可以与朋友们一起,参加、组织、分享各种精彩活动！</value>
         <value xml:lang="zh-TW">在这里您可以与朋友们一起,参加、组织、分享各种精彩活动！</value>
     </property>
+
+    <property key="success">
+        <value xml:lang="en">Success</value>
+        <value xml:lang="zh">成功</value>
+    </property>
 </resource>

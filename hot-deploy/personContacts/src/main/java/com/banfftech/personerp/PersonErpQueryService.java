@@ -173,37 +173,37 @@ public class PersonErpQueryService {
     }
 
 
-    /**
-     * 查询投票标题列表
-     * @param dctx
-     * @param context
-     * @return
-     * @throws GenericEntityException
-     */
-    public static Map<String, Object> findActivityPollQuestionsTitle(DispatchContext dctx, Map<String, Object> context)
-            throws GenericEntityException {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dispatcher.getDelegator();
-        Locale locale = (Locale) context.get("locale");
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        String partyId = (String) userLogin.get("partyId");
-        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        Map<String, Object> inputMap = new HashMap<String, Object>();
-        //活动ID
-        String workEffortId = (String) context.get("workEffortId");
-
-        EntityCondition findConditionsToVoteList = null;
-        findConditionsToVoteList = EntityCondition
-                .makeCondition(UtilMisc.toMap("workEffortId",workEffortId));
-        List<GenericValue> voteList = delegator.findList("ActivityVotes",findConditionsToVoteList,UtilMisc.toSet("surveyId","fromDate","surveyName"),
-                null, null, false);
-
-
-        inputMap.put("activityPollQuestionsTitle",voteList);
-        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
-        resultMap.put("resultMap", inputMap);
-        return resultMap;
-    }
+//    /**
+//     * 查询投票标题列表
+//     * @param dctx
+//     * @param context
+//     * @return
+//     * @throws GenericEntityException
+//     */
+//    public static Map<String, Object> findActivityPollQuestionsTitle(DispatchContext dctx, Map<String, Object> context)
+//            throws GenericEntityException {
+//        LocalDispatcher dispatcher = dctx.getDispatcher();
+//        Delegator delegator = dispatcher.getDelegator();
+//        Locale locale = (Locale) context.get("locale");
+//        GenericValue userLogin = (GenericValue) context.get("userLogin");
+//        String partyId = (String) userLogin.get("partyId");
+//        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+//        Map<String, Object> inputMap = new HashMap<String, Object>();
+//        //活动ID
+//        String workEffortId = (String) context.get("workEffortId");
+//
+//        EntityCondition findConditionsToVoteList = null;
+//        findConditionsToVoteList = EntityCondition
+//                .makeCondition(UtilMisc.toMap("workEffortId",workEffortId));
+//        List<GenericValue> voteList = delegator.findList("ActivityVotes",findConditionsToVoteList,UtilMisc.toSet("surveyId","fromDate","surveyName"),
+//                null, null, false);
+//
+//
+//        inputMap.put("activityPollQuestionsTitle",voteList);
+//        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+//        resultMap.put("resultMap", inputMap);
+//        return resultMap;
+//    }
     /**
      * 查询用户信息
      *
@@ -896,185 +896,180 @@ public class PersonErpQueryService {
     }
 
 
-    /**
-     * 查询我的活动项列表
-     * @param dctx
-     * @param context
-     * @return
-     * @throws GenericEntityException
-     */
-    public static Map<String, Object> findActivityProjects(DispatchContext dctx, Map<String, Object> context)
-            throws GenericEntityException {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dispatcher.getDelegator();
-        Locale locale = (Locale) context.get("locale");
-        Map<String, Object> inputMap = new HashMap<String, Object>();
-        String workEffortId = (String) context.get("workEffortId");
-        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        //查询活动项关系
-        EntityCondition findConditions = null;
-        findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("workEffortIdTo", workEffortId));
-        List<GenericValue> projectList = null;
-
-        projectList = delegator.findList("ActivityAndProject", findConditions, UtilMisc.toSet("workEffortIdTo", "workEffortName", "actualStartDate", "locationDesc"),
-                null, null, false);
-        inputMap.put("projectList",projectList);
-        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
-        resultMap.put("resultMap", inputMap);
-        return resultMap;
-    }
-
-
-    /**
-     * 我的活动详情
-     * @Author
-     * @param dctx
-     * @param context
-     * @return
-     * @throws GenericEntityException
-     */
-    public static Map<String, Object> findMyEventDetail(DispatchContext dctx, Map<String, Object> context)
-            throws GenericEntityException {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dispatcher.getDelegator();
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        String partyId = (String) userLogin.get("partyId");
-        Locale locale = (Locale) context.get("locale");
-        Map<String, Object> inputMap = new HashMap<String, Object>();
-        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        String workEffortId = (String) context.get("workEffortId");
-
-        GenericValue createPerson = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
-        //活动详情
-        EntityCondition findConditions = null;
-        findConditions = EntityCondition
-                .makeCondition(UtilMisc.toMap("workEffortId", workEffortId));
-        List<GenericValue> eventsDetail = null;
-        //要查询的字段
-        Set<String> fieldSet = new HashSet<String>();
-        fieldSet.add("workEffortId");
-        fieldSet.add("workEffortName");
-        fieldSet.add("actualStartDate");
-        fieldSet.add("description");
-        fieldSet.add("locationDesc");
-        fieldSet.add("estimatedCompletionDate");
-        fieldSet.add("specialTerms");
-        eventsDetail = delegator.findList("WorkEffort", findConditions, fieldSet,
-                null, null, false);
-
-        //参与的人员其实是头像列表
-        EntityCondition findConditionsToPartyContent  = EntityCondition
-                .makeCondition(UtilMisc.toMap("workEffortId",workEffortId));
-        List<GenericValue> partyJoinEventsList = null;
-        partyJoinEventsList = delegator.findList("WorkEffortPartyAssignmentAndJoinParty",findConditionsToPartyContent,UtilMisc.toSet("workEffortId","partyId","nickname","lastName","firstName"),
-                null, null, false);
-
-        List<Map<String,Object>> partyContent = new ArrayList<Map<String, Object>>();
-        if(null!=partyJoinEventsList)
-        for(GenericValue gv : partyJoinEventsList){
-            Map<String,Object> partyContentMap = new HashMap<String, Object>();
-            partyContentMap.put("partyId",
-                    gv.get("partyId"));
-            partyContentMap.put("nickName",
-                    gv.get("nickname"));
-            partyContentMap.put("lastName",
-                    gv.get("lastName"));
-            partyContentMap.put("firstName",
-                    gv.get("firstName"));
-//            partyContentMap.put("headPortrait",
-//                    "http://localhost:3400/personContacts/control/stream?contentId=" + gv.get("contentId"));
-            partyContent.add(partyContentMap);
-        }
-
-        //子活动列表
-        List<GenericValue> childActivityList = delegator.findList("WorkEffort",EntityCondition
-                .makeCondition(UtilMisc.toMap("workEffortParentId",workEffortId)),null,
-                null, null, false);
-
-
-        //TODO 优化鉴权 ,我是不是组织者
-        EntityCondition findPermissionConditions   = EntityCondition
-                .makeCondition(UtilMisc.toMap("partyId", partyId,"workEffortId",workEffortId));
-
-        List<GenericValue> whoAmI = null;
-        Set<String> seletField = new HashSet<String>();
-        seletField.add("partyId");
-        seletField.add("workEffortId");
-        whoAmI = delegator.findList("WorkEffortAndPartyAssign", findPermissionConditions,seletField,null, null, false);
-        if(whoAmI!=null && whoAmI.size()>1){
-            inputMap.put("iAmAdmin","Y");
-        }else{
-            inputMap.put("iAmAdmin","N");
-        }
-        List<GenericValue> personList = new ArrayList<GenericValue>();
-        personList.add(createPerson);
-        inputMap.put("createPersonInfoList", personList);
-        inputMap.put("eventDetail", eventsDetail);
-        inputMap.put("partyJoinEventsList",partyContent);
-        inputMap.put("childActivityList",childActivityList);
-        inputMap.put("partyId",partyId);
-        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
-        resultMap.put("resultMap", inputMap);
-        return resultMap;
-    }
-
-
-
-
-
-
-
-    /**
-     * 查询我的活动
-     *
-     * @param dctx
-     * @param context
-     * @return Map
-     * @throws GenericEntityException
-     * @throws GenericServiceException
-     * @author S
-     */
-    public static Map<String, Object> findMyEvent(DispatchContext dctx, Map<String, Object> context)
-            throws GenericEntityException {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dispatcher.getDelegator();
-        Locale locale = (Locale) context.get("locale");
-        Map<String, Object> inputMap = new HashMap<String, Object>();
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-        String partyId = (String) userLogin.get("partyId");
-        String roleTypeId = (String) context.get("roleTypeId");
-
-        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
-        //GenericValue person = delegator.findOne("Person", false, UtilMisc.toMap("partyId", partyId));
-        // 查询联系人partyId
-        EntityCondition findConditions = null;
-
-            findConditions = EntityCondition
-                    .makeCondition(UtilMisc.toMap("partyId", partyId,"roleTypeId",roleTypeId,"workEffortTypeId","Event"));
-        EntityCondition findConditions2 =  EntityCondition
-                .makeCondition("workEffortParentId", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
-
-        EntityConditionList<EntityCondition> captchaConditions = EntityCondition
-                .makeCondition(findConditions,findConditions2);
-
-
-        List<GenericValue> partyEventsList = null;
-//        partyEventsList = delegator.findList("MarketingCampaignAndRole", findConditions, UtilMisc.toSet("partyId","campaignName","startDate"),
-//                UtilMisc.toList("-startDate"), null, false);
-        Set<String> seletField = new HashSet<String>();
-        seletField.add("partyId");
-        seletField.add("workEffortName");
-        seletField.add("actualStartDate");
-        seletField.add("description");
-        seletField.add("locationDesc");
-        seletField.add("estimatedCompletionDate");
-        seletField.add("workEffortId");
-        partyEventsList = delegator.findList("WorkEffortAndPartyAssign", captchaConditions,seletField,UtilMisc.toList("-actualStartDate"), null, false);
-
-        inputMap.put("partyEventsList",partyEventsList);
-        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
-        resultMap.put("resultMap", inputMap);
-        return resultMap;
-    }
+//    /**
+//     * 查询我的活动项列表
+//     * @param dctx
+//     * @param context
+//     * @return
+//     * @throws GenericEntityException
+//     */
+//    public static Map<String, Object> findActivityProjects(DispatchContext dctx, Map<String, Object> context)
+//            throws GenericEntityException {
+//        LocalDispatcher dispatcher = dctx.getDispatcher();
+//        Delegator delegator = dispatcher.getDelegator();
+//        Locale locale = (Locale) context.get("locale");
+//        Map<String, Object> inputMap = new HashMap<String, Object>();
+//        String workEffortId = (String) context.get("workEffortId");
+//        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+//        //查询活动项关系
+//        EntityCondition findConditions = null;
+//        findConditions = EntityCondition
+//                .makeCondition(UtilMisc.toMap("workEffortIdTo", workEffortId));
+//        List<GenericValue> projectList = null;
+//
+//        projectList = delegator.findList("ActivityAndProject", findConditions, UtilMisc.toSet("workEffortIdTo", "workEffortName", "actualStartDate", "locationDesc"),
+//                null, null, false);
+//        inputMap.put("projectList",projectList);
+//        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+//        resultMap.put("resultMap", inputMap);
+//        return resultMap;
+//    }
+//
+//
+//    /**
+//     * 我的活动详情
+//     * @Author
+//     * @param dctx
+//     * @param context
+//     * @return
+//     * @throws GenericEntityException
+//     */
+//    public static Map<String, Object> findMyEventDetail(DispatchContext dctx, Map<String, Object> context)
+//            throws GenericEntityException {
+//        LocalDispatcher dispatcher = dctx.getDispatcher();
+//        Delegator delegator = dispatcher.getDelegator();
+//        GenericValue userLogin = (GenericValue) context.get("userLogin");
+//        String partyId = (String) userLogin.get("partyId");
+//        Locale locale = (Locale) context.get("locale");
+//        Map<String, Object> inputMap = new HashMap<String, Object>();
+//        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+//        String workEffortId = (String) context.get("workEffortId");
+//
+//        GenericValue createPerson = delegator.findOne("Person",UtilMisc.toMap("partyId",partyId),false);
+//        //活动详情
+//        EntityCondition findConditions = null;
+//        findConditions = EntityCondition
+//                .makeCondition(UtilMisc.toMap("workEffortId", workEffortId));
+//        List<GenericValue> eventsDetail = null;
+//        //要查询的字段
+//        Set<String> fieldSet = new HashSet<String>();
+//        fieldSet.add("workEffortId");
+//        fieldSet.add("workEffortName");
+//        fieldSet.add("actualStartDate");
+//        fieldSet.add("description");
+//        fieldSet.add("locationDesc");
+//        fieldSet.add("estimatedCompletionDate");
+//        fieldSet.add("specialTerms");
+//        eventsDetail = delegator.findList("WorkEffort", findConditions, fieldSet,
+//                null, null, false);
+//
+//        //参与的人员其实是头像列表
+//        EntityCondition findConditionsToPartyContent  = EntityCondition
+//                .makeCondition(UtilMisc.toMap("workEffortId",workEffortId));
+//        List<GenericValue> partyJoinEventsList = null;
+//        partyJoinEventsList = delegator.findList("WorkEffortPartyAssignmentAndJoinParty",findConditionsToPartyContent,UtilMisc.toSet("workEffortId","partyId","nickname","lastName","firstName"),
+//                null, null, false);
+//
+//        List<Map<String,Object>> partyContent = new ArrayList<Map<String, Object>>();
+//        if(null!=partyJoinEventsList)
+//        for(GenericValue gv : partyJoinEventsList){
+//            Map<String,Object> partyContentMap = new HashMap<String, Object>();
+//            partyContentMap.put("partyId",
+//                    gv.get("partyId"));
+//            partyContentMap.put("nickName",
+//                    gv.get("nickname"));
+//            partyContentMap.put("lastName",
+//                    gv.get("lastName"));
+//            partyContentMap.put("firstName",
+//                    gv.get("firstName"));
+////            partyContentMap.put("headPortrait",
+////                    "http://localhost:3400/personContacts/control/stream?contentId=" + gv.get("contentId"));
+//            partyContent.add(partyContentMap);
+//        }
+//
+//        //子活动列表
+//        List<GenericValue> childActivityList = delegator.findList("WorkEffort",EntityCondition
+//                .makeCondition(UtilMisc.toMap("workEffortParentId",workEffortId)),null,
+//                null, null, false);
+//
+//
+//        //TODO 优化鉴权 ,我是不是组织者
+//        EntityCondition findPermissionConditions   = EntityCondition
+//                .makeCondition(UtilMisc.toMap("partyId", partyId,"workEffortId",workEffortId));
+//
+//        List<GenericValue> whoAmI = null;
+//        Set<String> seletField = new HashSet<String>();
+//        seletField.add("partyId");
+//        seletField.add("workEffortId");
+//        whoAmI = delegator.findList("WorkEffortAndPartyAssign", findPermissionConditions,seletField,null, null, false);
+//        if(whoAmI!=null && whoAmI.size()>1){
+//            inputMap.put("iAmAdmin","Y");
+//        }else{
+//            inputMap.put("iAmAdmin","N");
+//        }
+//        List<GenericValue> personList = new ArrayList<GenericValue>();
+//        personList.add(createPerson);
+//        inputMap.put("createPersonInfoList", personList);
+//        inputMap.put("eventDetail", eventsDetail);
+//        inputMap.put("partyJoinEventsList",partyContent);
+//        inputMap.put("childActivityList",childActivityList);
+//        inputMap.put("partyId",partyId);
+//        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+//        resultMap.put("resultMap", inputMap);
+//        return resultMap;
+//    }
+//
+//
+//    /**
+//     * 查询我的活动
+//     *
+//     * @param dctx
+//     * @param context
+//     * @return Map
+//     * @throws GenericEntityException
+//     * @throws GenericServiceException
+//     * @author S
+//     */
+//    public static Map<String, Object> findMyEvent(DispatchContext dctx, Map<String, Object> context)
+//            throws GenericEntityException {
+//        LocalDispatcher dispatcher = dctx.getDispatcher();
+//        Delegator delegator = dispatcher.getDelegator();
+//        Locale locale = (Locale) context.get("locale");
+//        Map<String, Object> inputMap = new HashMap<String, Object>();
+//        GenericValue userLogin = (GenericValue) context.get("userLogin");
+//        String partyId = (String) userLogin.get("partyId");
+//        String roleTypeId = (String) context.get("roleTypeId");
+//
+//        Map<String, Object> resultMap = ServiceUtil.returnSuccess();
+//        //GenericValue person = delegator.findOne("Person", false, UtilMisc.toMap("partyId", partyId));
+//        // 查询联系人partyId
+//        EntityCondition findConditions = null;
+//
+//            findConditions = EntityCondition
+//                    .makeCondition(UtilMisc.toMap("partyId", partyId,"roleTypeId",roleTypeId,"workEffortTypeId","Event"));
+//        EntityCondition findConditions2 =  EntityCondition
+//                .makeCondition("workEffortParentId", EntityOperator.EQUALS, GenericEntity.NULL_FIELD);
+//
+//        EntityConditionList<EntityCondition> captchaConditions = EntityCondition
+//                .makeCondition(findConditions,findConditions2);
+//
+//
+//        List<GenericValue> partyEventsList = null;
+////        partyEventsList = delegator.findList("MarketingCampaignAndRole", findConditions, UtilMisc.toSet("partyId","campaignName","startDate"),
+////                UtilMisc.toList("-startDate"), null, false);
+//        Set<String> seletField = new HashSet<String>();
+//        seletField.add("partyId");
+//        seletField.add("workEffortName");
+//        seletField.add("actualStartDate");
+//        seletField.add("description");
+//        seletField.add("locationDesc");
+//        seletField.add("estimatedCompletionDate");
+//        seletField.add("workEffortId");
+//        partyEventsList = delegator.findList("WorkEffortAndPartyAssign", captchaConditions,seletField,UtilMisc.toList("-createdDate"), null, false);
+//
+//        inputMap.put("partyEventsList",partyEventsList);
+//        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+//        resultMap.put("resultMap", inputMap);
+//        return resultMap;
+//    }
 }

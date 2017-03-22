@@ -5,19 +5,67 @@
     <vendor></vendor>
     <version>1.0</version>
 
-    <service name="noSyntaxError" engine="interface">
-        <description>
-            Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
-        </description>
+
+
+
+
+    <!-- Create New Activity -->
+    <service name="createNewEvent" engine="java"
+             location="main.java.com.banfftech.personerp.activity.ActivityServices" invoke="createNewEvent" auth="false">
+        <description>Start New Activity </description>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="parentId" type="String" mode="IN" optional="true"/><!-- Parent Invoice ID -->
+        <attribute name="workEffortName" type="String" mode="IN" optional="true"/>
+        <attribute name="specialTerms" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="locationDesc" type="String" mode="IN" optional="true"/>
+        <attribute name="actualStartDate" type="String" mode="IN" optional="true"/>
+        <attribute name="estimatedCompletionDate" type="String" mode="IN" optional="true"/>
+        <attribute name="scopeEnumId" type="String" mode="IN" optional="true"/>
+        <attribute name="inputMap" type="java.util.HashMap" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+
+
+    <!-- Create Project To Activity -->
+    <service name="createActivityProject" engine="java"
+             location="main.java.com.banfftech.personerp.activity.ActivityServices" invoke="createActivityProject" auth="false">
+        <description>Create Project To Activity</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="workEffortName" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="locationDesc" type="String" mode="IN" optional="true"/>
+        <attribute name="actualStartDate" type="String" mode="IN" optional="true"/>
+        <attribute name="estimatedCompletionDate" type="String" mode="IN" optional="true"/>
+        <attribute name="inputMap" type="java.util.HashMap" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+    <!-- Create Activity Invoice -->
+    <service name="createPartyPaymentInfo" engine="java"
+             location="main.java.com.banfftech.personerp.activity.ActivityServices" invoke="createPartyPaymentInfo" auth="false">
+        <description>Create Activity Invoice</description>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceApplied" type="String" mode="IN" optional="false"/>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="payDate" type="String" mode="IN" optional="false"/>
+        <attribute name="amountApplied" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
     <!-- Join Activity -->
     <service name="newPartyJoinActivity" engine="java"
-             location="main.java.com.banfftech.personerp.activity.ActivityBaseService" invoke="newPartyJoinActivity" auth="false">
+             location="main.java.com.banfftech.personerp.activity.ActivityServices" invoke="newPartyJoinActivity" auth="false">
         <description>Join Activity</description>
         <attribute name="workEffortId" type="String" mode="INOUT" optional="false"/>
         <attribute name="nickName" type="String" mode="IN" optional="true"/>
         <attribute name="tel" type="String" mode="IN" optional="true"/>
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
+
+
 
 </services>

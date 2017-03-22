@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>PersonActivity Query Services</description>
+    <vendor></vendor>
+    <version>1.0</version>
+
+
+
+
+    <!-- Query My Activity -->
+    <service name="queryMyEvent" engine="java"
+             location="main.java.com.banfftech.personerp.activity.ActivityQueryServices" invoke="queryMyEvent" auth="false">
+        <description>Activity List</description>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+    <!-- Query My Activity Detail  -->
+    <service name="queryMyEventDetail" engine="java"
+             location="main.java.com.banfftech.personerp.activity.ActivityQueryServices" invoke="queryMyEventDetail" auth="false">
+        <description>Activity Detail</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+    <!-- Query My Activity Projects-->
+    <service name="queryActivityProjects" engine="java"
+             location="main.java.com.banfftech.personerp.activity.ActivityQueryServices" invoke="queryActivityProjects" auth="false">
+        <description>Activity Projects</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+
+    <!-- Query My Activity 'Invoice' Info -->
+    <service name="queryActivityPayment" engine="java"
+             location="main.java.com.banfftech.personerp.activity.ActivityQueryServices" invoke="queryActivityPayment" auth="false">
+        <description>Activity 'Invoice' Info</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
+
+
+</services>

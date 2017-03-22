@@ -134,7 +134,6 @@ public class ActivityVoteServices {
 
 
         //Scope Param
-
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         //Create By
