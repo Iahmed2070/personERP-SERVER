@@ -1,4 +1,4 @@
-package main.java.com.banfftech.personerp;
+package main.java.com.banfftech.personerp.activity;
 
 
 import org.apache.ofbiz.base.util.UtilMisc;

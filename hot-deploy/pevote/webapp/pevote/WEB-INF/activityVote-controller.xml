@@ -7,33 +7,35 @@
     <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
 
     <description>PeVote Component Site Configuration File</description>
+    <preprocessor>
+        <event name="checkTarjetaLogin" type="java" path="main.java.com.banfftech.personerp.PersonEventLoginWorker" invoke="checkTarjetaLogin"/>
+    </preprocessor>
 
 
-
-    <!-- 创建投票标题及问题 -->
+    <!-- Create Vote Title And Questions -->
     <request-map uri="createSurveyAndQuestions">
         <security https="false" auth="false" />
         <event type="service" invoke="createSurveyAndQuestions"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
-    <!-- 用户参与投票 -->
+    <!-- User Answer -->
     <request-map uri="doPollQuestion">
         <security https="false" auth="false" />
         <event type="service" invoke="doPollQuestion"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
-    <!-- 当前活动的投票标题列表 -->
+    <!-- Query Vote Title List -->
     <request-map uri="findActivityPollQuestionsTitle">
         <security https="false" auth="false" />
-        <event type="service" invoke="findActivityPollQuestionsTitle"/>
+        <event type="service" invoke="queryActivityVoteList"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
 
-    <!-- 当前活动的标题的投票项目列表及投票情况 -->
-    <request-map uri="findActivityPollQuestions">
+    <!-- Query Vote Questions And Answer -->
+    <request-map uri="queryActivityVoteQuestions">
         <security https="false" auth="false" />
         <event type="service" invoke="findActivityPollQuestions"/>
         <response name="success" type="request" value="json"/>
