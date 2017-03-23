@@ -20,14 +20,14 @@
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- User Answer -->
-    <request-map uri="doPollQuestion">
+    <request-map uri="doVoteQuestion">
         <security https="false" auth="false" />
         <event type="service" invoke="doPollQuestion"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
     <!-- Query Vote Title List -->
-    <request-map uri="findActivityPollQuestionsTitle">
+    <request-map uri="queryActivityVoteQuestionsTitle">
         <security https="false" auth="false" />
         <event type="service" invoke="queryActivityVoteList"/>
         <response name="success" type="request" value="json"/>
