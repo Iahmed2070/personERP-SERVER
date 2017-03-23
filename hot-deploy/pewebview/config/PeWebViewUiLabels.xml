@@ -48,7 +48,7 @@
     </property>
 
     <property key="ActivityRefused">
-        <value xml:lang="en">Refused  the fuck Activity</value>
+        <value xml:lang="en">Refused</value>
         <value xml:lang="zh">拒绝</value>
         <value xml:lang="zh-TW">不参与</value>
     </property>
