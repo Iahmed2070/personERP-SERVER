@@ -1,11 +1,11 @@
-package main.java.com.banfftech.personerp.submail.lib;
+package main.java.com.banfftech.personerp.peplatform.submail.lib;
 
 import java.util.Map;
 
-import main.java.com.banfftech.personerp.submail.lib.base.ISender;
-import main.java.com.banfftech.personerp.submail.lib.base.Sender;
+import main.java.com.banfftech.personerp.peplatform.submail.lib.base.ISender;
+import main.java.com.banfftech.personerp.peplatform.submail.lib.base.Sender;
 
-import main.java.com.banfftech.personerp.submail.config.AppConfig;
+import main.java.com.banfftech.personerp.peplatform.submail.config.AppConfig;
 
 /**
  * A Sender class define the mail mode to send HTTP request.

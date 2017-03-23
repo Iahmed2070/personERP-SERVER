@@ -1,4 +1,4 @@
-package main.java.com.banfftech.personerp.submail.config;
+package main.java.com.banfftech.personerp.peplatform.submail.config;
 
 /**
  * A class contains properties about application.The signature,made up of these

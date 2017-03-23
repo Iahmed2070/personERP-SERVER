@@ -1,11 +1,11 @@
-package main.java.com.banfftech.personerp.submail.utils;
+package main.java.com.banfftech.personerp.peplatform.submail.utils;
 
 import java.io.IOException;
 import java.util.Properties;
 
-import main.java.com.banfftech.personerp.submail.config.AppConfig;
-import main.java.com.banfftech.personerp.submail.config.MailConfig;
-import main.java.com.banfftech.personerp.submail.config.MessageConfig;
+import main.java.com.banfftech.personerp.peplatform.submail.config.AppConfig;
+import main.java.com.banfftech.personerp.peplatform.submail.config.MailConfig;
+import main.java.com.banfftech.personerp.peplatform.submail.config.MessageConfig;
 
 
 /**

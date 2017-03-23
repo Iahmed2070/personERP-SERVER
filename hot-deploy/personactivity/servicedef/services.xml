@@ -66,6 +66,14 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
-
+    <!-- SendInvitation(SMs) -->
+    <service name="sendInvitation" engine="java"
+             location="main.java.com.banfftech.personerp.activity.ActivityServices" invoke="sendInvitation" auth="false">
+        <description>发起专属活动邀请(短信)</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="contact" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 
 </services>

@@ -6,9 +6,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
 
-import main.java.com.banfftech.personerp.submail.config.AppConfig;
-import main.java.com.banfftech.personerp.submail.lib.MESSAGEXsend;
-import main.java.com.banfftech.personerp.submail.utils.ConfigLoader;
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.base.util.UtilValidate;
@@ -46,7 +43,6 @@ import java.io.DataInputStream;
 import java.io.FileOutputStream;
 import org.apache.ofbiz.entity.model.ModelEntity;
 import java.io.IOException;
-import main.java.com.banfftech.personerp.util.EncrypDES;
 import javax.servlet.ServletException;
 
 /**
@@ -438,109 +434,71 @@ public class PersonErpService {
 
 
 
-    public static Map<String, Object> sendFuckMss(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dispatcher.getDelegator();
-        Locale locale = (Locale) context.get("locale");
-        String messageInfo = "http://114.215.200.46:3400/pewebview/control/showActivityDetail?p_ctx="+"23123213";
-        AppConfig config =  new AppConfig();
-        config.setAppId("13407");
-        config.setAppKey("d0f68f840616a7cd8586ce63d6c77c03");
-        config.setSignType("normal");
-        MESSAGEXsend submail = new MESSAGEXsend(config);
-        submail.addTo("15800803851");
-        submail.setProject("ps6Xa4");
-        submail.addVar("fromparty", "王亮");
-        submail.addVar("activityname", "登山");
-        submail.addVar("activityurl", messageInfo);
-        submail.xsend();
-        Map<String, Object> result = ServiceUtil.returnSuccess();
-        return result;
-    }
-    /**
-     * SendMessageInvitation
-     * @Author S.Y.L
-     * @param dctx
-     * @param context
-     * @return
-     */
-    public static Map<String, Object> sendInvitation(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dispatcher.getDelegator();
-        Locale locale = (Locale) context.get("locale");
-        //ActivityId
-        String workEffortId = (String) context.get("workEffortId");
-        //ContactInfoMation
-        String contact = (String) context.get("contact");
-        //分割
-        String [] contactArrays = contact.split(",");
-
-        //SendFrom
-        String partyId = (String) context.get("partyId");
-
-        //TODO 获得邀请人的名称
-        GenericValue person = delegator.findOne("Person", false, UtilMisc.toMap("partyId", partyId));
-        //TODO 获得活动名称
-        GenericValue event = delegator.findOne("WorkEffort", false, UtilMisc.toMap("workEffortId", workEffortId));
-        //Get Activity Admin NikeName
-        String nikeName =  person.get("nickname")==null?person.get("lastName")+""+person.get("firstName"):(String) person.get("nickname");
-        String workEffortName = (String)event.get("workEffortName");
-
-        //TODO 发送邀请短信
-        forSendInvitation(contactArrays,nikeName,delegator,dispatcher,workEffortId,workEffortName);
+//    public static Map<String, Object> sendFuckMss(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException, IllegalBlockSizeException {
+//        LocalDispatcher dispatcher = dctx.getDispatcher();
+//        Delegator delegator = dispatcher.getDelegator();
+//        Locale locale = (Locale) context.get("locale");
+//        String messageInfo = "http://114.215.200.46:3400/pewebview/control/showActivityDetail?p_ctx="+"23123213";
+//        AppConfig config =  new AppConfig();
+//        config.setAppId("13407");
+//        config.setAppKey("d0f68f840616a7cd8586ce63d6c77c03");
+//        config.setSignType("normal");
+//        MESSAGEXsend submail = new MESSAGEXsend(config);
+//        submail.addTo("15800803851");
+//        submail.setProject("ps6Xa4");
+//        submail.addVar("fromparty", "王亮");
+//        submail.addVar("activityname", "登山");
+//        submail.addVar("activityurl", messageInfo);
+//        submail.xsend();
+//        Map<String, Object> result = ServiceUtil.returnSuccess();
+//        return result;
+//    }
 
 
-
-        Map<String, Object> result = ServiceUtil.returnSuccess();
-        Map<String, Object> inputMap = new HashMap<String, Object>();    inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
-        result.put("resultMap", inputMap);
-        return result;
-    }
-
-    /**
-     * 发送邀请函
-     * @author S.Y.L
-     * @param contactArrays
-     * @param nikeName
-     * @param delegator
-     * @param dispatcher
-     * @param workEffortId
-     */
-    private static void forSendInvitation(String[] contactArrays, String nikeName, Delegator delegator, LocalDispatcher dispatcher, String workEffortId,String workEffortName) throws BadPaddingException, InvalidKeyException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException {
-        //Str Add Str
-        StringBuffer stringBuffer = new StringBuffer();
-        //TODO DES 加密请求参数
-        EncrypDES de1 = new EncrypDES();
-
-        for(int i =0 ; i < contactArrays.length;i++){
-            String tel = contactArrays[i].substring(contactArrays[i].indexOf("/")+1);
-            String name = contactArrays[i].substring(0,contactArrays[i].indexOf("/"));
-            stringBuffer.append("fromName:"+nikeName+",");
-            stringBuffer.append("workEffortId:"+workEffortId+",");
-            stringBuffer.append("tel:"+ tel+",");
-            stringBuffer.append("name:"+ name);
-            String encontent = stringBuffer.toString();
-            //发送给邀请人
-            String messageInfo = "http://www.vivafoo.com:3400/pewebview/control/showActivityDetail?p_ctx="+encontent;
-            //String messageInfo = "http://t.im/nosplitpear?p_ctx="+encontent;
-            AppConfig config =  new AppConfig();
-            config.setAppId("13407");
-            config.setAppKey("d0f68f840616a7cd8586ce63d6c77c03");
-            config.setSignType("normal");
-            MESSAGEXsend submail = new MESSAGEXsend(config);
-            if(tel.indexOf("-")>0){
-                tel = tel.replaceAll("-","");
-            }
-            submail.addTo(tel);
-            submail.setProject("ps6Xa4");
-            submail.addVar("fromparty", nikeName);
-            submail.addVar("activityname", workEffortName);
-            submail.addVar("activityurl", messageInfo);
-            submail.xsend();
-
-
-        }
-    }
+//    /**
+//     * 发送邀请函
+//     * @author S.Y.L
+//     * @param contactArrays
+//     * @param nikeName
+//     * @param delegator
+//     * @param dispatcher
+//     * @param workEffortId
+//     */
+//    private static void forSendInvitation(String[] contactArrays, String nikeName, Delegator delegator, LocalDispatcher dispatcher, String workEffortId,String workEffortName) throws BadPaddingException, InvalidKeyException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException {
+//        //Str Add Str
+//        StringBuffer stringBuffer = new StringBuffer();
+//        //TODO DES 加密请求参数
+//        EncrypDES de1 = new EncrypDES();
+//
+//        for(int i =0 ; i < contactArrays.length;i++){
+//            String tel = contactArrays[i].substring(contactArrays[i].indexOf("/")+1);
+//            String name = contactArrays[i].substring(0,contactArrays[i].indexOf("/"));
+//            stringBuffer.append("fromName:"+nikeName+",");
+//            stringBuffer.append("workEffortId:"+workEffortId+",");
+//            stringBuffer.append("tel:"+ tel+",");
+//            stringBuffer.append("name:"+ name);
+//            String encontent = stringBuffer.toString();
+//            //发送给邀请人
+//            String messageInfo = "http://www.vivafoo.com:3400/pewebview/control/showActivityDetail?p_ctx="+encontent;
+//            //String messageInfo = "http://t.im/nosplitpear?p_ctx="+encontent;
+//            AppConfig config =  new AppConfig();
+//            config.setAppId("13407");
+//            config.setAppKey("d0f68f840616a7cd8586ce63d6c77c03");
+//            config.setSignType("normal");
+//            MESSAGEXsend submail = new MESSAGEXsend(config);
+//            if(tel.indexOf("-")>0){
+//                tel = tel.replaceAll("-","");
+//            }
+//            submail.addTo(tel);
+//            submail.setProject("ps6Xa4");
+//            submail.addVar("fromparty", nikeName);
+//            submail.addVar("activityname", workEffortName);
+//            submail.addVar("activityurl", messageInfo);
+//            submail.xsend();
+//
+//
+//        }
+//    }
 
     /**
      * 发送

@@ -1,11 +1,11 @@
-package main.java.com.banfftech.personerp.submail.lib.base;
+package main.java.com.banfftech.personerp.peplatform.submail.lib.base;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-import main.java.com.banfftech.personerp.submail.lib.Mail;
-import main.java.com.banfftech.personerp.submail.lib.Message;
+import main.java.com.banfftech.personerp.peplatform.submail.lib.Mail;
+import main.java.com.banfftech.personerp.peplatform.submail.lib.Message;
 import net.sf.json.JSONObject;
 
 import org.apache.http.HttpEntity;
@@ -20,8 +20,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-import main.java.com.banfftech.personerp.submail.utils.RequestEncoder;
-import main.java.com.banfftech.personerp.submail.config.AppConfig;
+import main.java.com.banfftech.personerp.peplatform.submail.utils.RequestEncoder;
+import main.java.com.banfftech.personerp.peplatform.submail.config.AppConfig;
 
 /**
  * A class implements ISender contains common methods to process something that

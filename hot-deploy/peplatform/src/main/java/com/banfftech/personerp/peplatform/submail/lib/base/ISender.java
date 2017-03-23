@@ -1,9 +1,9 @@
-package main.java.com.banfftech.personerp.submail.lib.base;
+package main.java.com.banfftech.personerp.peplatform.submail.lib.base;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import main.java.com.banfftech.personerp.submail.lib.Mail;
+import main.java.com.banfftech.personerp.peplatform.submail.lib.Mail;
 
 /**
  * A interface define a method of {@link #send(Map)}.All classes what can send

@@ -1,28 +1,26 @@
-package main.java.com.banfftech.personerp.submail.lib;
+package main.java.com.banfftech.personerp.peplatform.submail.lib;
 
-import main.java.com.banfftech.personerp.submail.lib.base.ISender;
-import main.java.com.banfftech.personerp.submail.lib.base.SenderWapper;
-import main.java.com.banfftech.personerp.submail.config.AppConfig;
-import main.java.com.banfftech.personerp.submail.config.MailConfig;
-import main.java.com.banfftech.personerp.submail.config.MessageConfig;
+import java.io.File;
+
+import main.java.com.banfftech.personerp.peplatform.submail.lib.base.ISender;
+import main.java.com.banfftech.personerp.peplatform.submail.lib.base.SenderWapper;
+import main.java.com.banfftech.personerp.peplatform.submail.config.AppConfig;
+import main.java.com.banfftech.personerp.peplatform.submail.config.MailConfig;
+import main.java.com.banfftech.personerp.peplatform.submail.config.MessageConfig;
 
 /**
  * A SenderWapper class as decoration class for user to send request by mail.
  * User can set the basic information of request by included several methods.
- * Then,send the request data by a mode of mail.It is diffirent from {@link MAILSend}
- * ,user don't need to offer html source or mail content,or even mail title and
- * sender, change the mail content by variable dynamicly if prividing only id which
- * created in submail application.
- * @see MAILSend
+ * Then,send the request data by a mode of mail.
  * @see Mail
  * 
  * @version 1.0 at 2014/10/28
  * */
-public class MAILXSend extends SenderWapper {
-
+public class MAILSend extends SenderWapper{
+	
 	/**
-	 * If the mode is mail,it's an instance of {@link MailConfig}. If the mode
-	 * is message,it's an instance of {@link MessageConfig}
+	 * If the mode is mail,it's an instance of {@link MailConfig}.
+	 * If the mode is message,it's an instance of {@link MessageConfig}
 	 * */
 	protected AppConfig config = null;
 	public static final String TO = "to";
@@ -33,15 +31,19 @@ public class MAILXSend extends SenderWapper {
 	public static final String CC = "cc";
 	public static final String BCC = "bcc";
 	public static final String SUBJECT = "subject";
-	public static final String PROJECT = "project";
+	public static final String TEXT = "text";
+	public static final String HTML = "html";
 	public static final String VARS = "vars";
 	public static final String LINKS = "links";
+	public static final String ATTACHMENTS = "attachments";
 	public static final String HEADERS = "headers";
 
-	public MAILXSend(AppConfig config) {
+	public MAILSend(AppConfig config) {
+		
 		this.config = config;
+		
 	}
-
+	
 	public void addTo(String address, String name) {
 		requestData.addWithBracket(TO, name, address);
 	}
@@ -71,10 +73,14 @@ public class MAILXSend extends SenderWapper {
 		requestData.put(SUBJECT, subject);
 	}
 
-	public void setProject(String project) {
-		requestData.put(PROJECT, project);
+	public void setText(String text) {
+		requestData.put(TEXT, text);
 	}
-
+	
+	public void setHtml(String html) {
+		requestData.put(HTML, html);
+	}
+	
 	public void addVar(String key, String val) {
 		requestData.addWithJson(VARS, key, val);
 	}
@@ -83,15 +89,20 @@ public class MAILXSend extends SenderWapper {
 		requestData.addWithJson(LINKS, key, val);
 	}
 	
+	public void addAttachment(String file){
+		requestData.addWithIncrease(ATTACHMENTS, new File(file));
+	}
+	
 	public void addHeaders(String key, String val) {
 		requestData.addWithJson(HEADERS, key, val);
 	}
+	
 	@Override
 	public ISender getSender() {
 		return new Mail(this.config);
 	}
 
-	public void xsend(){
-		getSender().xsend(requestData);
+	public void send(){
+		getSender().send(requestData);
 	}
 }

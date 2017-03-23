@@ -1,4 +1,4 @@
-package main.java.com.banfftech.personerp.submail.utils;
+package main.java.com.banfftech.personerp.peplatform.submail.utils;
 
 public class StringUtil {
 

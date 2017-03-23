@@ -1,4 +1,4 @@
-package main.java.com.banfftech.personerp.submail.config;
+package main.java.com.banfftech.personerp.peplatform.submail.config;
 
 /**
  * A AppConfig class store the configuration for mail.

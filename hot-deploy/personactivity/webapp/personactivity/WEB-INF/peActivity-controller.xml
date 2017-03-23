@@ -80,7 +80,13 @@
     </request-map>
 
 
-
+    <!-- 专属邀请链接 -->
+    <request-map uri="sendInvitation">
+        <security https="false" auth="false" />
+        <event type="service" invoke="sendInvitation"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
 
 
 

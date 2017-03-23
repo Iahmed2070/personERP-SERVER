@@ -1,10 +1,9 @@
-package main.java.com.banfftech.personerp.submail.lib;
+package main.java.com.banfftech.personerp.peplatform.submail.lib;
 
-import main.java.com.banfftech.personerp.submail.lib.base.ISender;
-import main.java.com.banfftech.personerp.submail.lib.base.SenderWapper;
-import main.java.com.banfftech.personerp.submail.config.AppConfig;
-import main.java.com.banfftech.personerp.submail.config.MailConfig;
-import main.java.com.banfftech.personerp.submail.config.MessageConfig;
+import main.java.com.banfftech.personerp.peplatform.submail.lib.base.ISender;
+import main.java.com.banfftech.personerp.peplatform.submail.lib.base.SenderWapper;
+import main.java.com.banfftech.personerp.peplatform.submail.config.AppConfig;
+import main.java.com.banfftech.personerp.peplatform.submail.config.MailConfig;
 
 /**
  * A SenderWapper class as decoration class for user to send request by message.

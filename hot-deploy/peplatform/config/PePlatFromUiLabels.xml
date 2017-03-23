@@ -12,12 +12,47 @@
     <property key="PePlatFromCompanySubtitle">
         <value xml:lang="en">Part of the Apache OFBiz Family of Open Source Software</value>
         <value xml:lang="it">Un modulo della famiglia di software open source Apache OFBiz</value>
-        <value xml:lang="zh">�?源软件OFBiz的组成部�?</value>
-        <value xml:lang="zh-TW">開源軟體OFBiz的組成部�?</value>
+        <value xml:lang="zh">�?源软件OFBiz的组成部�?</value>
+        <value xml:lang="zh-TW">開源軟體OFBiz的組成部�?</value>
     </property>
     <property key="PePlatFromViewPermissionError">
         <value xml:lang="en">You are not allowed to view this page.</value>
-        <value xml:lang="zh">不允许你浏览这个页面�?</value>
-        <value xml:lang="zh-TW">不允許您檢視這�?�頁�?.</value>
+        <value xml:lang="zh">不允许你浏览这个页面�?</value>
+        <value xml:lang="zh-TW">不允許您檢視這�?�頁�?.</value>
+    </property>
+
+    <property key="userDoesNotExist">
+        <value xml:lang="en">The user does not exist</value>
+        <value xml:lang="zh">用户不存在</value>
+    </property>
+    <property key="userDisabled">
+        <value xml:lang="en">The user is disabled </value>
+        <value xml:lang="zh">用户被禁用</value>
+    </property>
+    <property key="success">
+        <value xml:lang="en">Success</value>
+        <value xml:lang="zh">成功</value>
+    </property>
+    <property key="PeLoginSuccess">
+        <value xml:lang="en">PeLoginSuccess</value>
+        <value xml:lang="zh">PE平台登录成功</value>
+    </property>
+
+    <property key="PeLoginExsit">
+        <value xml:lang="en">Pe LoginAccount is Exsit!</value>
+        <value xml:lang="zh">该账号已被注册!</value>
+    </property>
+
+    <property key="PeCaptchaCheckFailedError">
+        <value xml:lang="en">captcha check failed</value>
+        <value xml:lang="zh">验证码不正确</value>
+    </property>
+    <property key="PeInternalServiceError">
+        <value xml:lang="en">Internal service error, please contact the platform administrator</value>
+        <value xml:lang="zh">内部服务错误，请联系平台管理员</value>
+    </property>
+    <property key="PeCaptchaNotExistError">
+        <value xml:lang="en">captcha not exist</value>
+        <value xml:lang="zh">验证码不存在</value>
     </property>
 </resource>

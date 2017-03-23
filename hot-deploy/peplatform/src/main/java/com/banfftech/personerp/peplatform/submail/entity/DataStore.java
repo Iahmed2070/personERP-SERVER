@@ -1,9 +1,9 @@
-package main.java.com.banfftech.personerp.submail.entity;
+package main.java.com.banfftech.personerp.peplatform.submail.entity;
 
 import java.util.TreeMap;
 
 import net.sf.json.JSONObject;
-import main.java.com.banfftech.personerp.submail.utils.StringUtil;
+import main.java.com.banfftech.personerp.peplatform.submail.utils.StringUtil;
 
 /**
  * A class extends TreeMap in order to store the request data with format of key-value.
