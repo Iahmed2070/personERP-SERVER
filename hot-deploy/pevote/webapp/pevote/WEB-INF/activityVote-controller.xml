@@ -37,7 +37,7 @@
     <!-- Query Vote Questions And Answer -->
     <request-map uri="queryActivityVoteQuestions">
         <security https="false" auth="false" />
-        <event type="service" invoke="findActivityPollQuestions"/>
+        <event type="service" invoke="queryActivityVoteQuestions"/>
         <response name="success" type="request" value="json"/>
         <response name="error" type="request" value="json"/>
     </request-map>
