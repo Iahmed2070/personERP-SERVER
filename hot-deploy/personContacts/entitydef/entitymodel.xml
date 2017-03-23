@@ -200,6 +200,9 @@
 		<member-entity entity-name="WorkEffortPartyAssignment" entity-alias="WP"/>
 		<!--<member-entity entity-name="PartyContent" entity-alias="PC"/>-->
 		<member-entity entity-name="Person" entity-alias="Person"/>
+		<member-entity entity-name="UserLogin" entity-alias="UserLogin"/>
+
+		<alias entity-alias="UserLogin" field="userLoginId" name="userLoginId"/>
 
 		<alias entity-alias="WP" field="partyId" name="partyId"/>
 		<alias entity-alias="WP" field="roleTypeId" name="roleTypeId"/>
@@ -213,6 +216,9 @@
 		<!--<alias entity-alias="PC" field="partyContentTypeId" name="partyContentTypeId"/>-->
 
 		<view-link entity-alias="WP" rel-entity-alias="Person" >
+			<key-map  field-name="partyId"/>
+		</view-link>
+		<view-link entity-alias="Person" rel-entity-alias="UserLogin" >
 			<key-map  field-name="partyId"/>
 		</view-link>
 			<entity-condition>
@@ -246,8 +252,8 @@
 		<alias name="booleanResponse" field="booleanResponse" entity-alias="SRAA"/>
 
 
-		<alias name="firstName" field="firstName" entity-alias="P"/>
-		<alias name="lastName" field="lastName" entity-alias="P"/>
+		<alias name="nickname" field="nickname" entity-alias="P"/>
+
 
 		<view-link entity-alias="SRAA" rel-entity-alias="SQ">
 			<key-map field-name="surveyQuestionId" rel-field-name="surveyQuestionId" />

@@ -205,7 +205,8 @@ public class ActivityVoteQueryServices {
         for(GenericValue gv :answerList){
             Map<String, Object> questionAndUser = new HashMap<String, Object>();
             questionAndUser.put("question", gv.get("question"));
-            questionAndUser.put("userName",gv.get("lastName")+""+gv.get("firstName")+"");
+            questionAndUser.put("nickName",gv.get("nickname"));
+            questionAndUser.put("partyId",gv.get("partyId"));
             return questionAndUser;
         }
         return null;

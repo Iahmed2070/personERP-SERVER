@@ -17,6 +17,7 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.service.GenericServiceException;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
+import sun.net.www.content.text.Generic;
 
 import java.io.UnsupportedEncodingException;
 import java.util.*;
@@ -124,7 +125,7 @@ public class ActivityQueryServices {
 
 
 
-        List<GenericValue> partyEventsList = null;
+        List<Map<String,Object>> partyEventsList = null;
         //Select Fields
         Set<String> seletField = new HashSet<String>();
         seletField.add("partyId");
@@ -134,7 +135,7 @@ public class ActivityQueryServices {
         seletField.add("locationDesc");
         seletField.add("estimatedCompletionDate");
         seletField.add("workEffortId");
-        partyEventsList = delegator.findList("WorkEffortAndPartyAssign", activityConditions,seletField,UtilMisc.toList("-createdDate"), null, false);
+        partyEventsList = doCountJoins(delegator, delegator.findList("WorkEffortAndPartyAssign", activityConditions, seletField, UtilMisc.toList("-createdDate"), null, false));
 
 
 
@@ -147,7 +148,36 @@ public class ActivityQueryServices {
     }
 
 
+    /**
+     * ForEach Find Activity Joins Count
+     *
+     * @return
+     */
+    private static List<Map<String,Object>> doCountJoins(Delegator delegator,List<GenericValue> partyEventsList)throws GenericEntityException{
 
+        List<Map<String,Object>> resultList = new ArrayList<Map<String, Object>>();
+
+        for(GenericValue gv : partyEventsList){
+
+                Map<String,Object> singleActivity = new HashMap<String, Object>();
+
+                String workEffortId = (String) gv.get("workEffortId");
+                //参与人数
+                int joinsCount =  EntityQuery.use(delegator).from("WorkEffortPartyAssignmentAndJoinParty").where("workEffortId",workEffortId).queryList().size();
+
+
+
+                singleActivity = gv.getAllFields();
+
+                singleActivity.put("joinsCount",joinsCount);
+
+                resultList.add(singleActivity);
+        }
+
+
+
+        return resultList;
+    }
 
 
 
@@ -196,10 +226,20 @@ public class ActivityQueryServices {
         fieldSet.add("specialTerms");
         eventsDetail = delegator.findList("WorkEffort", findConditions, fieldSet,
                 null, null, false);
+
+
+        Set<String> personFieldSet = new HashSet<String>();
+        personFieldSet.add("workEffortId");
+        personFieldSet.add("partyId");
+        personFieldSet.add("nickname");
+        personFieldSet.add("lastName");
+        personFieldSet.add("firstName");
+        personFieldSet.add("userLoginId");
         //Activity Person List
         EntityCondition findConditionsToPartyContent  = EntityCondition
                 .makeCondition(UtilMisc.toMap("workEffortId",workEffortId));
-        List<GenericValue> partyJoinEventsList = delegator.findList("WorkEffortPartyAssignmentAndJoinParty",findConditionsToPartyContent,UtilMisc.toSet("workEffortId","partyId","nickname","lastName","firstName"),
+        List<GenericValue> partyJoinEventsList = delegator.findList("WorkEffortPartyAssignmentAndJoinParty",
+                findConditionsToPartyContent,personFieldSet,
                 null, null, false);
 
 
@@ -212,12 +252,10 @@ public class ActivityQueryServices {
                 Map<String,Object> partyContentMap = new HashMap<String, Object>();
                 partyContentMap.put("partyId",
                         gv.get("partyId"));
+                partyContentMap.put("userLoginId",
+                        gv.get("userLoginId"));
                 partyContentMap.put("nickName",
                         gv.get("nickname"));
-                partyContentMap.put("lastName",
-                        gv.get("lastName"));
-                partyContentMap.put("firstName",
-                        gv.get("firstName"));
 
                 //TODO OSS Logic : partyContentMap.put("headPortrait","http://localhost:3400/personContacts/control/stream?contentId=" + gv.get("contentId"));
 
