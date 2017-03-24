@@ -84,9 +84,9 @@ public class PersonEventLoginWorker {
         Map<String, Object> inputMap = new HashMap<String, Object>();
         GenericValue userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
         if(null!= userLogin){
-            inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels", "PeLoginExsit", locale));
+            inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels", "PeLoginExsit", locale));
         }else{
-            inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+            inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels", "success", locale));
         }
         result.put("resultMap",inputMap);
         return result;
@@ -123,11 +123,11 @@ public class PersonEventLoginWorker {
         } catch (GenericEntityException e) {
             Debug.logError(e.getMessage(), module);
             //org.apache.ofbiz.base.util.UtilProperties.getMessage("PeInternalServiceError", "success", locale)
-            return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeInternalServiceError", locale));
+            return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels","PeInternalServiceError", locale));
         }
 
         if(UtilValidate.isEmpty(smsList)){
-            return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeCaptchaNotExistError", locale));
+            return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels","PeCaptchaNotExistError", locale));
         }else{
             GenericValue sms = smsList.get(0);
 
@@ -161,22 +161,22 @@ public class PersonEventLoginWorker {
                 } catch (GenericEntityException e) {
                     Debug.logError(e.getMessage(), module);
                     //org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeInternalServiceError", locale)
-                    return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeInternalServiceError", locale));
+                    return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels","PeInternalServiceError", locale));
                 }
 
                 inputMap.put("tarjeta", token);
 
-                inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels", "PeLoginSuccess", locale));
+                inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels", "PeLoginSuccess", locale));
 
                 if(userLogin.get("partyId") == null){//没有找到用户
-                    return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeUserNotFundError", locale));
+                    return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels","PeUserNotFundError", locale));
                 }
                 inputMap.put("partyId",userLogin.get("partyId"));
 
                 result.put("resultMap",inputMap);
             }else{
                 Debug.log("---------------------------------------------------------CaptERROR,xi"+sms.get("captcha")+""+"|"+captcha);
-                return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeCaptchaCheckFailedError", locale));
+                return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels","PeCaptchaCheckFailedError", locale));
             }
         }
 
