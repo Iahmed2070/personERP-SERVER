@@ -3,14 +3,6 @@
         xmlns="http://ofbiz.apache.org/Site-Conf" xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
     <!-- Include Common Controller -->
     <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
-    <!-- Vote For Activity -->
-    <include location="component://pevote/webapp/pevote/WEB-INF/activityVote-controller.xml"/>
-
-
-
-
-
-
 
 
 
@@ -18,8 +10,47 @@
     <description>PePlatFrom Component Site Configuration File</description>
 
     <preprocessor>
-        <event name="checkTarjetaLogin" type="java" path="com.banfftech.peplatform.common.PeLoginWorker" invoke="checkTarjetaLogin"/>
+        <event name="checkTarjetaLogin" type="java" path="main.java.com.banfftech.personerp.peplatform.PersonEventLoginWorker" invoke="checkTarjetaLogin"/>
     </preprocessor>
+
+    <!-- AppLogin -->
+    <request-map uri="userAppLogin">
+        <security https="false" auth="false" />
+        <event type="service" invoke="userAppLogin" />
+        <response name="success" type="request" value="json" />
+        <response name="error" type="request" value="json" />
+    </request-map>
+
+    <!-- Platform Register -->
+    <request-map uri="userAppRegister">
+        <security https="false" auth="false" />
+        <event type="service" invoke="userAppRegister"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+
+    <!-- Ajax Check UserLogin is Exsits? -->
+    <request-map uri="isUserLoginExsits">
+        <security https="false" auth="false" />
+        <event type="service" invoke="isUserLoginExsits"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+
+    <!-- Get Captcha To Login -->
+    <request-map uri="getLoginCaptcha">
+        <security https="false" auth="false" />
+        <event type="service" invoke="getLoginCaptcha"/>
+        <response name="success" type="request" value="json"/>
+        <response name="error" type="request" value="json"/>
+    </request-map>
+
+
+
+
+
     <!-- Request Mappings -->
     <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
     

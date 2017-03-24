@@ -76,4 +76,12 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
+    <!-- translation -->
+    <service name="translationActivity" engine="java"
+             location="main.java.com.banfftech.personerp.activity.ActivityServices" invoke="translationActivity" auth="false">
+        <description>translation</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
+
 </services>

@@ -6,7 +6,7 @@
          elements found in the common-controller.xml file. -->
     <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
     <!-- Pe Platform Contorl -->
-    <include location="component://peplatform/webapp/WEB-INF/peplatform/peplatform-controller.xml"/>
+    <include location="component://peplatform/webapp/peplatform/WEB-INF/peplatform-controller.xml"/>
 
     <description>PePlatFrom Component Site Configuration File</description>
 

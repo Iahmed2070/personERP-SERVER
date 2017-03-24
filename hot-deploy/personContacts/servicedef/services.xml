@@ -127,13 +127,7 @@
     </service>
 
 
-    <!-- 报名 -->
-    <service name="translationActivity" engine="java"
-             location="com.banfftech.personerp.PersonErpService" invoke="translationActivity" auth="false">
-        <description>获取我的活动列表</description>
-        <attribute name="workEffortId" type="String" mode="IN" optional="true"/>
-        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
-    </service>
+
 
 
     <!-- 创建新的标签并且关联联系人 -->
@@ -148,21 +142,13 @@
 
     <!-- app 登录 -->
     <service name="userAppLogin" engine="java"
-             location="main.java.com.banfftech.personerp.PersonEventLoginWorker" invoke="userAppLogin" auth="false">
+             location="main.java.com.banfftech.personerp.peplatform.PersonEventLoginWorker" invoke="userAppLogin" auth="false">
         <description>用户手机登录</description>
         <attribute name="userLoginId" type="String" mode="IN" optional="false"/>
         <attribute name="captcha" type="String" mode="IN" optional="false"/>
         <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
         <!--<attribute name="organizationPartyId" type="String" mode="OUT" optional="true"/>-->
         <attribute name="inputMap" type="java.util.HashMap" mode="OUT" optional="true"/>
-        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
-    </service>
-    <!-- 检查用户是否存在 -->
-    <service name="isUserLoginExsits" engine="java"
-             location="main.java.com.banfftech.personerp.PersonEventLoginWorker" invoke="isUserLoginExsits" auth="false">
-        <description>用户手机登录</description>
-        <attribute name="userLoginId" type="String" mode="IN" optional="false"/>
-
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
@@ -175,13 +161,7 @@
         <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
     </service>
 
-    <!-- 获得登录的验证码 -->
-    <service name="getLoginCaptcha" engine="java"
-             location="com.banfftech.personerp.PersonErpService" invoke="getLoginCaptcha" auth="false">
-        <description>获取登录验证码</description>
-        <attribute name="teleNumber" type="String" mode="IN" optional="false"/>
-        <attribute name="smsType" type="String" mode="IN" optional="false"/>
-    </service>
+
 
 
     <!-- App用户注册 -->

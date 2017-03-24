@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  *******************************************************************************/
-package main.java.com.banfftech.personerp;
+package main.java.com.banfftech.personerp.peplatform;
 
 
 import com.auth0.jwt.JWTExpiredException;

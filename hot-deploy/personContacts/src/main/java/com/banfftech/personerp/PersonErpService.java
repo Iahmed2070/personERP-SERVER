@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
-
-
 import org.apache.ofbiz.base.util.UtilMisc;
 import org.apache.ofbiz.base.util.UtilProperties;
 import org.apache.ofbiz.base.util.UtilValidate;
@@ -20,7 +18,6 @@ import org.apache.ofbiz.service.DispatchContext;
 import org.apache.ofbiz.entity.util.EntityUtilProperties;
 import org.apache.ofbiz.service.LocalDispatcher;
 import org.apache.ofbiz.service.ServiceUtil;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
@@ -354,81 +351,81 @@ public class PersonErpService {
      * @param context
      * @return
      */
-    public static Map<String, Object> getLoginCaptcha(DispatchContext dctx, Map<String, Object> context) {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dispatcher.getDelegator();
-        Locale locale = (Locale) context.get("locale");
-        String teleNumber = (String) context.get("teleNumber");
-        String smsType = (String) context.get("smsType");//LOGIN 或 REGISTER
-
-        java.sql.Timestamp nowTimestamp  = org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp();
-
-
-
-        EntityCondition captchaCondition = EntityCondition.makeCondition(
-                EntityCondition.makeCondition("teleNumber", EntityOperator.EQUALS, teleNumber),
-                EntityUtil.getFilterByDateExpr(),
-                EntityCondition.makeCondition("isValid", EntityOperator.EQUALS,"N"));
-
-        GenericValue sms = null;
-        try {
-            sms = EntityUtil.getFirst(
-                    delegator.findList("SmsValidateCode", captchaCondition, null,UtilMisc.toList("-" + ModelEntity.CREATE_STAMP_FIELD), null, false)
-            );
-        } catch (GenericEntityException e) {
-            //TODO ADD EXCEPTION
-        }
-
-
-        int validTime = Integer.valueOf(EntityUtilProperties.getPropertyValue("pe","sms.validTime","900",delegator));
-        int intervalTime = Integer.valueOf(EntityUtilProperties.getPropertyValue("pe","sms.intervalTime","60",delegator));
-
-
-        boolean sendSMS = false;
-        if(UtilValidate.isEmpty(sms)){
-            sendSMS = true;
-        }else{
-            org.apache.ofbiz.base.util.Debug.logInfo("The user tel:[" + teleNumber + "]  verfiy code[" + sms.getString("captcha") + "], check the interval time , if we'll send new code", module);
-            // 如果已有未验证的记录存在，则检查是否过了再次重发的时间间隔，没过就忽略本次请求
-            if(org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp().after(org.apache.ofbiz.base.util.UtilDateTime.adjustTimestamp((java.sql.Timestamp) sms.get("fromDate"), Calendar.SECOND, intervalTime))){
-                sms.set("thruDate", nowTimestamp);
-                try {
-                    sms.store();
-                } catch (GenericEntityException e) {
-
-//                    return ServiceUtil.returnError("CloudCardInternalServiceError"));
-                }
-                org.apache.ofbiz.base.util.Debug.logInfo("The user tel:[" + teleNumber + "]  will get new verfiy code!", module);
-                sendSMS = true;
-            }
-        }
-
-        if(sendSMS){
-            //生成验证码
-            String captcha = org.apache.ofbiz.base.util.UtilFormatOut.padString(String.valueOf(Math.round((Math.random() * 10e6))), 2, false, '0');
-             Map<String,Object> smsValidateCodeMap = UtilMisc.toMap();
-            smsValidateCodeMap.put("teleNumber", teleNumber);
-            smsValidateCodeMap.put("captcha", captcha);
-            smsValidateCodeMap.put("smsType", smsType);
-            smsValidateCodeMap.put("isValid", "N");
-            smsValidateCodeMap.put("fromDate", nowTimestamp);
-            smsValidateCodeMap.put("thruDate", org.apache.ofbiz.base.util.UtilDateTime.adjustTimestamp(nowTimestamp, Calendar.SECOND, validTime));
-            try {
-                GenericValue smstGV = delegator.makeValue("SmsValidateCode", smsValidateCodeMap);
-                smstGV.create();
-            } catch (GenericEntityException e) {
-
-//                return ServiceUtil.returnError("CloudCardSendFailedError"));
-            }
-
-            //发送短信
-            context.put("phone", teleNumber);
-            context.put("code", captcha);
-            context.put("product", "丕屹");
-            PersonErpService.sendMessage(dctx, context);
-        }
-        return ServiceUtil.returnSuccess();
-    }
+//    public static Map<String, Object> getLoginCaptcha(DispatchContext dctx, Map<String, Object> context) {
+//        LocalDispatcher dispatcher = dctx.getDispatcher();
+//        Delegator delegator = dispatcher.getDelegator();
+//        Locale locale = (Locale) context.get("locale");
+//        String teleNumber = (String) context.get("teleNumber");
+//        String smsType = (String) context.get("smsType");//LOGIN 或 REGISTER
+//
+//        java.sql.Timestamp nowTimestamp  = org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp();
+//
+//
+//
+//        EntityCondition captchaCondition = EntityCondition.makeCondition(
+//                EntityCondition.makeCondition("teleNumber", EntityOperator.EQUALS, teleNumber),
+//                EntityUtil.getFilterByDateExpr(),
+//                EntityCondition.makeCondition("isValid", EntityOperator.EQUALS,"N"));
+//
+//        GenericValue sms = null;
+//        try {
+//            sms = EntityUtil.getFirst(
+//                    delegator.findList("SmsValidateCode", captchaCondition, null,UtilMisc.toList("-" + ModelEntity.CREATE_STAMP_FIELD), null, false)
+//            );
+//        } catch (GenericEntityException e) {
+//            //TODO ADD EXCEPTION
+//        }
+//
+//
+//        int validTime = Integer.valueOf(EntityUtilProperties.getPropertyValue("pe","sms.validTime","900",delegator));
+//        int intervalTime = Integer.valueOf(EntityUtilProperties.getPropertyValue("pe","sms.intervalTime","60",delegator));
+//
+//
+//        boolean sendSMS = false;
+//        if(UtilValidate.isEmpty(sms)){
+//            sendSMS = true;
+//        }else{
+//            org.apache.ofbiz.base.util.Debug.logInfo("The user tel:[" + teleNumber + "]  verfiy code[" + sms.getString("captcha") + "], check the interval time , if we'll send new code", module);
+//            // 如果已有未验证的记录存在，则检查是否过了再次重发的时间间隔，没过就忽略本次请求
+//            if(org.apache.ofbiz.base.util.UtilDateTime.nowTimestamp().after(org.apache.ofbiz.base.util.UtilDateTime.adjustTimestamp((java.sql.Timestamp) sms.get("fromDate"), Calendar.SECOND, intervalTime))){
+//                sms.set("thruDate", nowTimestamp);
+//                try {
+//                    sms.store();
+//                } catch (GenericEntityException e) {
+//
+////                    return ServiceUtil.returnError("CloudCardInternalServiceError"));
+//                }
+//                org.apache.ofbiz.base.util.Debug.logInfo("The user tel:[" + teleNumber + "]  will get new verfiy code!", module);
+//                sendSMS = true;
+//            }
+//        }
+//
+//        if(sendSMS){
+//            //生成验证码
+//            String captcha = org.apache.ofbiz.base.util.UtilFormatOut.padString(String.valueOf(Math.round((Math.random() * 10e6))), 2, false, '0');
+//             Map<String,Object> smsValidateCodeMap = UtilMisc.toMap();
+//            smsValidateCodeMap.put("teleNumber", teleNumber);
+//            smsValidateCodeMap.put("captcha", captcha);
+//            smsValidateCodeMap.put("smsType", smsType);
+//            smsValidateCodeMap.put("isValid", "N");
+//            smsValidateCodeMap.put("fromDate", nowTimestamp);
+//            smsValidateCodeMap.put("thruDate", org.apache.ofbiz.base.util.UtilDateTime.adjustTimestamp(nowTimestamp, Calendar.SECOND, validTime));
+//            try {
+//                GenericValue smstGV = delegator.makeValue("SmsValidateCode", smsValidateCodeMap);
+//                smstGV.create();
+//            } catch (GenericEntityException e) {
+//
+////                return ServiceUtil.returnError("CloudCardSendFailedError"));
+//            }
+//
+//            //发送短信
+//            context.put("phone", teleNumber);
+//            context.put("code", captcha);
+//            context.put("product", "丕屹");
+//            PersonErpService.sendMessage(dctx, context);
+//        }
+//        return ServiceUtil.returnSuccess();
+//    }
 
 
 
@@ -506,40 +503,40 @@ public class PersonErpService {
      * @param context
      * @return
      */
-    public static Map<String, Object> sendMessage(DispatchContext dctx, Map<String, Object> context) {
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        Delegator delegator = dispatcher.getDelegator();
-        Locale locale = (Locale) context.get("locale");
-        String phone = (String) context.get("phone");
-        String code = (String) context.get("code");
-        String product = (String) context.get("product");
-        //初始化短信发送配置文件
-        getSmsProperty(delegator);
-        //发送短信
-        //暂时先写死、此处应当放入配置文件
-        TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23654770", "9c58a5fa366e2aabd8a62363c4c228c6");
-        AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
-        req.setExtend("");
-        req.setSmsType("normal");
-        req.setSmsFreeSignName(smsFreeSignName);
-        String json="{\"number\":\""+code+"\"}";
-        req.setSmsParamString(json);
-        req.setRecNum(phone);
-        req.setSmsTemplateCode(smsTemplateCode);
-        AlibabaAliqinFcSmsNumSendResponse rsp = null;
-        try {
-            rsp = client.execute(req);
-        } catch (ApiException e) {
-
-        }
-        if(rsp!=null && !rsp.isSuccess()){
-            org.apache.ofbiz.base.util.Debug.logWarning("something wrong when send the short message, response body:" + rsp.getBody(), module);
-        }
-        Map<String, Object> result = ServiceUtil.returnSuccess();
-        Map<String, Object> inputMap = new HashMap<String, Object>();    inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
-        result.put("resultMap", inputMap);
-        return result;
-    }
+//    public static Map<String, Object> sendMessage(DispatchContext dctx, Map<String, Object> context) {
+//        LocalDispatcher dispatcher = dctx.getDispatcher();
+//        Delegator delegator = dispatcher.getDelegator();
+//        Locale locale = (Locale) context.get("locale");
+//        String phone = (String) context.get("phone");
+//        String code = (String) context.get("code");
+//        String product = (String) context.get("product");
+//        //初始化短信发送配置文件
+//        getSmsProperty(delegator);
+//        //发送短信
+//        //暂时先写死、此处应当放入配置文件
+//        TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23654770", "9c58a5fa366e2aabd8a62363c4c228c6");
+//        AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+//        req.setExtend("");
+//        req.setSmsType("normal");
+//        req.setSmsFreeSignName(smsFreeSignName);
+//        String json="{\"number\":\""+code+"\"}";
+//        req.setSmsParamString(json);
+//        req.setRecNum(phone);
+//        req.setSmsTemplateCode(smsTemplateCode);
+//        AlibabaAliqinFcSmsNumSendResponse rsp = null;
+//        try {
+//            rsp = client.execute(req);
+//        } catch (ApiException e) {
+//
+//        }
+//        if(rsp!=null && !rsp.isSuccess()){
+//            org.apache.ofbiz.base.util.Debug.logWarning("something wrong when send the short message, response body:" + rsp.getBody(), module);
+//        }
+//        Map<String, Object> result = ServiceUtil.returnSuccess();
+//        Map<String, Object> inputMap = new HashMap<String, Object>();    inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+//        result.put("resultMap", inputMap);
+//        return result;
+//    }
 
     /**
      *创建支付临时数据

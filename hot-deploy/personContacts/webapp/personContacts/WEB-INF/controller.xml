@@ -11,7 +11,7 @@
     <!-- Events to run on every request before security (chains exempt) -->
 
     <preprocessor>
-        <event name="checkTarjetaLogin" type="java" path="main.java.com.banfftech.personerp.PersonEventLoginWorker" invoke="checkTarjetaLogin"/>
+        <event name="checkTarjetaLogin" type="java" path="main.java.com.banfftech.personerp.peplatform.PersonEventLoginWorker" invoke="checkTarjetaLogin"/>
     </preprocessor>
 
     <!-- Events to run on every request after all other processing (chains exempt) -->
@@ -27,13 +27,7 @@
     	<response name="success" type="view" value="main"/>
    	</request-map>
 
-    <!-- 用户app登录接口 -->
-    <request-map uri="userAppLogin">
-        <security https="false" auth="false" />
-        <event type="service" invoke="userAppLogin" />
-        <response name="success" type="request" value="json" />
-        <response name="error" type="request" value="json" />
-    </request-map>
+
 
    	<!-- 查询用户信息 -->
 	<request-map uri="findPerson">
@@ -44,31 +38,10 @@
     </request-map>
 
 
-    <!-- 平台注册 -->
-    <request-map uri="userAppRegister">
-        <security https="false" auth="false" />
-        <event type="service" invoke="userAppRegister"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
 
 
-    <!-- Ajax 判断是否已注册用户 -->
-    <request-map uri="isUserLoginExsits">
-        <security https="false" auth="false" />
-        <event type="service" invoke="isUserLoginExsits"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
 
 
-    <!-- 验证码发送申请 To Login Logic -->
-    <request-map uri="getLoginCaptcha">
-        <security https="false" auth="false" />
-        <event type="service" invoke="getLoginCaptcha"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
 
     <!-- 查询联系人信息 -->
 	<request-map uri="findContactInfo">
@@ -186,13 +159,7 @@
     </request-map>
 
 
-    <!-- 报名-->
-    <request-map uri="translationActivity">
-        <security https="false" auth="false" />
-        <event type="service" invoke="translationActivity"/>
-        <response name="success" type="request" value="json"/>
-        <response name="error" type="request" value="json"/>
-    </request-map>
+
 
     <!-- 创建子活动 -->
     <request-map uri="createChildActivity">

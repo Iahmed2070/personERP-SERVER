@@ -8,7 +8,7 @@
 
     <description>PeVote Component Site Configuration File</description>
     <preprocessor>
-        <event name="checkTarjetaLogin" type="java" path="main.java.com.banfftech.personerp.PersonEventLoginWorker" invoke="checkTarjetaLogin"/>
+        <event name="checkTarjetaLogin" type="java" path="main.java.com.banfftech.personerp.peplatform.PersonEventLoginWorker" invoke="checkTarjetaLogin"/>
     </preprocessor>
 
 

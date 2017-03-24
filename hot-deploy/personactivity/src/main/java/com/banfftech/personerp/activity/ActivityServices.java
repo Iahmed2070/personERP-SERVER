@@ -32,6 +32,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -388,6 +389,15 @@ public class ActivityServices {
     }
 
 
+
+
+
+
+
+
+
+
+
     /**
      * Party Join
      *
@@ -443,7 +453,7 @@ public class ActivityServices {
             Map<String, Object> createUserLogin = null;
             createUserLogin = dispatcher.runSync("createUserLogin", createUserLoginInMap);
 
-            //2.GRANT ABOUT PE SOME PERMISSION
+            //2.GRANT ABOUT Activity  PERMISSION
             Map<String, Object> createPartyRoleMemberMap = UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER");
             dispatcher.runSync("createPartyRole", createPartyRoleMemberMap);
             createPartyRoleMemberMap =  UtilMisc.toMap("userLogin", userLogin, "partyId", partyId, "roleTypeId", "ACTIVITY_ADMIN");
@@ -466,4 +476,84 @@ public class ActivityServices {
         resultMap.put("workEffortId",workEffortId);
         return resultMap;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * translation Activity (IN APP)
+     *
+     * @param dctx
+     * @param context
+     * @return
+     * @throws IOException
+     * @throws GenericEntityException
+     * @throws GenericServiceException
+     * @throws InterruptedException
+     */
+    public static Map<String, Object> translationActivity(DispatchContext dctx, Map<String, ? extends Object> context)
+            throws IOException, GenericEntityException, GenericServiceException, InterruptedException {
+
+
+        //Service Head
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        GenericValue admin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", "admin"), false);
+        Map<String, Object> inputMap = new HashMap<String, Object>();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+
+
+
+        //Scope Param
+        GenericValue userLogin = (GenericValue)context.get("userLogin");
+        String partyId = (String) userLogin.get("partyId");
+        String workEffortId = (String) context.get("workEffortId");
+
+        //Check IS Member
+        Map<String, Object> createPartyRoleMemberMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER");
+        GenericValue isExsitsMember = delegator.findOne("PartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER"), false);
+        if (null == isExsitsMember) {
+            dispatcher.runSync("createPartyRole", createPartyRoleMemberMap);
+        }
+
+
+        //是否作为'受邀人'存在与活动邀请列表
+        EntityCondition findConditions = null;
+
+        findConditions = EntityCondition
+                .makeCondition(UtilMisc.toMap("partyId", partyId,"roleTypeId","ACTIVITY_INVITATION","workEffortTypeId","Event"));
+        List<GenericValue> partyExsitEvents =   delegator.findList("WorkEffortAndPartyAssign", findConditions, null, null, null, false);
+        if(null!=partyExsitEvents){
+            //do unassignPartyFromWorkEffort
+            for(GenericValue gv : partyExsitEvents){
+                if(workEffortId.equals((String) gv.get("workEffortId"))){
+                    Map<String, Object> updateMemberAssignPartyMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACTIVITY_INVITATION", "fromDate", gv.get("fromDate"), "workEffortId", workEffortId);
+                    dispatcher.runSync("unassignPartyFromWorkEffort", updateMemberAssignPartyMap);
+                }
+            }
+        }
+
+        Map<String, Object> createMemberAssignPartyMap = UtilMisc.toMap("userLogin", admin, "partyId", partyId, "roleTypeId", "ACTIVITY_MEMBER", "statusId", "PRTYASGN_ASSIGNED", "workEffortId", workEffortId);
+        dispatcher.runSync("assignPartyToWorkEffort", createMemberAssignPartyMap);
+
+
+
+
+        //Service Foot
+        inputMap.put("workEffortId",workEffortId);
+        result.put("resultMap", inputMap);
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        return result;
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.banfftech.peplatform.common;
+package main.java.com.banfftech.personerp.peplatform.common;
 
 import org.apache.ofbiz.base.util.Debug;
 import org.apache.ofbiz.base.util.StringUtil;
