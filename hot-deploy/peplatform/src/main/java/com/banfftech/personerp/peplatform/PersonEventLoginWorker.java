@@ -160,7 +160,6 @@ public class PersonEventLoginWorker {
                     sms.store();
                 } catch (GenericEntityException e) {
                     Debug.logError(e.getMessage(), module);
-                    //org.apache.ofbiz.base.util.UtilProperties.getMessage("PersonContactsUiLabels","PeInternalServiceError", locale)
                     return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels","PeInternalServiceError", locale));
                 }
 
