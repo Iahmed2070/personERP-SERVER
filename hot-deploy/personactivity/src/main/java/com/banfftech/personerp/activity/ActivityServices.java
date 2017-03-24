@@ -85,7 +85,7 @@ public class ActivityServices {
 
 
         Map<String, Object> result = ServiceUtil.returnSuccess();
-        Map<String, Object> inputMap = new HashMap<String, Object>();    inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        Map<String, Object> inputMap = new HashMap<String, Object>();    inputMap.put("resultMsg", UtilProperties.getMessage("PersonActivityUiLabels", "success", locale));
         result.put("resultMap", inputMap);
         return result;
     }
@@ -552,7 +552,7 @@ public class ActivityServices {
         //Service Foot
         inputMap.put("workEffortId",workEffortId);
         result.put("resultMap", inputMap);
-        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonActivityUiLabels", "success", locale));
         return result;
     }
 

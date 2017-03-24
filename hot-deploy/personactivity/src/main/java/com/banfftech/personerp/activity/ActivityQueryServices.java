@@ -73,7 +73,7 @@ public class ActivityQueryServices {
 
         //Service Foot
         inputMap.put("payList",payList);
-        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonActivityUiLabels", "success", locale));
         resultMap.put("resultMap", inputMap);
         return resultMap;
     }
