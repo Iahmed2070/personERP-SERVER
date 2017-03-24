@@ -332,7 +332,7 @@ public class ActivityQueryServices {
         projectList = delegator.findList("ActivityAndProject", findConditions, UtilMisc.toSet("workEffortIdTo", "workEffortName", "actualStartDate", "locationDesc"),
                 null, null, false);
         inputMap.put("projectList",projectList);
-        inputMap.put("resultMsg", UtilProperties.getMessage("PersonContactsUiLabels", "success", locale));
+        inputMap.put("resultMsg", UtilProperties.getMessage("PersonActivityUiLabels", "success", locale));
         resultMap.put("resultMap", inputMap);
         return resultMap;
     }
