@@ -9,9 +9,19 @@
         <description>
             Dummy service to prevent empty files and syntax error - Remove when the 1st real service will be added here 
         </description>
-    </service> 
+    </service>
 
 
 
+    <service name="userAppLogin" engine="java"
+             location="main.java.com.banfftech.personerp.peplatform.PersonEventLoginWorker" invoke="userAppLogin" auth="false">
+        <description>用户手机登录</description>
+        <attribute name="userLoginId" type="String" mode="IN" optional="false"/>
+        <attribute name="captcha" type="String" mode="IN" optional="false"/>
+        <attribute name="tarjeta" type="String" mode="OUT" optional="true"/>
+        <!--<attribute name="organizationPartyId" type="String" mode="OUT" optional="true"/>-->
+        <attribute name="inputMap" type="java.util.HashMap" mode="OUT" optional="true"/>
+        <attribute name="resultMap" type="java.util.Map" mode="OUT" optional="true"/>
+    </service>
 
 </services>

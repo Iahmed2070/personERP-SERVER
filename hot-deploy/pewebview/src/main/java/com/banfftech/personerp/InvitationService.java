@@ -39,7 +39,6 @@ import org.apache.ofbiz.entity.model.ModelEntity;
 import java.io.IOException;
 import java.util.*;
 
-import main.java.com.banfftech.personerp.util.EncrypDES;
 import javax.servlet.ServletException;
 
 /**

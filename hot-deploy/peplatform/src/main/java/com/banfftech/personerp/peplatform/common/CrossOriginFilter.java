@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class CrossOriginFilter implements Filter {
 
-	 public static final String module = com.banfftech.personerp.common.CrossOriginFilter.class.getName();
+	 public static final String module = CrossOriginFilter.class.getName();
 	 
 	 public List<String> allowList;
 	 

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-engine-xml>
+    <!--参与者与组织者的角色类型定义-->
+    <RoleType createdStamp="2017-02-14 14:49:24.0" createdTxStamp="2017-02-14 14:49:24.0" description="活动参与者" lastUpdatedStamp="2017-02-14 14:49:24.0" lastUpdatedTxStamp="2017-02-14 14:49:24.0" roleTypeId="ACTIVITY_MEMBER"/>
+    <RoleType createdStamp="2017-02-14 14:49:59.0" createdTxStamp="2017-02-14 14:49:59.0" description="活动组织者" lastUpdatedStamp="2017-02-14 14:49:59.0" lastUpdatedTxStamp="2017-02-14 14:49:59.0" roleTypeId="ACTIVITY_ADMIN"/>
+    <RoleType createdStamp="2017-02-14 14:49:59.0" createdTxStamp="2017-02-14 14:49:59.0" description="活动受邀者" lastUpdatedStamp="2017-02-14 14:49:59.0" lastUpdatedTxStamp="2017-02-14 14:49:59.0" roleTypeId="ACTIVITY_INVITATION"/>
+
 
 </entity-engine-xml>
