@@ -4,4 +4,58 @@
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/test-suite.xsd">
 
 
+
+
+
+        <!--
+
+	单元测试的注意事项：
+
+		1、单元测试结束前ofbiz会清理测试产生的数据，
+			但是这个清理过程似乎并没有按照数据产生的顺序进行逆序操作，
+
+
+		2、将entityengine.xml中
+
+			<delegator name="default"  .... />
+			<delegator name="default-no-eca"  .... />
+			<delegator name="test"  .... />
+
+			每一个的 datasource-name 都设置为 derby数据源，比如： localderby localderbyolap localderbytenant
+
+		3、如果是第一次测试，还需要先  执行 ant load-seed 导入基础种子数据
+
+			基础种子数据导入完成后，可以将
+				<delegator name="default"  .... />
+				<delegator name="default-no-eca"  .... />
+
+			的 datasource-name 设置回自己的 mysql数据源 或 其它数据源，只保留test的继续使用derby，、
+
+			但需要注意，如果后续开发过程中如果有新的seed数据，需要再次切好到 derby数据源，进行基础数据增量导入，以保证涉及到新增种子数据的测试可用
+
+		4、如果执行了 ant clean-data 或 ant clean-all 上述2、3过程需要重做， 因为这些命令会删除derby数据库
+
+	测试方法:
+		ant run-test-suite -Dtest.component=cloudcard -Dtest.suiteName=cloudcardTests
+
+
+    OFBiz 16 测试方法:
+     导
+    `gradlew "ofbiz -test component=entity -test case=entity-tests"`
+     测
+    `gradlew "ofbiz -test component=widget -test suitename=org.apache.ofbiz.widget.test.WidgetMacroLibraryTests"`
+
+
+ -->
+
+        <!-- 导入 测试用户数据、测试活动数据、测试投票数据、测试账单数据-->
+        <test-case case-name="activity-tests-data-load">
+                <entity-xml action="load" entity-xml-url="component://personactivity/testdef/data/ActivityTestData.xml"/>
+        </test-case>
+
+        <!-- 测试关于幼儿园的那次家长会活动创建 -->
+        <test-case case-name="activity-tests-create-activity-test">
+                <junit-test-suite class-name="com.banfftech.cloudcard.test.CreateNewCardTest"/>
+        </test-case>
+
 </test-suite>

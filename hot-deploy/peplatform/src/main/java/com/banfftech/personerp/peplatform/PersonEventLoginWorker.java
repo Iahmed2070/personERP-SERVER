@@ -46,11 +46,14 @@ import org.apache.ofbiz.entity.model.ModelEntity;
 import org.apache.ofbiz.webapp.stats.VisitHandler;
 import org.apache.ofbiz.service.ServiceUtil;
 import org.apache.ofbiz.entity.condition.EntityCondition;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.ofbiz.service.DispatchContext;
+
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -58,7 +61,7 @@ import java.security.SignatureException;
 import java.util.*;
 
 /**
- * Common Workers
+ * Login Workers
  */
 public class PersonEventLoginWorker {
 
@@ -68,54 +71,71 @@ public class PersonEventLoginWorker {
     public static final String TOKEN_KEY_ATTR = "tarjeta";
 
 
+
+
+
     /**
-     * 是否已经注册用户
+     * Check UserLogin
+     *
      * @param dctx
      * @param context
      * @return
      * @throws GenericEntityException
      */
-    public static Map<String, Object> isUserLoginExsits(DispatchContext dctx, Map<String, Object> context)throws GenericEntityException {
+    public static Map<String, Object> isUserLoginExsits(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException {
+
+
+        //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
+
+
+
         String userLoginId = (String) context.get("userLoginId");//teleNumber
         Map<String, Object> result = ServiceUtil.returnSuccess();
         Map<String, Object> inputMap = new HashMap<String, Object>();
         GenericValue userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
-        if(null!= userLogin){
+        if (null != userLogin) {
             inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels", "PeLoginExsit", locale));
-        }else{
+        } else {
             inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels", "success", locale));
         }
-        result.put("resultMap",inputMap);
+
+
+        //Service Foot
+        result.put("resultMap", inputMap);
         return result;
     }
+
+
     /**
-     * App登录
+     * App Login
+     *
      * @param dctx
      * @param context
      * @return
      */
-    public static Map<String, Object> userAppLogin(DispatchContext dctx, Map<String, Object> context)throws GenericEntityException {
+    public static Map<String, Object> userAppLogin(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException {
+
+        //Service Head
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Delegator delegator = dispatcher.getDelegator();
         Locale locale = (Locale) context.get("locale");
         String userLoginId = (String) context.get("userLoginId");//teleNumber
-       // String captcha = (String) context.get("captcha");
-        //String appType = (String) context.get("appType");
-        GenericValue userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId",userLoginId), false);
+
+
+
+        GenericValue userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
         String token = null;
         Map<String, Object> result = ServiceUtil.returnSuccess();
         String captcha = (String) context.get("captcha");
-
         Map<String, Object> inputMap = new HashMap<String, Object>();
-
 
 
 //        //查找用户验证码是否存在
         EntityConditionList<EntityCondition> captchaConditions = EntityCondition
-                .makeCondition(EntityCondition.makeCondition("teleNumber", EntityOperator.EQUALS, userLoginId),EntityUtil.getFilterByDateExpr(),EntityCondition.makeCondition("isValid", EntityOperator.EQUALS, "N"),EntityCondition.makeCondition("smsType", EntityOperator.EQUALS, "LOGIN"));
+                .makeCondition(EntityCondition.makeCondition("teleNumber", EntityOperator.EQUALS, userLoginId), EntityUtil.getFilterByDateExpr(), EntityCondition.makeCondition("isValid", EntityOperator.EQUALS, "N"), EntityCondition.makeCondition("smsType", EntityOperator.EQUALS, "LOGIN"));
         List<GenericValue> smsList = new ArrayList<GenericValue>();
         try {
             smsList = delegator.findList("SmsValidateCode", captchaConditions, null,
@@ -123,19 +143,19 @@ public class PersonEventLoginWorker {
         } catch (GenericEntityException e) {
             Debug.logError(e.getMessage(), module);
             //org.apache.ofbiz.base.util.UtilProperties.getMessage("PeInternalServiceError", "success", locale)
-            return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels","PeInternalServiceError", locale));
+            return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels", "PeInternalServiceError", locale));
         }
 
-        if(UtilValidate.isEmpty(smsList)){
-            return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels","PeCaptchaNotExistError", locale));
-        }else{
+        if (UtilValidate.isEmpty(smsList)) {
+            return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels", "PeCaptchaNotExistError", locale));
+        } else {
             GenericValue sms = smsList.get(0);
 
-            if(sms.get("captcha").equals(captcha)){
+            if (sms.get("captcha").equals(captcha)) {
                 //有效时间
-                long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe","tarjeta.expirationTime","172800L",delegator));
-                String iss = EntityUtilProperties.getPropertyValue("pe","tarjeta.issuer",delegator);
-                String tokenSecret = EntityUtilProperties.getPropertyValue("pe","tarjeta.secret",delegator);
+                long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800L", delegator));
+                String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
+                String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", delegator);
                 //开始时间
                 final long iat = System.currentTimeMillis() / 1000L; // issued at claim
                 //Token到期时间
@@ -153,31 +173,32 @@ public class PersonEventLoginWorker {
                 token = signer.sign(claims);
 
 
-
                 //修改验证码状态
                 sms.set("isValid", "Y");
                 try {
                     sms.store();
                 } catch (GenericEntityException e) {
                     Debug.logError(e.getMessage(), module);
-                    return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels","PeInternalServiceError", locale));
+                    return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels", "PeInternalServiceError", locale));
                 }
 
                 inputMap.put("tarjeta", token);
 
                 inputMap.put("resultMsg", org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels", "PeLoginSuccess", locale));
 
-                if(userLogin.get("partyId") == null){//没有找到用户
-                    return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels","PeUserNotFundError", locale));
+                if (userLogin.get("partyId") == null) {//没有找到用户
+                    return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels", "PeUserNotFundError", locale));
                 }
-                inputMap.put("partyId",userLogin.get("partyId"));
+                inputMap.put("partyId", userLogin.get("partyId"));
 
-                result.put("resultMap",inputMap);
-            }else{
-                Debug.log("---------------------------------------------------------CaptERROR,xi"+sms.get("captcha")+""+"|"+captcha);
-                return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels","PeCaptchaCheckFailedError", locale));
+                result.put("resultMap", inputMap);
+            } else {
+                Debug.log("---------------------------------------------------------CaptERROR,xi" + sms.get("captcha") + "" + "|" + captcha);
+                return ServiceUtil.returnError(org.apache.ofbiz.base.util.UtilProperties.getMessage("PePlatFromUiLabels", "PeCaptchaCheckFailedError", locale));
             }
         }
+
+
 
         return result;
     }
@@ -185,55 +206,56 @@ public class PersonEventLoginWorker {
 
     /**
      * 验证是否拥身份令牌
+     *
      * @param request
      * @param response
      * @return
      */
     public static String checkTarjetaLogin(HttpServletRequest request, HttpServletResponse response) {
+
+
+        //Servlet Head
         HttpSession session = request.getSession();
         Delegator delegator = (Delegator) request.getAttribute("delegator");
 
-        Debug.logInfo("token verify...",module);
+        Debug.logInfo("token verify...", module);
         String token = request.getParameter("tarjeta");
         // 这种事件里面只能返回success, 后面的其它预处理事件会继续采用其它方式验证登录情况
         if (token == null) return "success";
 
         // 验证token
         Delegator defaultDelegator = DelegatorFactory.getDelegator("default");//万一出现多租户情况，应在主库中查配置
-        String tokenSecret = EntityUtilProperties.getPropertyValue("pe","tarjeta.secret", defaultDelegator);
-        String iss = EntityUtilProperties.getPropertyValue("pe","tarjeta.issuer",delegator);
+        String tokenSecret = EntityUtilProperties.getPropertyValue("pe", "tarjeta.secret", defaultDelegator);
+        String iss = EntityUtilProperties.getPropertyValue("pe", "tarjeta.issuer", delegator);
 
         Map<String, Object> claims;
         try {
-             JWTVerifier verifier = new JWTVerifier(tokenSecret, null, iss);//验证token和发布者（云平台）
-             claims= verifier.verify(token);
-        }catch(JWTExpiredException e1){
-            Debug.logInfo("token过期：" + e1.getMessage(),module);
+            JWTVerifier verifier = new JWTVerifier(tokenSecret, null, iss);//验证token和发布者（云平台）
+            claims = verifier.verify(token);
+        } catch (JWTExpiredException e1) {
+            Debug.logInfo("token过期：" + e1.getMessage(), module);
             return "success";
-        }catch (JWTVerifyException | InvalidKeyException | NoSuchAlgorithmException | IllegalStateException | SignatureException | IOException e) {
-            Debug.logInfo("token没通过验证：" + e.getMessage(),module);
+        } catch (JWTVerifyException | InvalidKeyException | NoSuchAlgorithmException | IllegalStateException | SignatureException | IOException e) {
+            Debug.logInfo("token没通过验证：" + e.getMessage(), module);
             return "success";
         }
 
-        if(UtilValidate.isEmpty(claims)||UtilValidate.isEmpty(claims.get("user"))||UtilValidate.isEmpty(claims.get("delegatorName"))){
-        	 Debug.logInfo("token invalid",module);
-             return "success";
+        if (UtilValidate.isEmpty(claims) || UtilValidate.isEmpty(claims.get("user")) || UtilValidate.isEmpty(claims.get("delegatorName"))) {
+            Debug.logInfo("token invalid", module);
+            return "success";
         }
 
         String userLoginId = (String) claims.get("user");
         String tokenDelegatorName = (String) claims.get("delegatorName");
         Delegator tokenDelegator = DelegatorFactory.getDelegator(tokenDelegatorName);
         GenericValue userLogin;
-		try {
-            userLogin = tokenDelegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId),false);
-		} catch (GenericEntityException e) {
-			Debug.logError("some thing wrong when verify the token:" + e.getMessage(), module);
-			return "success";
-		}
+        try {
+            userLogin = tokenDelegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId), false);
+        } catch (GenericEntityException e) {
+            Debug.logError("some thing wrong when verify the token:" + e.getMessage(), module);
+            return "success";
+        }
 
-
-
-        //TODO  User Check  使用阿里大鱼
 
 
 
@@ -242,8 +264,8 @@ public class PersonEventLoginWorker {
             String currentDelegatorName = delegator.getDelegatorName();
             ServletContext servletContext = session.getServletContext();
             if (!currentDelegatorName.equals(tokenDelegatorName)) {
-            //	LocalDispatcher tokenDispatcher = ContextFilter.makeWebappDispatcher(servletContext, tokenDelegator);
-            //    setWebContextObjects(request, response, tokenDelegator, tokenDispatcher);
+                //	LocalDispatcher tokenDispatcher = ContextFilter.makeWebappDispatcher(servletContext, tokenDelegator);
+                //    setWebContextObjects(request, response, tokenDelegator, tokenDispatcher);
             }
             // found userLogin, do the external login...
 
@@ -268,21 +290,21 @@ public class PersonEventLoginWorker {
             long now = System.currentTimeMillis() / 1000L;
             Long oldExp = Long.valueOf(String.valueOf(claims.get("exp")));
 
-            if(oldExp - now < secondsBeforeUpdatetoken){
-            	// 快要过期了，新生成token
-            	long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800", defaultDelegator));
-    			//开始时间
-    			//Token到期时间
-    			long exp = now + expirationTime;
-    			//生成Token
-    			JWTSigner signer = new JWTSigner(tokenSecret);
-    			claims = new HashMap<String, Object>();
-    			claims.put("iss", iss);
-    			claims.put("user", userLoginId);
-    			claims.put("delegatorName", tokenDelegatorName);
-    			claims.put("exp", exp);
-    			claims.put("iat", now);
-    			request.setAttribute(TOKEN_KEY_ATTR, signer.sign(claims));
+            if (oldExp - now < secondsBeforeUpdatetoken) {
+                // 快要过期了，新生成token
+                long expirationTime = Long.valueOf(EntityUtilProperties.getPropertyValue("pe", "tarjeta.expirationTime", "172800", defaultDelegator));
+                //开始时间
+                //Token到期时间
+                long exp = now + expirationTime;
+                //生成Token
+                JWTSigner signer = new JWTSigner(tokenSecret);
+                claims = new HashMap<String, Object>();
+                claims.put("iss", iss);
+                claims.put("user", userLoginId);
+                claims.put("delegatorName", tokenDelegatorName);
+                claims.put("exp", exp);
+                claims.put("iat", now);
+                request.setAttribute(TOKEN_KEY_ATTR, signer.sign(claims));
             }
         } else {
             Debug.logWarning("Could not find userLogin for token: " + token, module);
@@ -292,6 +314,14 @@ public class PersonEventLoginWorker {
     }
 
 
+    /**
+     * Set Web ContentObject
+     *
+     * @param request
+     * @param response
+     * @param delegator
+     * @param dispatcher
+     */
     private static void setWebContextObjects(HttpServletRequest request, HttpServletResponse response, Delegator delegator, LocalDispatcher dispatcher) {
         HttpSession session = request.getSession();
         // NOTE: we do NOT want to set this in the servletContext, only in the request and session

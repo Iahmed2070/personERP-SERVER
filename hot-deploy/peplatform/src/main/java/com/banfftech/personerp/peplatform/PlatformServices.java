@@ -201,7 +201,7 @@ public class PlatformServices {
 
 
 
-        //暂时先写死、此处应当放入配置文件
+        //暂时先写死
         TaobaoClient client = new DefaultTaobaoClient("http://gw.api.taobao.com/router/rest", "23654770", "9c58a5fa366e2aabd8a62363c4c228c6");
         AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
         req.setExtend("");
